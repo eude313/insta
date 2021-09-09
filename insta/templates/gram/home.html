@@ -4,27 +4,82 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="col">
-
-        <a class="ripple" href="#!">
-            <img
+    <div class="row my-5">
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            
+            <div class="col-md">
+               <img
                 alt="example"
                 class="img-fluid rounded"
-                src="https://mdbootstrap.com/img/new/standard/city/044.jpg"
-            />
-        </a>
+                src="{% static '/images/phone.png'%}"
+                />
 
-
+            </div>
+           
         </div>
-        <div class="col">
+        <div class="col-md-6">
 
+            <div class="">
+                <div class="border" style="width: 320px; height: 320px;">
+                   <h4 class="text-center my-1">Bazenga insta</h4>
+                  <form class="px-4 py-3">
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                      <input type="email" id="form2Example1" class="form-control" />
+                      <label class="form-label" for="form2Example1">Email address</label>
+                    </div>
+              
+                    <!-- Password input -->
+                    <div class="form-outline">
+                        <input type="password" id="typePassword" class="form-control" />
+                        <label class="form-label" for="typePassword">Password input</label>
+                    </div>
+              
+                    <!-- 2 column grid layout for inline styling -->
+                    <div class="mb-4 text-center">
+                      <div class="col">
+                        <!-- Simple link -->
+                        <a href="#!"><small> Forgot password?</small></a>
+                      </div>
+                    </div>
+              
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                  </form>
+
+                  
+                </div>
+                <div class="border my-2" style="width: 320px;">
+                    <a class="dropdown-item" href="#">New around here? Sign up</a>
+                    <a class="dropdown-item" href="#">Forgot password?</a>
+
+                </div>
+                <div class="text-center" style="width: 320px;">
+                    <small>Get the app.</small>
+                </div>
+                
+                <div class="" style="width: 278px; padding-left:1.4rem;">
+                    <img src="{% static '/images/play.png' %}" alt="" class="img-fluid">
+                </div>
+
+            </div>
+            <div class="col-md-"></div>
             
         </div>
 
     </div>
 
 </div>
+
+<footer class="bg-light text-center text-lg-start">
+    <!-- Copyright -->
+    <div class="text-center p-3">
+      © 2020 Copyright:
+      <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+</footer>
 
 
 

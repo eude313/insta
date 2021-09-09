@@ -1,0 +1,12 @@
+/* font-family: 'Berkshire Swash', cursive;{heading}
+font-family: 'Caveat', cursive; {notes} */
+
+.or{
+    height:10px; 
+    font-size:10px;
+    background-color: black; 
+}
+.vl{
+    height:2px;
+    width: 10vh;
+}

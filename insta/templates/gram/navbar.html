@@ -1,168 +1,78 @@
 <!-- Navbar-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid justify-content-between">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-family: 'Courgette', cursive;">
+  <div class="container justify-content-between">
     <!-- Left elements -->
     <div class="d-flex">
       <!-- Brand -->
       <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
-       <p class="m-1" style="font-size:1.8rem;"> <i class="fas fa-award pt-1" style="font-size:1.5rem; color: gold;"></i> Bazenga Insta <i style="font-size:1.5rem; color: gold;" class="fas fa-smile-wink"></i></p>
+       <p class="m-1" style="font-size:1.8rem; font-family: 'Berkshire Swash', cursive;"> <i class="fas fa-award pt-1" style="font-size:1.5rem; color: gold;"></i> Bazenga Insta <i style="font-size:1.5rem; color: gold;" class="fas fa-smile-wink"></i></p>
       </a>
-
-      <!-- Search form -->
-      <form class="input-group w-auto my-auto d-none d-sm-flex">
-        <input
-          autocomplete="off"
-          type="search"
-          class="form-control rounded"
-          placeholder="Search"
-          style="min-width: 125px;"
-        />
-        <span class="input-group-text border-0 d-none d-lg-flex"
-          ><i class="fas fa-search"></i
-        ></span>
-      </form>
     </div>
     <!-- Left elements -->
-
-    <!-- Center elements -->
-    <ul class="navbar-nav flex-row d-none d-md-flex">
-      <li class="nav-item me-3 me-lg-1 active">
-        <a class="nav-link" href="#">
-          <span><i class="fas fa-home fa-lg"></i></span>
-          <span class="badge rounded-pill badge-notification bg-danger">1</span>
-        </a>
-      </li>
-
-      <li class="nav-item me-3 me-lg-1">
-        <a class="nav-link" href="#">
-          <span><i class="fas fa-flag fa-lg"></i></span>
-        </a>
-      </li>
-
-      <li class="nav-item me-3 me-lg-1">
-        <a class="nav-link" href="#">
-          <span><i class="fas fa-video fa-lg"></i></span>
-        </a>
-      </li>
-
-      <li class="nav-item me-3 me-lg-1">
-        <a class="nav-link" href="#">
-          <span><i class="fas fa-shopping-bag fa-lg"></i></span>
-        </a>
-      </li>
-
-      <li class="nav-item me-3 me-lg-1">
-        <a class="nav-link" href="#">
-          <span><i class="fas fa-users fa-lg"></i></span>
-          <span class="badge rounded-pill badge-notification bg-danger">2</span>
-        </a>
-      </li>
-    </ul>
-    <!-- Center elements -->
-
+    <!-- center- elements -->
+    <div>
+       <!-- Search form -->
+      <form class="input-group w-auto my-auto d-none d-sm-flex">
+        <div class="form-outline mb-2">
+          <input type="search" style="min-width: 125px; "id="form2Example1" autocomplete="off" class="form-control rounded" />
+          <label class="form-label" for="form2Example1"> <i class="fas fa-search"> <span style="font-family: 'Courgette', cursive;" >Search</span> </i></label>
+        </div>
+      </form>
+    </div>
+    <!-- center- elements -->
     <!-- Right elements -->
     <ul class="navbar-nav flex-row">
-      <li class="nav-item me-3 me-lg-1">
-        <a class="nav-link d-sm-flex align-items-sm-center" href="#">
+      <li class="nav-item me-3 me-lg-1 active">
+        <a class="nav-link" href="{% url 'home' %}">
+          <span><i class="fas fa-home fa-lg"></i></span>
+        </a>
+      </li>
+      <li class="nav-item me-3 me-lg-1 active">
+        <a class="nav-link" href="#">
+          <span><i class="far fa-comment fa-lg"></i></span>
+        </a>
+      </li>
+      
+      <li class="nav-item me-3 me-lg-1 active">
+        <a class="nav-link" href="#">
+          <span><i class="far fa-compass fa-lg"></i></span>
+        </a>
+      </li>
+      <li class="nav-item me-3 me-lg-1 active">
+        <a class="nav-link" href="#">
+          <span><i class="far fa-heart fa-lg"></i></span>
+        </a>
+      </li>
+      <!-- Avatar -->
+      <li class="nav-item me-3 dropdown">
+        <a
+          class="nav-link dropdown-toggle d-flex align-items-center"
+          href="#"
+          id="dropdown-toggle"
+          role="button"
+          data-mdb-toggle="dropdown"
+          aria-expanded="false"
+        >
           <img
-            src="https://mdbootstrap.com/img/new/avatars/1.jpg"
+            src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg"
             class="rounded-circle"
-            height="22"
+            height="28"
             alt=""
             loading="lazy"
           />
-          <strong class="d-none d-sm-block ms-1">John</strong>
         </a>
-      </li>
-      <li class="nav-item me-3 me-lg-1">
-        <a class="nav-link" href="#">
-          <span><i class="fas fa-plus-circle fa-lg"></i></span>
-        </a>
-      </li>
-      <li class="nav-item dropdown me-3 me-lg-1">
-        <a
-          class="nav-link dropdown-toggle hidden-arrow"
-          href="#"
-          id="navbarDropdownMenuLink"
-          role="button"
-          data-mdb-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="fas fa-comments fa-lg"></i>
-
-          <span class="badge rounded-pill badge-notification bg-danger">6</span>
-        </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuLink"
-        >
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li>
-            <a class="dropdown-item" href="#">Some news</a>
+            <a class="dropdown-item" href="{% url 'profile' %}"><i class="far fa-user me-1"></i>profile</a>
           </li>
+          <li><hr class="dropdown-divider" /></li>
           <li>
-            <a class="dropdown-item" href="#">Another news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="#"><i class="far fa-share-square me-1"></i>Logout</a>
           </li>
         </ul>
       </li>
-      <li class="nav-item dropdown me-3 me-lg-1">
-        <a
-          class="nav-link dropdown-toggle hidden-arrow"
-          href="#"
-          id="navbarDropdownMenuLink"
-          role="button"
-          data-mdb-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="fas fa-bell fa-lg"></i>
-          <span class="badge rounded-pill badge-notification bg-danger">12</span>
-        </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuLink"
-        >
-          <li>
-            <a class="dropdown-item" href="#">Some news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </li>
-      <li class="nav-item dropdown me-3 me-lg-1">
-        <a
-          class="nav-link dropdown-toggle hidden-arrow"
-          href="#"
-          id="navbarDropdownMenuLink"
-          role="button"
-          data-mdb-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <i class="fas fa-chevron-circle-down fa-lg"></i>
-        </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuLink"
-        >
-          <li>
-            <a class="dropdown-item" href="#">Some news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </li>
-      <i class="far fa-heart"></i>
-      <i class="far fa-compass"></i>
-      <i class="far fa-comment"></i>
+      
     </ul>
     <!-- Right elements -->
   </div>

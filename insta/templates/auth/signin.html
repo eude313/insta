@@ -2,9 +2,9 @@
 {% load static %}
 {% block content %} 
 <div class="container d-flex justify-content-center">
-    <div>
+    <div style="font-family: 'Courgette', cursive;">
         <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
-        <div class="border" style="width: 380px; height: 450px; font-family: 'Caveat', cursive;">
+        <div class="border" style="width: 380px; height: 450px;">
             <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Sign Up</h4>
             <form class="px-4 py-2" method="post" action="">
             {% csrf_token %}
@@ -56,7 +56,7 @@
             </div>
 
             <div class="px-1" style="width: 380px;">
-                <img src="{% static '/images/play.png' %}" alt="" class="img-fluid">
+                <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb&utm_campaign=loginPage&ig_mid=E50E46DD-5BBA-48D4-8862-874BD4DFEA24&utm_content=lo&utm_medium=badge"><img src="{% static '/images/play.png' %}" alt="" class="img-fluid"></a>
             </div>
 
             </div>

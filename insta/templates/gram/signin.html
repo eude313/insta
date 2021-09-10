@@ -1,64 +1,70 @@
 {% extends 'gram/base.html' %}
 {% load static %}
 {% block content %} 
-<div class="container">
-    <div class="border" style="width: 320px; height: 450px; font-family: 'Caveat', cursive;">
-        <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Bazenga insta</h4>
-        <form class="px-4 py-2" method="post" action="">
-       {% csrf_token %}
-        <!-- Username input -->
-        <div class="form-outline mb-3">
-            <input type="Username" id="form2Example1" class="form-control" />
-            <label class="form-label" for="form2Example1">Username</label>
-        </div>
-
-        <!-- Email input -->
-        <div class="form-outline mb-3">
-            <input type="email" id="form2Example1" class="form-control" />
-            <label class="form-label" for="form2Example1">Email</label>
-        </div>
-
-        <!-- Password input -->
-        <div class="form-outline mb-3">
-            <input type="password" id="typePassword" class="form-control" />
-            <label class="form-label" for="typePassword">Password</label>
-        </div>
-
-         <!-- Confirm_Password -->
-        <div class="form-outline">
-            <input type="Confirm_Password" id="typeConfirm_Password" class="form-control" />
-            <label class="form-label" for="typeConfirm_Password">Confirm_Password</label>
-        </div>
-                
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mt-3">Log in</button>
-        
-        <!-- 2 column grid layout for inline styling -->
-        <div class="mb-2 text-center">
-            <div class='or mt-1 d-flex'>
-            <div class='mt-2' style="height:1px; width:100%; background-color:rgb(195, 195, 195);"></div><p class='mx-2' style="font-size:18px;">OR</p><div class='mt-2 ' style="height:1px; width:100%; background-color:rgb(195, 195, 195);"></div>
+<div class="container d-flex justify-content-center">
+    <div>
+        <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
+        <div class="border" style="width: 380px; height: 450px; font-family: 'Caveat', cursive;">
+            <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Sign Up</h4>
+            <form class="px-4 py-2" method="post" action="">
+            {% csrf_token %}
+            <!-- Username input -->
+            <div class="form-outline mb-3">
+                <input type="Username" id="form2Example1" class="form-control" />
+                <label class="form-label" for="form2Example1">Username</label>
             </div>
-            <div class="py-2">
-            <!-- Simple link -->
-            <a href="#!"><small> Forgot password?</small></a>
+
+            <!-- Email input -->
+            <div class="form-outline mb-3">
+                <input type="email" id="form2Example1" class="form-control" />
+                <label class="form-label" for="form2Example1">Email</label>
             </div>
-        </div>
-        </form>
+
+            <!-- Password input -->
+            <div class="form-outline mb-3">
+                <input type="password" id="typePassword" class="form-control" />
+                <label class="form-label" for="typePassword">Password</label>
+            </div>
+
+            <!-- Confirm_Password -->
+            <div class="form-outline">
+                <input type="Confirm_Password" id="typeConfirm_Password" class="form-control" />
+                <label class="form-label" for="typeConfirm_Password">Confirm_Password</label>
+            </div>
+                    
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mt-3">Log in</button>
+            
+            <!-- 2 column grid layout for inline styling -->
+            <div class="mb-2 text-center">
+                <div class='or mt-1 d-flex'>
+                <div class='mt-2' style="height:1px; width:100%; background-color:rgb(195, 195, 195);"></div><p class='mx-2' style="font-size:18px;">OR</p><div class='mt-2 ' style="height:1px; width:100%; background-color:rgb(195, 195, 195);"></div>
+                </div>
+                <div class="py-2">
+                <!-- Simple link -->
+                <a href="#!"><small> Forgot password?</small></a>
+                </div>
+            </div>
+            </form>
+
+            </div>
+            <div class="border my-2 text-center pt-2" style="width: 380px; height:50px;">
+                <small> Already have an account?<a href="{% url 'login' %}"> Sign In</a></small>
+            </div>
+            <div class="text-center pb-1" style="width: 320px; padding-left:3rem;">
+                <small>Get the app.</small>
+            </div>
+
+            <div class="px-1" style="width: 380px;">
+                <img src="{% static '/images/play.png' %}" alt="" class="img-fluid">
+            </div>
+
+            </div>
 
         </div>
-        <div class="border my-2 text-center pt-2" style="width: 320px; height:50px;">
-            <small> Already have an account?<a href="#"> Sign In</a></small>
-        </div>
-        <div class="text-center pb-1" style="width: 320px;">
-            <small>Get the app.</small>
-        </div>
-
-        <div class="" style="width: 278px; padding-left:1.4rem;">
-            <img src="{% static '/images/play.png' %}" alt="" class="img-fluid">
-        </div>
-
-        </div>
-
     </div>
 </div>
+
+
+
 {% endblock %}

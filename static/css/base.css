@@ -2,11 +2,10 @@
 font-family: 'Caveat', cursive; {notes} */
 
 .or{
-    height:10px; 
+    height:10px;
     font-size:10px;
-    background-color: black; 
 }
 .vl{
-    height:2px;
-    width: 10vh;
+    height:1px;
+    width: 1rem;
 }

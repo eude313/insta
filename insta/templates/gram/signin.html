@@ -1,7 +1,8 @@
 {% extends 'gram/base.html' %}
 {% load static %}
-{% block content %}  
-    <div class="border justify-content-center" style="width: 320px; height: 450px; font-family: 'Caveat', cursive;">
+{% block content %} 
+<div class="container">
+    <div class="border" style="width: 320px; height: 450px; font-family: 'Caveat', cursive;">
         <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Bazenga insta</h4>
         <form class="px-4 py-2" method="post" action="">
        {% csrf_token %}
@@ -59,4 +60,5 @@
         </div>
 
     </div>
+</div>
 {% endblock %}

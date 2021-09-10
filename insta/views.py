@@ -2,5 +2,9 @@ from django.shortcuts import render
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'gram/home.html')
+def login(request):
+    return render(request, 'gram/login.html')
+
+
+def signin(request):
+    return render(request, 'gram/signin.html')

@@ -6,6 +6,7 @@ font-family: 'Caveat', cursive; {notes} */
     font-size:10px;
 }
 .vl{
-    height:1px;
-    width: 1rem;
+    height:1rem;
+    width:10rem;
+    background-color:rgb(0, 0, 0);
 }

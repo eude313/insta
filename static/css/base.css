@@ -16,3 +16,21 @@ font-family: 'Courgette', cursive;{notes} */
     border-radius: 50%;
     display: inline-block;
 }
+.image-2{
+    width:70px;
+    height:70px; 
+    border-radius: 50%;
+    display: inline-block;
+}
+.image-3{
+    width:50px;
+    height:50px; 
+    border-radius: 50%;
+    display: inline-block;
+}
+.image-4{
+    width:35px;
+    height:35px; 
+    border-radius: 50%;
+    display: inline-block;
+}

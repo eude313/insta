@@ -6,29 +6,29 @@
         <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
         <div class="border" style="width: 380px; height: 450px;">
             <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Sign Up</h4>
-            <form class="px-4 py-2" method="post" action="">
+            <form class="px-4 py-2" method="POST" action="">
             {% csrf_token %}
             <!-- Username input -->
             <div class="form-outline mb-3">
-                <input type="Username" id="form2Example1" class="form-control" />
+                <input name="username" type="Username" id="form2Example1" class="form-control" />
                 <label class="form-label" for="form2Example1">Username</label>
             </div>
 
             <!-- Email input -->
             <div class="form-outline mb-3">
-                <input type="email" id="form2Example1" class="form-control" />
+                <input name="email" type="email" id="form2Example1" class="form-control" />
                 <label class="form-label" for="form2Example1">Email</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-3">
-                <input type="password" id="typePassword" class="form-control" />
+                <input name="password" type="password" id="typePassword" class="form-control" />
                 <label class="form-label" for="typePassword">Password</label>
             </div>
 
             <!-- Confirm_Password -->
             <div class="form-outline">
-                <input type="Confirm_Password" id="typeConfirm_Password" class="form-control" />
+                <input name="confirm_password" type="Confirm_Password" id="typeConfirm_Password" class="form-control" />
                 <label class="form-label" for="typeConfirm_Password">Confirm_Password</label>
             </div>
                     

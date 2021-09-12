@@ -1,20 +1,19 @@
 <!-- Navbar-->
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-family: 'Courgette', cursive;">
-  <div class="container justify-content-between">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-family: 'Courgette', cursive; height:3rem; width:65rem;">
+  <div class="container justify-content-between ps-5 ms-5">
     <!-- Left elements -->
     <div class="d-flex">
       <!-- Brand -->
       <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
-       <p class="m-1" style="font-size:1.8rem; font-family: 'Berkshire Swash', cursive;"> <i class="fas fa-award pt-1" style="font-size:1.5rem; color: gold;"></i> Bazenga Insta <i style="font-size:1.5rem; color: gold;" class="fas fa-smile-wink"></i></p>
+      <p class="m-1" style="font-size:1.8rem; font-family: 'Berkshire Swash', cursive;"> <i class="fas fa-award pt-1" style="font-size:1.5rem; color: gold;"></i> Bazenga Insta <i style="font-size:1.5rem; color: gold;" class="fas fa-smile-wink"></i></p>
       </a>
     </div>
     <!-- Left elements -->
     <!-- center- elements -->
     <div>
-       <!-- Search form -->
+      <!-- Search form -->
       <form class="input-group w-auto my-auto d-none d-sm-flex">
-        <div class="form-outline mb-2">
+        <div class="form-outline my-2">
           <input type="search" style="min-width: 125px; "id="form2Example1" autocomplete="off" class="form-control rounded" />
           <label class="form-label" for="form2Example1"> <i class="fas fa-search"> <span style="font-family: 'Courgette', cursive;" >Search</span> </i></label>
         </div>
@@ -46,27 +45,19 @@
       </li>
       <!-- Avatar -->
       <li class="nav-item me-3 dropdown">
-        <a
-          class="nav-link dropdown-toggle d-flex align-items-center"
+        <a class="nav-link dropdown-toggle d-flex align-items-center"
           href="#"
           id="dropdown-toggle"
           role="button"
           data-mdb-toggle="dropdown"
-          aria-expanded="false"
-        >
-          <img
-            src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg"
-            class="rounded-circle"
-            height="28"
-            alt=""
-            loading="lazy"
-          />
+          aria-expanded="false">
+          <img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" class="rounded-circle" height="28" alt="" loading="lazy"/>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <li>
             <a class="dropdown-item" href="{% url 'profile' %}"><i class="far fa-user me-1"></i>profile</a>
           </li>
-          <li><hr class="dropdown-divider" /></li>
+          <li><hr class="dropdown-divider"></li>
           <li>
             <a class="dropdown-item" href="#"><i class="far fa-share-square me-1"></i>Logout</a>
           </li>
@@ -76,5 +67,6 @@
     </ul>
     <!-- Right elements -->
   </div>
+ 
 </nav>
 <!-- Navbar -->

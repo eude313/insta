@@ -1,11 +1,18 @@
 from insta.models import Users
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.contrib.auth.hashers import make_password
+from django.contrib import messages
+from django.contrib.auth import authenticate
 # from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 
 def login(request):
-    return render(request, 'auth/login.html')
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+    else:
+        return render(request, 'auth/login.html')
 
 def signin(request):
     if request.method == 'POST':
@@ -14,11 +21,14 @@ def signin(request):
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
         if password == confirm_password:
-            user = Users(username=username, email=email, password=password)
+            user = Users(username=username, email=email, password=make_password(password))
+            user.save()
+            messages.add_message(request, messages.SUCCESS, "Account created successfully!")
+            # redirect(login)
         else:
-            print("password")
-    else:
-        return render(request, 'auth/signin.html')
+            print("wrong password")
+    return render(request, 'auth/signin.html')
+
 def home(request):
     return render(request, 'gram/index.html')
 

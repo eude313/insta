@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-import datetime as dat
+import datetime as dt
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
@@ -36,14 +36,14 @@ class Users(AbstractBaseUser):
     username = models.CharField( max_length=20, unique=True)  
     email = models.CharField( max_length=50, unique=True)    
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
-    last_login = models.DateTimeField(default=dat.datetime.now)
+    last_login = models.DateTimeField(default=dt.datetime.now)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     password = models.CharField( max_length=100)
     
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [ 'email']
     
     objects=MyAccountManager()

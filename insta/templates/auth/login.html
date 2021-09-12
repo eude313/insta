@@ -4,6 +4,13 @@
 {% block content %}
 <div class="container">
   <div class="row my-5" style="font-family: 'Courgette', cursive;">
+    {% if messages %}
+      <div class="messages me-5">
+          {% for message in messages %}
+          <h4 {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</h4>
+          {% endfor %}
+      </div>
+    {% endif %}
     <div class="col-md-3"></div>
     <div class="col-md-3">
       <div class="col-md">

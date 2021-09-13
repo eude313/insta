@@ -2,7 +2,7 @@ from insta.models import Users
 from django.shortcuts import redirect, render
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 # from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
@@ -36,6 +36,11 @@ def signIn(request):
             return redirect("signIn")  
     else:
         return render(request, 'auth/login.html')
+    
+def signOut(request):
+    logout(request)
+    messages.add_message(request, messages.SUCCESS, "Successfully logged Out!")
+    return redirect("signIn") 
 
 def home(request):
     return render(request, 'gram/index.html')

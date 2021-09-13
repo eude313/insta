@@ -3,6 +3,8 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 import datetime as dt
 from django.db.models.signals import post_save, post_delete
 from cloudinary.models import CloudinaryField
+from django.utils import timezone
+from django.conf import settings 
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
@@ -59,7 +61,11 @@ class Users(AbstractBaseUser):
         return True
     
 class Post(models.Model):
-    auther = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    image = CloudinaryField('image')
+    auther = models.ForeignKey('Users', on_delete=models.CASCADE)
+    image = CloudinaryField('image', default='')
+    captions = models.TextField()
+    created_time = models.DateTimeField(default=timezone.now)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
+    saved   = models.BooleanField(default=False)  
     
     

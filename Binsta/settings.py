@@ -123,7 +123,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-AUTH_USER_MODEL = "insta.users"
+AUTH_USER_MODEL = "insta.Users"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/

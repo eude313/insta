@@ -1,11 +1,12 @@
 {% extends 'gram/base.html' %}
 {% load static %}
 {% block content %} 
+<a class="nav-link active" href="{% url 'home' %}"> <i class="fas fa-reply-all mx-5 my-2" style="font-size:2rem;"><span class="ms-1" style=" font-family: 'Berkshire Swash', cursive;"> Home</span></i></a>
 <div class="container d-flex justify-content-center">
     <div style="font-family: 'Courgette', cursive;">
         <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
        
-        <div class="border" style="width: 380px; height: 450px;">
+        <div class="border" style="height: 450px;">
             
             <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Upload </h4>
             <form class="px-4 py-2" method="POST" action="">

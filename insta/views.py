@@ -42,6 +42,13 @@ def signOut(request):
     messages.add_message(request, messages.SUCCESS, "Successfully logged Out!")
     return redirect("signIn") 
 
+def upload(request):
+    if request.method == "POST":
+        pass
+    else:
+        return render(request, 'gram/upload.html')
+
+
 def home(request):
     posts = Post.objects.all()
     context= {'posts':posts}

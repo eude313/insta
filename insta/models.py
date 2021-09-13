@@ -68,4 +68,5 @@ class Post(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
     saved   = models.BooleanField(default=False)  
     
-    
+def __str__(self):
+    return self.captions

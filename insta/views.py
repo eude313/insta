@@ -1,4 +1,4 @@
-from insta.models import Users
+from insta.models import Users, Post
 from django.shortcuts import redirect, render
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
@@ -43,6 +43,7 @@ def signOut(request):
     return redirect("signIn") 
 
 def home(request):
+    
     return render(request, 'gram/index.html')
 
 def profile(request):

@@ -1,0 +1,27 @@
+{% extends 'gram/base.html' %}
+{% load static %}
+{% block content %} 
+<div class="container d-flex justify-content-center">
+    <div style="font-family: 'Courgette', cursive;">
+        <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
+       
+        <div class="border" style="width: 380px; height: 450px;">
+            
+            <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Upload </h4>
+            <form class="px-4 py-2" method="POST" action="">
+                {% csrf_token %}
+                <!-- Username input -->
+                <div class="form-outline mb-3">
+                    <input name="username" type="Username" id="form2Example1" class="form-control" />
+                    <label class="form-label" for="form2Example1">Username</label>
+                </div>
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mt-3">Sign In</button>
+                
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

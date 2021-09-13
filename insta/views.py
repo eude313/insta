@@ -43,8 +43,9 @@ def signOut(request):
     return redirect("signIn") 
 
 def home(request):
-    
-    return render(request, 'gram/index.html')
+    posts = Post.objects.all()
+    context= {'posts':posts}
+    return render(request, 'gram/index.html', context)
 
 def profile(request):
     return render(request, 'gram/profile.html')

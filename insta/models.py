@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 import datetime as dt
 from django.db.models.signals import post_save, post_delete
+from cloudinary.models import CloudinaryField
 # Create your models here.
 
 class MyAccountManager(BaseUserManager):
@@ -56,4 +57,9 @@ class Users(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+    
+class Post(models.Model):
+    auther = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    image = CloudinaryField('image')
+    
     

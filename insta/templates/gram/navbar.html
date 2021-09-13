@@ -54,13 +54,19 @@
           <img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" class="rounded-circle" height="28" alt="" loading="lazy"/>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        {% if user is authenticated %}
+          
+         
+          
+        {% else %}
           <li>
             <a class="dropdown-item" href="{% url 'profile' %}"><i class="far fa-user me-1"></i>profile</a>
           </li>
           <li><hr class="dropdown-divider"></li>
-          <li>
+           <li>
             <a class="dropdown-item" href="#"><i class="far fa-share-square me-1"></i>Logout</a>
           </li>
+        {% endif %}
         </ul>
       </li>
       

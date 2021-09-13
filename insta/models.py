@@ -44,8 +44,7 @@ class Users(AbstractBaseUser):
     password = models.CharField( max_length=100)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [ 'email']
-    
+        
     objects=MyAccountManager()
      
     def _str_(self):

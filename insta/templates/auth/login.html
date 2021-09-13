@@ -23,17 +23,17 @@
         <h4 class="text-center my-1" style="width: 320px; font-family: 'Berkshire Swash', cursive;">Bazenga insta</h4>
         <div class="border" style="width: 320px; height: 320px;">
           <h4 class="text-center my-1" style=" font-family: 'Berkshire Swash', cursive;">Login</h4>
-          <form class="px-4 py-2" method="post" action="">
+          <form class="px-4 py-2" method="POST" action="">
             {% csrf_token %}
             <!-- Email input -->
             <div class="form-outline mb-3">
-              <input type="email" id="form2Example1" class="form-control" />
+              <input type="email" name="email" id="form2Example1" class="form-control" />
               <label class="form-label" for="form2Example1">Email</label>
             </div>
       
             <!-- Password input -->
             <div class="form-outline">
-              <input type="password" id="typePassword" class="form-control" />
+              <input type="password" name="password" id="typePassword" class="form-control" />
               <label class="form-label" for="typePassword">Password</label>
             </div>
                     
@@ -47,14 +47,14 @@
               </div>
               <div class="py-2">
                 <!-- Simple link -->
-                <a href="{% url 'home' %}"><small> Forgot password?</small></a>
+                <a href="#"><small> Forgot password?</small></a>
               </div>
             </div>
           </form>
 
         </div>
         <div class="border my-2 text-center pt-2" style="width: 320px; height:50px;">
-          <small > New around here?<a href="{% url 'signin' %}"> Sign up</a></small>
+          <small > New around here?<a href="{% url 'signUp' %}"> Sign up</a></small>
         </div>
         <div class="text-center pb-1" style="width: 320px;">
           <small>Get the app.</small>

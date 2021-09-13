@@ -61,7 +61,7 @@ class Users(AbstractBaseUser):
         return True
     
 class Post(models.Model):
-    auther = models.ForeignKey('Users', on_delete=models.CASCADE)
+    author = models.ForeignKey('Users', on_delete=models.CASCADE)
     image = CloudinaryField('image', default='')
     captions = models.TextField()
     created_time = models.DateTimeField(default=timezone.now)

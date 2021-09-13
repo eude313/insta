@@ -44,7 +44,11 @@ def signOut(request):
 
 def upload(request):
     if request.method == "POST":
-        pass
+        image= request.FILES['image']
+        captions = request.POST['captions']
+        post= Post(author=request.user, image=image, captions=captions)
+        post.save()
+        return redirect("home")
     else:
         return render(request, 'gram/upload.html')
 

@@ -15,6 +15,14 @@
           </div>
         {% endif %}
       </div>
+      <div class="card text-center" style="width: 10rem;">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><i class="fas fa-expand"><span class="ms-2">Go to post</span></i></li>
+          <li class="list-group-item"><i class="fas fa-user-minus"><span class="ms-2">Unfollow</span> </i></li>
+          <li class="list-group-item"><i class="fas fa-times"><span class="ms-2">Cancel</span> </i></li>
+          <li class="list-group-item"><i class="fas fa-trash-alt"><span class="ms-2">Delete</span> </i></li>
+        </ul>
+      </div>
       {% for post in posts %}
         <div class="border my-2" style="margin-left:5rem; width:36rem; border-radius:8px;">
 
@@ -42,10 +50,16 @@
                       alt=""/>
                     </a>
                   </li>
-                  <li class="nav-item mt-1">
-                    <a class="nav-link" href="#">{{ post.author }}</a>
-                  </li>
-                  
+                 
+                  <div class="d-flex ">
+                    <div class="nav-item mt-1">
+                      <a class="nav-link" href="#">{{ post.author.username }}</a>
+                    </div>
+                   
+                    <div class="nav-item mt-1" style=" position:relative; left:8rem;">
+                      <a class="nav-link" href="#" onclick=""><i class="fas fa-ellipsis-h"></i></a>
+                    </div>
+                  </div>
                 </ul>
               </div>
             </div>
@@ -63,6 +77,7 @@
           </div>
         </div>
       {% endfor %}
+     
 
     </div>
     <div class="ms-2">

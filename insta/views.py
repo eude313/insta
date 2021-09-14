@@ -62,8 +62,8 @@ def viewImage(request, pk):
     posts = Post.objects.get(id=pk)
     if request.method == 'POST':
         posts.delete()
-        return redirect('gallery')
-    return render(request, 'gram/viewImage.html', {'posts':posts})
+        return redirect('home')
+    return render(request, 'gram/viewImage.html', {'post':posts})
 
 def profile(request):
     return render(request, 'gram/profile.html')

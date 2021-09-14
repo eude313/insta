@@ -4,10 +4,10 @@
 {% include "gram/navbar.html" %}
 
 <div class="container">
-    <div class="row mt-3"> 
+    <ul class="row mt-3"> 
         <div class="col-md-1"></div>
         <div class="col-md-3">           
-            <div class="co-md-8 mt-2">
+            <div class="co-md-8 mt-4 ms-3">
                 <img src="https://mdbootstrap.com/img/new/standard/city/047.jpg"
                 class=" image-1 img-fluid"
                 alt=""/>
@@ -28,8 +28,8 @@
                         aria-expanded="false">
                             Edit profile
                         </button>
-                        <div class="dropdown-menu mt-2" style="width: 320px;">
-                            <div class="border" style="width: 300px;  position:relative; left: -4rem;">
+                        <div class="dropdown-menu mt-2 " style="width: 320px;">
+                            <div class="border card" style="width: 300px;  position:relative; left: -4rem;">
                                 <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
                                 <form class="px-4 py-2" method="POST" action="" enctype="multipart/form-data">
                                     {% csrf_token %}
@@ -90,9 +90,18 @@
                 </div>
             </div>
         </div>
-        <hr style="margin-left:5rem; margin-top:4rem; width:50rem;">
-
-
+        <hr style="margin-left:5.5rem; margin-top:4rem; width:50rem;">
+        <ul class="nav nav-pills mb-3" id="pills-tab2" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="dropdown-item" href="{% url 'profile' %}">profile</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="dropdown-item" href="{% url 'profile' %}">profile</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="dropdown-item" href="{% url 'profile' %}">profile</a>
+            </li>
+        </ul>
 
     </div>
 </div>

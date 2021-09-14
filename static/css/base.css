@@ -34,3 +34,10 @@ font-family: 'Courgette', cursive;{notes} */
     border-radius: 50%;
     display: inline-block;
 }
+
+/* Styles required only for the example above */
+.scrollspy-example-collapsible {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+}

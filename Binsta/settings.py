@@ -91,11 +91,10 @@ DATABASES = {
     }
 }
 
-PRODUCTION= config('PRODUCTION')
-if PRODUCTION == True:
+PRODUCTION = config('PRODUCTION')
+if PRODUCTION:
     DATABASES['default']= dj_database_url.config()
-    
-import pdb; pdb.set_trace()
+# import pdb; pdb.set_trace()
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

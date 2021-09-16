@@ -1,4 +1,4 @@
-from insta.models import Users, Post
+from insta.models import Users, Post, Profile
 from django.shortcuts import redirect, render
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
@@ -66,4 +66,14 @@ def viewImage(request, pk):
     return render(request, 'gram/viewImage.html', {'post':posts})
 
 def profile(request):
-    return render(request, 'gram/profile.html')
+    profiles = Profile.objects.all()
+    posts = Post.objects.all()
+    if request.method == 'POST':
+        photo= request.FILES['photo']
+        gender= request.POST['gender']
+        bio = request.POST['bio']
+        profile= Profile(photo=photo, bio=bio, gender=gender)
+        profile.save()
+        return redirect("profile")
+    context= {'profiles':profiles, 'post':posts }
+    return render(request, 'gram/profile.html', context)

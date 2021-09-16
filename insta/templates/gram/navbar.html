@@ -51,7 +51,7 @@
           role="button"
           data-mdb-toggle="dropdown"
           aria-expanded="false">
-          <img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" class="rounded-circle" height="28" alt="" loading="lazy"/>
+          <img src="{{ profile.photo.url }}" class="rounded-circle" height="28" alt="" loading="lazy"/>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
         {% if user is authenticated %}

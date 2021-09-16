@@ -66,7 +66,32 @@ class Post(models.Model):
     captions = models.TextField()
     created_time = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_likes')
-    saved   = models.BooleanField(default=False)  
+    saved   = models.BooleanField(default=False)
+    location = models.CharField(max_length=60, blank=True)  
     
 def __str__(self):
     return self.captions
+
+class Profile(models.Model):
+    author = models.ForeignKey('Users',  on_delete=models.CASCADE)
+    pic = CloudinaryField('pic', default='user.png')
+    bio = models.CharField(max_length=280)
+    gender= models.CharField(max_length=7)
+    
+def __str__(self):
+    return f'{self.author} Profile'
+ 
+def save_profile(self):
+    self.save()
+    
+    
+class Follow(models.Model):
+    follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following')
+    followed = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers')
+
+    def __str__(self):
+        return self.follower
+    
+    
+    def delete_profile(self):
+        self.delete()

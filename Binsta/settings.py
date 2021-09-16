@@ -15,6 +15,7 @@ from decouple import config
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,13 +84,18 @@ WSGI_APPLICATION = 'Binsta.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'insta',
-        'USER': 'postgres',
+        'NAME': config('NAME'),
+        'USER': config('USER'),
         'PASSWORD': config('PASSWORD'),
-        'HOST':'localhost',
+        'HOST': config('HOST'),
     }
 }
 
+PRODUCTION= config('PRODUCTION')
+if PRODUCTION == True:
+    DATABASES['default']= dj_database_url.config()
+    
+import pdb; pdb.set_trace()
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -130,10 +136,13 @@ AUTH_USER_MODEL = "insta.Users"
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

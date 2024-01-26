@@ -1,32 +1,53 @@
-<div class="card" style="width: 14rem; position: fixed;">
+{% load static %}
 
+<div
+  class="card mt-2">
   <div class="card-body">
-        <h5 class="card-title">
-            <ul class="nav nav-tabs card-header-tabs py-1 d-flex">
-                <li class="nav-item">
-                    <img
-                    src="{{ profile.image.url }}"
-                    class="image-2 img-fluid"
-                    alt=""/>
-                </li>
-                <li class="caption d-none d-md-block ms-2" style="font-family: 'Courgette', cursive;">
-                    <h6 class="mt-1" style='font-size:15px;'>{{ profile.username }}</h6>
-                    <small style='font-size:12px;'>Lorem  </small>
-                </li>
-            </ul>
-        </h5>
-        <div class="card-title mt-3 d-flex  justify-content-between"  style="font-family: 'Berkshire Swash', cursive;">
-            <h3 class="text-muted" style='font-size:17px;'>Suggestions For You</h3>
-            <h5 style='font-size:15px;'>see all</h5>
-        </div>
-        <div class="card-text d-flex  justify-content-between" style="font-family: 'Courgette', cursive;">
-            <img src="https://mdbootstrap.com/img/new/standard/city/047.jpg"
-            class="image-4 img-fluid"
-            alt=""/>
-           <a href="#"> <small>Follow</small></a>
-        </div>
+    <h5 class="card-title">
+      <ul class="nav nav-tabs card-header-tabs py-1 d-flex">
+        <li class="nav-item">
+          {% if user_profile_photo %}
+          <img src="{{ user_profile_photo }}" alt="User Profile Photo"  class=" image-3 img-fluid">
+          {% else %}
+          <img src="{% static 'images/user.png' %}" alt="Default User Photo" class='image-3'>
+          {% endif %}
+        </li>
+        <li
+          class="caption d-none d-md-block ms-2"
+          style="font-family: 'Courgette', cursive">
+          <h6
+            class="mt-1"
+            style="font-size: 15px">
+            {{ request.user.email }}
+          </h6>
+          <h6
+            class="mt-1"
+            style="font-size: 15px">
+            {{ request.user.username }}
+          </h6>
+        </li>
+      </ul>
+    </h5>
+    <div
+      class="card-title mt-3 d-flex justify-content-between"
+      style="font-family: 'Berkshire Swash', cursive">
+      <h3
+        class="text-muted"
+        style="font-size: 17px">
+        Suggestions For You
+      </h3>
+      <h5 style="font-size: 15px">see all</h5>
+    </div>
+    <div
+      class="card-text d-flex justify-content-between"
+      style="font-family: 'Courgette', cursive">
+      
+      <img
+        src="https://mdbootstrap.com/img/new/standard/city/047.jpg"
+        class="image-4 img-fluid"
+        alt="" />
+      <a href="#"> <small>Follow</small></a>
+    </div>
   </div>
-
-
 
 </div>

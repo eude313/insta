@@ -3,56 +3,88 @@
 {% block content %} 
 <div class="container d-flex justify-content-center">
     <div style="font-family: 'Courgette', cursive;">
-        <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
+        <h4 class="text-center my-2 text-capitalize" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
         {% if messages %}
-        <div class="messages me-5">
-            {% for message in messages %}
-            <h4 {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</h4>
-            {% endfor %}
-        </div>
+            <div class="me-5">
+                {% for message in messages %}
+                <div class="toast align-items-center border-0 show position-absolute bottom-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true" style="background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'info' %}#17a2b8{% elif message.tags == 'warning' %}#ffc107{% elif message.tags == 'danger' %}#dc3545{% endif %}">
+                    <div class="d-flex">
+                    <div class="toast-body text-white">
+                        {{ message }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         {% endif %}
-        <div class="border" style="width: 380px; height: 450px;">
-            
-            <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Sign Up</h4>
-            <form class="px-4 py-2" method="POST" action="">
+
+        <div class="border" style="width: 380px;">
+            <h4 class="text-center my-1 text-capitalize" style="font-family: 'Berkshire Swash', cursive;">Sign Up</h4>
+            <form class="px-4 py-2 needs-validation" method="POST" action="" novalidate>
                 {% csrf_token %}
             <!-- Username input -->
             <div class="form-outline mb-3">
-                <input name="username" type="Username" id="form2Example1" class="form-control" />
                 <label class="form-label" for="form2Example1">Username</label>
+                <input name="username" type="Username" id="form2Example1" class="form-control" required
+                placeholder="Username"/>
             </div>
 
             <!-- Email input -->
             <div class="form-outline mb-3">
-                <input name="email" type="email" id="form2Example1" class="form-control" />
                 <label class="form-label" for="form2Example1">Email</label>
+                <input name="email" type="email" id="form2Example1" class="form-control" 
+                placeholder="youremail@gmail.com"  required/>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-3">
-                <input name="password" type="password" id="typePassword" class="form-control" />
                 <label class="form-label" for="typePassword">Password</label>
+                <input name="password" type="password" id="typePassword" class="form-control"  required
+                placeholder="*****"/>
             </div>
 
             <!-- Confirm_Password -->
-            <div class="form-outline">
-                <input name="confirm_password" type="Password" id="typeConfirm_Password" class="form-control" />
+            <div class="form-outline mb-3">
                 <label class="form-label" for="typeConfirm_Password">Confirm_Password</label>
+                <input name="confirm_password" type="Password" id="typeConfirm_Password" class="form-control" required
+                placeholder="*****" />
             </div>
                     
             <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mt-3">Sign In</button>
-            
-            <!-- 2 column grid layout for inline styling -->
-            <div class="mb-2 text-center">
-                <div class='or mt-1 d-flex'>
-                <div class='mt-2' style="height:1px; width:100%; background-color:rgb(195, 195, 195);"></div><p class='mx-2' style="font-size:18px;">OR</p><div class='mt-2 ' style="height:1px; width:100%; background-color:rgb(195, 195, 195);"></div>
-                </div>
-                <div class="py-2">
-                <!-- Simple link -->
-                <a href="#!"><small> Forgot password?</small></a>
-                </div>
+            <div class="d-grid gap-2  mb-3">
+                <button type="submit" class="btn btn-primary btn-block mt-3">Sign In</button>
             </div>
+            <!-- 2 column grid layout for inline styling -->
+            <div class="text-center">
+                <div class="d-flex">
+                  <div
+                    class="d-flex align-items-center me-2"
+                    style="height: 27px; width: 100%">
+                    <div
+                      style="
+                        height: 1px;
+                        width: 100%;
+                        background-color: rgb(195, 195, 195);
+                      "></div>
+                  </div>
+  
+                  <p style="font-size: 16px; height: 27px; margin-bottom: 0px">
+                    OR
+                  </p>
+                  <div
+                    class="d-flex align-items-center ms-2"
+                    style="height: 27px; width: 100%">
+                    <div
+                      style="
+                        height: 1px;
+                        width: 100%;
+                        background-color: rgb(195, 195, 195);
+                      "></div>
+                  </div>
+                </div>
+                <a href="#"><small> Forgot password?</small></a>
+              </div>
             </form>
 
             </div>
@@ -64,7 +96,7 @@
             </div>
 
             <div class="px-1" style="width: 380px;">
-                <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb&utm_campaign=loginPage&ig_mid=E50E46DD-5BBA-48D4-8862-874BD4DFEA24&utm_content=lo&utm_medium=badge"><img src="{% static '/images/play.png' %}" alt="" class="img-fluid"></a>
+                <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb&utm_campaign=loginPage&ig_mid=E50E46DD-5BBA-48D4-8862-874BD4DFEA24&utm_content=lo&utm_medium=badge"><img src="{% static './images/play.png' %}" alt="" class="img-fluid"></a>
             </div>
 
             </div>

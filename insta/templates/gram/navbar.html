@@ -1,83 +1,81 @@
 <!-- Navbar-->
-<nav class="border navbar navbar-expand-lg navbar-light bg-light sticky-top" style="font-family: 'Courgette', cursive; height:3rem; width:100%; padding-right:13rem">
-  <div class="container justify-content-between" style="margin-left:10rem;">
-    <!-- Left elements -->
+{% load static %}
+<nav
+  class="border navbar navbar-expand-lg bg-body-tertiary sticky-top"
+  style=" padding: 0rem 7rem">
+  <div
+    class="container-md">
     <div class="d-flex">
       <!-- Brand -->
-      <a class="navbar-brand me-2 mb-1 d-flex align-items-center" href="#">
-      <p class="m-1" style="font-size:1.8rem; font-family: 'Berkshire Swash', cursive;"> <i class="fas fa-award pt-1" style="font-size:1.5rem; color: gold;"></i> Bazenga Insta <i style="font-size:1.5rem; color: gold;" class="fas fa-smile-wink"></i></p>
+      <a
+        class="navbar-brand me-2 mb-1 d-flex align-items-center"
+        href="{% url 'home' %}">
+        <p
+          class="m-1"
+          style="font-size: 1.8rem; font-family: 'Berkshire Swash', cursive">
+        
+            <i class="bi bi-award-fill"style="font-size: 1.5rem; color: gold"></i>
+          Bazenga Insta
+          <i
+            style="font-size: 1.5rem; color: gold"
+            class="fas fa-smile-wink"></i>
+        </p>
       </a>
     </div>
     <!-- Left elements -->
-    <!-- center- elements -->
-    <div>
-      <!-- Search form -->
-      <form class="input-group w-auto my-auto d-none d-sm-flex">
-        <div class="form-outline my-2">
-          <input type="search" style="min-width: 125px; "id="form2Example1" autocomplete="off" class="form-control rounded" />
-          <label class="form-label" for="form2Example1"> <i class="fas fa-search"> <span style="font-family: 'Courgette', cursive;" >Search</span> </i></label>
-        </div>
-      </form>
+    <i class="bi bi-columns-gap"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarScroll"
+    aria-controls="navbarScroll"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+    style="font-size: 24px; "
+    ></i>
+    <div
+      class="collapse navbar-collapse"
+      id="navbarScroll">
+      
+      <ul
+        class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+        style="--bs-scroll-height: 100px">
+        <li class="nav-item me-3 me-lg-1 active">
+          <a
+            class="nav-link"
+            href="{% url 'home' %}">
+            <h3><i class="bi bi-house"></i></h3>
+          </a>
+        </li>
+        <li class="nav-item me-3 me-lg-1 active">
+          <a
+            class="nav-link"
+            href="#">
+            <h3><i class="bi bi-chat-left"></i></h3>
+          </a>
+        </li>
+
+        <li class="nav-item me-3 me-lg-1 active">
+          <a
+            class="nav-link"
+            href="{% url 'explore' %}">
+            <h3><i class="bi bi-compass"></i></h3>
+          </a>
+        </li>
+        <li class="nav-item me-3 me-lg-1 active">
+          <a
+            class="nav-link"
+            href="{% url 'upload' %}">
+            <h3><i class="bi bi-plus-lg"></i></h3>
+          </a>
+        </li>
+        <li class="nav-item me-3 me-lg-1 active">
+          <a
+            class="nav-link"
+            href="{% url 'profile' %}">
+            <h3><i class="bi bi-person"></i></h3>
+          </a>
+        </li>
+      </ul>
     </div>
-    <!-- center- elements -->
-    <!-- Right elements -->
-    <ul class="navbar-nav flex-row">
-      <li class="nav-item me-3 me-lg-1 active">
-        <a class="nav-link" href="{% url 'home' %}">
-          <span><i class="fas fa-home fa-lg"></i></span>
-        </a>
-      </li>
-      <li class="nav-item me-3 me-lg-1 active">
-        <a class="nav-link" href="#">
-          <span><i class="far fa-comment fa-lg"></i></span>
-        </a>
-      </li>
-      
-      <li class="nav-item me-3 me-lg-1 active">
-        <a class="nav-link" href="#">
-          <span><i class="far fa-compass fa-lg"></i></span>
-        </a>
-      </li>
-      <li class="nav-item me-3 me-lg-1 active">
-        <a class="nav-link" href="#">
-          <span><i class="far fa-heart fa-lg"></i></span>
-        </a>
-      </li>
-      <!-- Avatar -->
-      <li class="nav-item me-3 dropdown">
-        <a class="nav-link dropdown-toggle d-flex align-items-center"
-          href="#"
-          id="dropdown-toggle"
-          role="button"
-          data-mdb-toggle="dropdown"
-          aria-expanded="false">
-          <img src="{{ profile.photo.url }}" class="rounded-circle" height="28" alt="" loading="lazy"/>
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-        {% if user is authenticated %}
-          
-         
-          
-        {% else %}
-          <li>
-            <a class="dropdown-item" href="{% url 'profile' %}"><i class="far fa-user me-1"></i>profile</a>
-          </li>
-          <li>
-          <li>
-            <a class="dropdown-item" href="{% url 'upload' %}"><i class="fas fa-upload  me-1"></i>Add post</a>
-          </li>
-          <li>
-          <hr class="dropdown-divider"></li>
-          <li>
-            <a class="dropdown-item" href="{% url 'signOut' %}"><i class="far fa-share-square me-1"></i>Logout</a>
-          </li>
-        {% endif %}
-        </ul>
-      </li>
-      
-    </ul>
-    <!-- Right elements -->
   </div>
- 
 </nav>
-<!-- Navbar -->

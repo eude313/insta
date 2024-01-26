@@ -1,0 +1,32 @@
+# Python-specific ignores
+*.pyc           
+__pycache__/    
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/        
+
+# Environment variables
+.env            
+.prettierignore
+*text.txt
+
+# IDE/Editor specific files
+.vscode/       
+.idea/          
+
+# Logs and other generated files
+logs/          
+*.log
+*.swp           
+
+# Compiled Python modules
+*.pyc
+*.pyo
+*.pyd
+
+# Package/dependency management
+*.egg-info/
+dist/
+build/

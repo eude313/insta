@@ -1,127 +1,21 @@
 {% extends 'gram/base.html' %}
-{% load cloudinary %}      
-{% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
+{% load static %}
 {% block content %}
-{% include "gram/navbar.html" %}
-<div class="container">
-  <div class="d-flex">
-    <div class="">
-      <div style="margin-left:5rem; width:100%; border-radius:8px; font-family: 'Courgette', cursive;">
-        {% if messages %}
-          <div class="messages me-5">
-            {% for message in messages %}
-              <h4 {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</h4>
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-      
-      {% for post in posts %}
-        <div class="border my-2" style="margin-left:5rem; width:36rem; border-radius:8px;">
-
-          <!-- Navbar -->
-          <nav class="navbar navbar-expand-lg navbar-light bg-white" style="height: 10vh;;">
-            <div class="container-fluid">
-              <button
-                class="navbar-toggler"
-                type="button"
-                data-mdb-toggle="collapse"
-                data-mdb-target="#navbarExample01"
-                aria-controls="navbarExample01"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-              <i class="fas fa-bars"></i>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarExample01" style=" font-family: 'Berkshire Swash', cursive; font-size:2vw;">
-                <ul class="navbar-nav me-auto my-3" style="width: 100%; position: relative; top:0.8rem;">
-                  <li class="nav-item active" style="width: 10%;">
-                   
-                    <a class="nav-link" aria-current="page" href="#" style="width: 100%;"> 
-                      <img
-                      src="{{ profile.pic.url }}"
-                      class="image-3 img-fluid"
-                      alt=""/>
-                    </a>
-                    
-                  </li>
-                 
-                  <div class="d-flex" style="width: 90%;">
-                    <div class="nav-item" style="width: 90%;">
-                      <a class="nav-link"  href="#">{{ post.author.username }}</a>
-                    </div>
-                    <div class="fas-group" style="width: 10%; position: relative; top:-1.7rem;">
-                      <i 
-                      type="fas"
-                      data-mdb-toggle="dropdown"
-                      data-mdb-display="static"
-                      aria-expanded="false"
-                      class="fa-ellipsis-h">
-                      <i class="fas fa-ellipsis-h fa-lg"></i>
-                      </i>
-                      <ul class="dropdown-menu dropdown-menu-end dropdown"  style="margin:1rem 12rem;">
-                        <li><a class="dropdown-item" href="{%  url 'viewImage' post.id %}"><i class="fas fa-expand"><span class="ms-2">Go to post</span></i></a></li>
-                        <hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-minus"><span class="ms-2">Unfollow</span> </i></a></li>
-                        <hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'home' %}"><i class="fas fa-times"><span class="ms-2">Cancel</span> </i></a></li>
-                      </ul>
-                    </div>
-                    
-                  </div>
-                </ul>
-              </div>
-            </div>
-          </nav>
-          <!-- Navbar -->
-          <img
-            src="{{ post.image.url }}"
-            class="img-fluid"
-            alt="..."
-          />
-          <div class="d-flex ps-2">
-              <a class="text-muted m-1" href="#">
-                <span><i class="far fa-heart fa-lg"><span class="ms-2">{{ post.likes.count }}</span></i></span>
-              </a>
-              <a class="text-muted m-1" href="#">
-                <span><i class="far fa-comment fa-lg"></i></span>
-              </a>
-              
-              <a class="text-muted m-1 ms-2" href="#">
-                <span><i class="far fa-paper-plane fa-lg"></i></span>
-              </a>
-              <a class="text-muted m-1 ms-2" href="#">
-                <i class="far fa-bookmark fa-lg"></i>
-              </a>
-              
-          </div>
-          
-          <div class="card-body" style="font-family: 'Courgette', cursive;">
-            <p class="card-text">
-              {{ post.captions }}
-            </p>
-          </div>
-          <div class="time_posted ms-2">
-              {{ post.created_time | timesince }} ago
-          </div>
-          <form class="d-flex border" action="" style="position:relative; top:1.1rem;">
-            <i class="far fa-smile fa-lg pt-2 mx-2"></i>
-            <!-- gender input -->
-            <div class="form-outline mb-3" style="width: 30rem;">
-              <input type="comment" name="comment" id="form2Example1" class="form-control" />
-              <label class="form-label" for="form2Example1">Comment</label>
-            </div>
-            <button type="button" style="width: 20px;" class="btn btn-link text-muted mb-3 me-3" data-mdb-ripple-color="dark">Link</button>
-          </form>
+{% load cloudinary %}
+<div class="nav-box">
+    {% include "gram/navbar.html" %}
+  </div> 
+<div class="container-main">
+    <div class="box-1">
+    </div> 
+    <div class="box-2">
+        <div class="card my-2 card-content">
         </div>
-      {% endfor %}
-      
-
     </div>
-    <div class="ms-2">
-      {% include "gram/sidebar.html" %}
+    <div class="box-3">
     </div>
-  </div>
+    <div class="box-4">
+    </div>
 </div>
 
 {% endblock %}

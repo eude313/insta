@@ -1,34 +1,52 @@
 {% extends 'gram/base.html' %}
 {% load static %}
 {% block content %} 
-<a class="nav-link active" href="{% url 'home' %}"> <i class="fas fa-reply-all mx-5 my-2" style="font-size:2rem;"><span class="ms-1" style=" font-family: 'Berkshire Swash', cursive;"> Home</span></i></a>
-<div class="container d-flex justify-content-center">
-    <div style="font-family: 'Courgette', cursive;">
-        <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
-       
-        <div class="border" style="height: 450px;">
-            
-            <h4 class="text-center my-1" style="font-family: 'Berkshire Swash', cursive;">Upload </h4>
-            <form class="px-4 py-2" method="POST" action="" enctype="multipart/form-data">
-                {% csrf_token %}
+<div class="container">
+    <div class="py-4">
+    </div>
+    <div class="row">
+        <div class="col-md-5" style="font-family: 'Courgette', cursive;">     
+            <div class="border" style="height: auto;">
                 
-                <!-- file input -->
-                <div class="mb-3">
-                    <label class="form-label" for="customFile">Upload Image</label>
-                    <input type="file"  name="image" required  class="form-control" id="customFile" />
+                <h4 class="text-center py-2 fw-medium" style="font-family: 'Berkshire Swash', cursive;">Upload </h4>
+                <form class="px-4 py-2" method="POST" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- file input -->
+                    <div>
+                        <label class="form-label" for="customFile">Upload Image</label>
+                        <input type="file"  name="images" required multiple class="form-control" id="customFile" />
+                    </div>
+                    <!-- location input -->
+                    <div class="form-outline mb-3">
+                        <label class="form-label" for="form2Example1">Location</label>
+                        <input name="location" id="form2Example1" class="form-control" required
+                        placeholder="Current location"/>
+                    </div>
+                    <!-- message input -->
+                    <div class="form-outline my-3">
+                        <label class="form-label" for="textAreaExample">Caption</label>
+                        <textarea name="captions" class="form-control" id="textAreaExample" rows="4"  required placeholder="Add a caption..."></textarea>
+                    </div>
+                    <!-- Submit button -->
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Create post</button>
+                    </div>
+                </form>
+                <div class="text-center py-2 mt-2">
+                    <p class="fst-normal">Return to <a  href="{% url 'home' %}">home page</a></p>   
                 </div>
-                <!-- message input -->
-                <div class="form-outline">
-                    <textarea name="captions" class="form-control" id="textAreaExample" rows="4"></textarea>
-                    <label class="form-label" for="textAreaExample">Caption</label>
-                </div>
-                <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block mt-3">Create post</button>
-                
-            </form>
+            </div>
+        </div>
+        <div class="col-md-7 border">
+            <h4 class="text-center my-2 fw-medium">Bazenga insta</h4>
+            <p class="text-center"> your selected images will appear here</p>
 
         </div>
     </div>
 </div>
-
 {% endblock %}
+<script>
+
+</script>

@@ -1,119 +1,111 @@
-{% extends 'gram/base.html' %}
-
-{% block content %}
-{% include "gram/navbar.html" %}
-
-<div class="container">
-    <ul class="row mt-3"> 
-        <div class="col-md-1"></div>
-        <div class="col-md-3">         
-            <div class="co-md-8 mt-4 ms-3">
-                <img src="{{ profile.image.url }}"
-                class=" image-1 img-fluid"
-                alt=""/>
-            </div>           
-        </div>
-        <div class="col-md-8">
-            <div  class="mt-3">
-                <div class="d-flex"  style="font-family: 'Courgette', cursive;">
-                    <div class="mt-2 me-1" style="text-align:center;">
-                        <h4>{{ profile.author.username }}</h4>
-                    </div>
-                    <div class="mx-2 dropdown">
-                        <button
-                        type="button"
-                        class="btn btn-light" 
-                        data-mdb-ripple-color="dark"
-                        data-mdb-toggle="dropdown"
-                        aria-expanded="false">
-                            Edit profile
-                        </button>
-                        <div class="dropdown-menu mt-2 " >
-                            <div class="border card" style="width: 300px;  position:relative; left: -4rem;">
-                                <h4 class="text-center my-2" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
-                                <form class="px-4 py-2" method="POST" action="" enctype="multipart/form-data">
-                                    {% csrf_token %}
-
-                                    <!-- file input -->
-                                    <div class="mb-3">
-                                        <label class="form-label" for="customFile">Upload Profile</label>
-                                        <input type="file"  name="photo" required  class="form-control" id="customFile" />
-                                    </div>
-                                    <!-- gender input -->
-                                    <div class="form-outline mb-3">
-                                        <input type="gender" name="gender" id="form2Example1" class="form-control" />
-                                        <label class="form-label" for="form2Example1">Gender</label>
-                                    </div>
-                                    <!-- Phone Number input -->
-                                    <div class="form-outline mb-3">
-                                        <input type="bio" name="bio" id="form2Example1" class="form-control" />
-                                        <label class="form-label" for="form2Example1">Bio</label>
-                                    </div>
-                                    <!-- Submit button -->
-                                    <button type="submit" class="btn btn-primary btn-block mt-3">Edit profile </button>
-                                    
-                                </form>
-                        
-                            </div>
-
-
-                        </div>
-                    </div>
-                    <div class="mt-4 ms-2">
-
-                        <div class="fas-group" style="width: 10%; position: relative; top:-1.7rem;">
-                            <i 
-                            type="fas"
-                            data-mdb-toggle="dropdown"
-                            data-mdb-display="static"
-                            aria-expanded="false"
-                            class="fas fa-cogs">
-                            <i class="fas fa-cogs fa-lg ms-2"></i>
-                            </i>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown"  style="margin:2rem 5rem;">
-                              <li><a class="dropdown-item" href="#"><i class="fas fa-user-minus"><span class="ms-2">Unfollow</span> </i></a></li>
-                               <hr class="dropdown-divider"></li>
-                              <li><a class="dropdown-item" href="{% url 'signOut' %}"><i class="far fa-share-square me-1"></i>Logout</a></li>
-                            </ul>
-                              
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex" style="font-family: 'Courgette', cursive;">
-                    <div class="me-5">
-                        <h5>{{ images.count }} Post</h5>
-                    </div>
-                    <div class="mx-4">
-                        <h5>{{ profile.followers.count }} Followers</h5>
-                    </div>
-                    <div class="mx-4">
-                        <h5>{{ profile.following.count }} Following</h5>
-                    </div>
-                </div>
-                <div>
-                    
-                    <p class="text-secondary">{{ profile.bio }}</p>
-                </div>
-            </div>
-        </div>
-
-        
-        <hr style="margin-left:5.5rem; margin-top:4rem; width:50rem;">
-        <ul class="nav nav-pills mb-3"  style="padding-left:21rem; margin-top:-1rem; width:50rem;" id="pills-tab2" role="tablist">
-            <li class="nav-item  me-2" role="presentation">
-                <a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-th"><span class='ms-1'>POSTS</span></i></a>
-            </li>
-            <li class="nav-item me-2" role="presentation">
-                <a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-tv"><span class='ms-1'>IGTV</span></i></a>
-            </li>
-            <li class="nav-item me-2" role="presentation">
-                <a class="dropdown-item" href="{% url 'profile' %}"><i class="far fa-bookmark"><span class='ms-1'>SAVED</span></i></a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-tags"><span class='ms-1'>TAGGED</span></i></a>
-            </li>
-        </ul>
-
+{% extends 'gram/base.html' %} {% load static %} {% block content %}
+  {% load cloudinary %}
+  <div class="container-main">
+    <div class="box-1">
+      {% include 'gram/appbar.html' %}
     </div>
-</div>
+    <div class="box-5">
+      <div class="container w-100">
+        <div class="row my-3">
+          <div class="col-md-1"></div>
+          <div class="col-md-3">
+            <div class="co-md-8 ms-3">
+              {% if user_profile_photo %}
+                <img src="{{ user_profile_photo }}" alt="User Profile Photo" class="image-1 img-fluid" />
+              {% else %}
+                <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-1" />
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div>
+              <div class="" style="font-family: 'Courgette', cursive">
+                <div class="my-2 d-flex align-items-center">
+                  <div class="me-2">
+                    <h4 class="fs-3 fw-medium mt-2">{{ request.user.username }}</h4>
+                  </div>
+
+                  <div class="me-2">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn fs-5" data-bs-toggle="modal" data-bs-target="#exampleModal" style="height: 40px">Edit profile</button>
+                  </div>
+                  <div class="btn-group dropdown">
+                    <i class="bi bi-three-dots" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 18px"></i>
+
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a class="dropdown-item" href="#">
+                          <i class="bi bi-person-dash" style="font-size: 24px"></i>
+                          <span class="ms-2">Unfollow</span>
+                        </a>
+                      </li>
+                      <li class="d-flex">
+                        <a class="dropdown-item" href="{% url 'signOut' %}"><i class="bi bi-box-arrow-in-right" style="font-size: 24px"></i><span class="ms-3">Logout</span></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div>
+                  {% for profile in profiles %}
+                    <p>{{ profile.bio }}</p>
+                    <p>{{ profile.get_gender_display }}</p>
+                  {% endfor %}
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <form class="px-4 py-2" method="POST" action="{% url 'profile' %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title fs-5" style="
+                            font-family: 'Berkshire Swash', cursive;
+                            justify-content: center;
+                          ">Bazenga insta</h4>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <h4 class="text-center my-2" style="
+                            font-family: 'Berkshire Swash', cursive;
+                            justify-content: center;
+                          ">Create post</h4>
+                          <!-- file input -->
+                          <div class="form-group">{{ form.photo.label_tag }} {{ form.photo }}</div>
+
+                          <div class="form-group">{{ form.gender.label_tag }} {{ form.gender }}</div>
+
+                          <div class="form-group">{{ form.bio.label_tag }} {{ form.bio }}</div>
+                        </div>
+                        <div class="modal-footer d-grid gap-2">
+                          <!-- Submit button -->
+                          <button type="submit" class="btn btn-primary btn-block mt-3">Edit profile</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex" style="font-family: 'Courgette', cursive">
+                <div class="me-5">
+                  <h5>{{ post.count }} Post</h5>
+                </div>
+                <div class="mx-4">
+                  <h5>{{ followers_count }} Followers</h5>
+                </div>
+                <div class="mx-4">
+                  <h5>{{ following_count }} Following</h5>
+                </div>
+              </div>
+              <div>
+                <p class="text-secondary">{{ profile.bio }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% include 'gram/profileInfo.html' %}
+      </div>
+    </div>
+    <div class="box-4"></div>
+  </div>
 {% endblock %}

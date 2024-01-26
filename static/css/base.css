@@ -1,38 +1,182 @@
 /* font-family: 'Berkshire Swash', cursive;{heading}
 font-family: 'Courgette', cursive;{notes} */
+html {
+    overflow-y: scroll;
+}
 
-.or{
-    height:10px;
-    font-size:10px;
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
 }
-.vl{
-    height:1rem;
-    width:10rem;
-    background-color:rgb(0, 0, 0);
+
+.nav-box {
+    display: none;
 }
-.image-1{
-    width:200px;
-    height:200px; 
+
+.container-main {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.box-1 {
+    width: 20%;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    background-color: red;
+}
+
+.box-2 {
+    width: 60%;
+    height: auto;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.box-5 {
+    width: 80%;
+    position: fixed;
+    right: 0;
+    padding: 0 20px;
+    justify-content: center;
+}
+
+.card-content {
+    width: 630px;
+    height: 800px;
+}
+
+.box-3 {
+    width: 20%;
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    background-color: green;
+}
+
+@media screen and (max-width: 1100px) {
+    .container-main {
+        width: 100%;
+    }
+
+    .box-1 {
+        width: 25%;
+        background-color: black;
+    }
+
+    .box-2 {
+        width: 75%;
+        position: fixed;
+        right: 0;
+        padding: 10px 12px;
+        display: flex;
+        justify-content: center;
+        background-color: yellow;
+    }
+
+    .box-5 {
+        width: 75%;
+        right: 0;
+        padding: 0 20px;
+        justify-content: center;
+    }
+
+    .card-content {
+        height: 700px;
+    }
+
+    .box-3 {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .nav-box {
+        display: block;
+    }
+
+    .box-1 {
+        display: none;
+    }
+
+    .box-2 {
+        width: 100%;
+        padding: 10px 12px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .box-5 {
+        width: 100%;
+        padding: 10px 12px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .box-4 {
+        background-color: blueviolet;
+        width: 100%;
+        height: 80px;
+        position: fixed;
+        bottom: 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.or {
+    height: 10px;
+    font-size: 10px;
+}
+
+.vl {
+    height: 1rem;
+    width: 10rem;
+    background-color: rgb(0, 0, 0);
+}
+
+.image-1 {
+    width: 240px;
+    height: 240px;
     border-radius: 50%;
     display: inline-block;
 }
-.image-2{
-    width:70px;
-    height:70px; 
+
+.image-2 {
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     display: inline-block;
 }
-.image-3{
-    width:50px;
-    height:50px; 
+
+.image-3 {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: inline-block;
 }
-.image-4{
-    width:35px;
-    height:35px; 
+
+.image-4 {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    display: inline-block;
 }
 
 /* Styles required only for the example above */
@@ -40,4 +184,81 @@ font-family: 'Courgette', cursive;{notes} */
     position: relative;
     height: 200px;
     overflow: auto;
+}
+
+
+/* css/styles.css */
+
+/* Add general styles for form fields */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Style the label */
+label {
+    display: block;
+    font-weight: bold;
+}
+
+/* Style the input fields */
+input[type="text"],
+input[type="file"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+}
+
+/* Style the submit button */
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+/* explore */
+.container-explore {
+    position: relative;
+    width: 50%;
+}
+
+.image-x {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.overlay-y {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #008CBA;
+}
+
+.container-explore:hover .overlay-y {
+    opacity: 1;
+}
+
+.text-h {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
 }

@@ -1,0 +1,64 @@
+<!-- internet_connection_error.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Connection Error</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .error-container {
+            text-align: center;
+        }
+
+        .error-message {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff3333;
+        }
+
+        .retry-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .retry-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="error-container">
+    <div class="error-message">
+        Oops! There was an issue connecting to the internet.
+    </div>
+    <button class="retry-button" onclick="retryConnection()">Retry</button>
+</div>
+
+<script>
+    // JavaScript function to retry the connection
+    function retryConnection() {
+        location.reload();
+    }
+</script>
+
+</body>
+</html>

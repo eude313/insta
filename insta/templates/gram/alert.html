@@ -1,0 +1,17 @@
+{% extends 'gram/base.html' %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div  {% if message.tags %}  class="offcanvas offcanvas-bottom bg-{{ message.tags }} text-white" {% endif %} tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel" role="alert" style='height: 80px;'>
+            <div class="offcanvas-header my-2">
+            <h5 class="offcanvas-title" id="offcanvasBottomLabel">{{ message }}</h5>
+            <i class="bi bi-x-lg text-white me-2"
+            type="button" 
+            data-bs-dismiss="offcanvas" aria-label="Close"
+            ></i>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

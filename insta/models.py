@@ -4,7 +4,6 @@ import datetime as dt
 from django.db.models.signals import post_save, post_delete
 from cloudinary.models import CloudinaryField
 from django.utils import timezone
-from django.conf import settings
 
 # Create your models here.
 
@@ -50,6 +49,7 @@ class MyAccountManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.CharField(max_length=50, unique=True)
+    first_name = models.CharField(max_length=50, unique=True)
     date_joined = models.DateTimeField(verbose_name="date joined", auto_now_add=True)
     last_login = models.DateTimeField(default=dt.datetime.now)
     is_admin = models.BooleanField(default=False)
@@ -57,6 +57,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     password = models.CharField(max_length=100)
+    last_seen = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['username']
@@ -78,15 +79,15 @@ class Post(models.Model):
     image = CloudinaryField("image")
     captions = models.TextField()
     created_time = models.DateTimeField(default=timezone.now)
-    likes = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="post_likes"
-    )
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
     saved = models.BooleanField(default=False)
     location = models.CharField(max_length=60, blank=True)
 
 
     def __str__(self):
         return self.captions
+    
+    
     
 class CarouselImage(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -105,8 +106,9 @@ class Profile(models.Model):
         (FEMALE, 'Female'),
         (OTHER, 'Other'),
     ]
-    user = models.OneToOneField("User", on_delete=models.CASCADE)
-    photo = CloudinaryField("photo", default="./images/user.png")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    first_name = models.CharField(max_length=100, null=True, default='')
+    photo = CloudinaryField("photo")
     bio = models.CharField(max_length=280)
     gender = models.CharField(
         max_length=1,
@@ -114,25 +116,35 @@ class Profile(models.Model):
         default=OTHER,
     )
 
-
     def __str__(self):
         return f"{self.user} Profile"
-
 
     def save_profile(self):
         self.save()
 
 
+class Like(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE) 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_like = models.BooleanField(default=False)
+
+
+
 class Follow(models.Model):
-    follower = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="following"
-    )
-    followed = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="followers"
-    )
+    follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    following = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE, null=True)
+
+    
+    class Meta:
+        unique_together = ('follower', 'following')  # Each follow instance should be unique
 
     def __str__(self):
-        return self.follower
+        return f"{self.follower} follows {self.following}"
+    
 
-    def delete_profile(self):
-        self.delete()
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)

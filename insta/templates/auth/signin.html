@@ -1,115 +1,92 @@
 {% extends 'gram/base.html' %}
 {% load static %}
-{% block content %} 
+{% block content %}
 <div class="container d-flex justify-content-center">
-    <div style="font-family: 'Courgette', cursive;">
-        <h4 class="text-center my-2 text-capitalize" style="font-family: 'Berkshire Swash', cursive; justify-content: center;">Bazenga insta</h4>
-        {% if messages %}
-            <div class="me-5">
-                {% for message in messages %}
-                <div class="toast align-items-center border-0 show position-absolute bottom-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true" style="background-color: {% if message.tags == 'success' %}#28a745{% elif message.tags == 'info' %}#17a2b8{% elif message.tags == 'warning' %}#ffc107{% elif message.tags == 'danger' %}#dc3545{% endif %}">
-                    <div class="d-flex">
-                    <div class="toast-body text-white">
-                        {{ message }}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <div class="border" style="width: 380px;">
-            <h4 class="text-center my-1 text-capitalize" style="font-family: 'Berkshire Swash', cursive;">Sign Up</h4>
-            <form class="px-4 py-2 needs-validation" method="POST" action="" novalidate>
+    <div style="width: 380px;">
+        <div class="border mt-3 px-3">
+            <h4 class="text-center my-4 text-capitalize fs-1" style="font-family: 'Lobster', sans-serif; justify-content: center;">Bazenga insta</h4>
+            <p class="text-center m-3 fs-6 fw-semibold text-muted">Sign up to see photos and videos from your friends.</p>
+            <form class="px-4 py-2 needs-validation" method="POST" validate>
                 {% csrf_token %}
-            <!-- Username input -->
-            <div class="form-outline mb-3">
-                <label class="form-label" for="form2Example1">Username</label>
-                <input name="username" type="Username" id="form2Example1" class="form-control" required
-                placeholder="Username"/>
-            </div>
-
-            <!-- Email input -->
-            <div class="form-outline mb-3">
-                <label class="form-label" for="form2Example1">Email</label>
-                <input name="email" type="email" id="form2Example1" class="form-control" 
-                placeholder="youremail@gmail.com"  required/>
-            </div>
-
-            <!-- Password input -->
-            <div class="form-outline mb-3">
-                <label class="form-label" for="typePassword">Password</label>
-                <input name="password" type="password" id="typePassword" class="form-control"  required
-                placeholder="*****"/>
-            </div>
-
-            <!-- Confirm_Password -->
-            <div class="form-outline mb-3">
-                <label class="form-label" for="typeConfirm_Password">Confirm_Password</label>
-                <input name="confirm_password" type="Password" id="typeConfirm_Password" class="form-control" required
-                placeholder="*****" />
-            </div>
-                    
-            <!-- Submit button -->
-            <div class="d-grid gap-2  mb-3">
-                <button type="submit" class="btn btn-primary btn-block mt-3">Sign In</button>
-            </div>
-            <!-- 2 column grid layout for inline styling -->
-            <div class="text-center">
-                <div class="d-flex">
-                  <div
-                    class="d-flex align-items-center me-2"
-                    style="height: 27px; width: 100%">
-                    <div
-                      style="
-                        height: 1px;
-                        width: 100%;
-                        background-color: rgb(195, 195, 195);
-                      "></div>
-                  </div>
-  
-                  <p style="font-size: 16px; height: 27px; margin-bottom: 0px">
-                    OR
-                  </p>
-                  <div
-                    class="d-flex align-items-center ms-2"
-                    style="height: 27px; width: 100%">
-                    <div
-                      style="
-                        height: 1px;
-                        width: 100%;
-                        background-color: rgb(195, 195, 195);
-                      "></div>
-                  </div>
+                <!-- Email input -->
+                <div class="form-outline mb-3">
+                    <input  name="email" type="email" class="form-control form-control-lg fs-6" placeholder="youremail@gmail.com" required/>
                 </div>
-                <a href="#"><small> Forgot password?</small></a>
-              </div>
+                <!-- First_name input -->
+                <div class="form-outline mb-3">
+                    <input name="first_name" type="first_name" class="form-control" required placeholder="First Name" style="
+                    height: 46px;"/>
+                </div>
+                <!-- Username input -->
+                <div class="form-outline mb-3">
+                    <input name="username" type="Username" class="form-control" required placeholder="Username"style="
+                    height: 46px;" />
+                </div>
+
+                <!-- Password input -->
+                <div class="form-outline mb-3">
+                    <input name="password" type="password" id="typePassword" class="form-control" required placeholder="*****" style="
+                    height: 46px;"/>
+                </div>
+
+                <!-- Confirm_Password -->
+                <div class="form-outline mb-3">
+                    <input name="confirm_password" type="Password" id="typeConfirm_Password" class="form-control" required placeholder="*****"style="
+                    height: 46px;" />
+                </div>
+                <div class="fs-6 text-center text-muted">
+                    <div class="">
+                    <small class="m-0">
+                        People who use our service may have uploaded your contact information to Instagram. <a href="https://l.instagram.com/?u=https%3A%2F%2Fwww.facebook.com%2Fhelp%2Finstagram%2F261704639352628&e=AT33--0ByTdhJzPtFn-9GkH3YPcHypXMoQZ63nTHePvmgvV9vSqhiSwxrQyE7tBn5PRG4JOxxVkYlmc14gMxtM3-wI5kaPeDAUJ3PtVGRTkYXJaZu9C2b5N08y_0YvqZMdrTCi37-caJ8g"class="link-offset-2 link-underline link-underline-opacity-0">Learn More</a>
+                    </small>  </div>
+                    <small class="m-0">
+                        By signing up, you agree to our <a href="https://help.instagram.com/581066165581870/?locale=en_US"class="link-offset-2 link-underline link-underline-opacity-0"> Terms</a> ,<a href="https://l.instagram.com/?u=https%3A%2F%2Fwww.facebook.com%2Fprivacy%2Fpolicy&e=AT33--0ByTdhJzPtFn-9GkH3YPcHypXMoQZ63nTHePvmgvV9vSqhiSwxrQyE7tBn5PRG4JOxxVkYlmc14gMxtM3-wI5kaPeDAUJ3PtVGRTkYXJaZu9C2b5N08y_0YvqZMdrTCi37-caJ8g"class="link-offset-2 link-underline link-underline-opacity-0">  Privacy Policy</a> and <a href="https://www.instagram.com/legal/cookies/"class="link-offset-2 link-underline link-underline-opacity-0">Cookies Policy</a> .
+                    </small>
+
+                </div>
+                <!-- Submit button -->
+                <div class="d-grid gap-2 mb-4">
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Sign In</button>
+                </div>
+                <!-- 2 column grid layout for inline styling -->
+                <div class="text-center">
+                    <div class="d-flex mb-3">
+                        <div class="d-flex align-items-center me-2" style="height: 27px; width: 100%">
+                            <div style="
+                                        height: 1px;
+                                        width: 100%;
+                                        background-color: rgb(195, 195, 195);
+                                    "></div>
+                        </div>
+
+                        <p style="font-size: 16px; height: 27px; margin-bottom: 0px">OR</p>
+                        <div class="d-flex align-items-center ms-2" style="height: 27px; width: 100%">
+                            <div style="
+                                        height: 1px;
+                                        width: 100%;
+                                        background-color: rgb(195, 195, 195);
+                                    "></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <a href="#"class="link-offset-2 link-underline link-underline-opacity-0 "><small>Forgot password?</small></a>
+                    </div>
+                </div>
             </form>
+      </div>
+      <div class="border my-2 text-center pt-3" style="height:60px;">
+        <small>Already have an account?<a href="{% url 'signIn' %}"class="link-offset-2 link-underline link-underline-opacity-0"> Sign In</a></small>
+      </div>
+      <div class="text-center pb-1" style="width: 320px; padding-left:3rem;">
+        <small class="fs-4">Get the app.</small>
+      </div>
 
-            </div>
-            <div class="border my-2 text-center pt-2" style="width: 380px; height:50px;">
-                <small> Already have an account?<a href="{% url 'signIn' %}"> Sign In</a></small>
-            </div>
-            <div class="text-center pb-1" style="width: 320px; padding-left:3rem;">
-                <small>Get the app.</small>
-            </div>
-
-            <div class="px-1" style="width: 380px;">
-                <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb&utm_campaign=loginPage&ig_mid=E50E46DD-5BBA-48D4-8862-874BD4DFEA24&utm_content=lo&utm_medium=badge"><img src="{% static './images/play.png' %}" alt="" class="img-fluid"></a>
-            </div>
-
-            </div>
-
-        </div>
+      <div class="px-1" style="">
+        <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb&utm_campaign=loginPage&ig_mid=E50E46DD-5BBA-48D4-8862-874BD4DFEA24&utm_content=lo&utm_medium=badge"><img src="{% static './images/play.png' %}" alt="" class="img-fluid" /></a>
+      </div>
     </div>
 </div>
 
-<!-- <form method="POST" action="" class="card" style="width: 20rem;">
-    {{ form }}
-    <button type="submit" class="btn btn-primary btn-block mt-3">Sign In</button>
-</form> -->
-
-
-
+  {% include 'gram/footer.html' %}
+  {% include 'gram/alert.html' %}
 {% endblock %}

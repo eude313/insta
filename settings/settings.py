@@ -109,6 +109,7 @@ USE_TZ = True
 
 AUTH_USER_MODEL = "insta.User"
 
+DEFAULT_PROFILE_PHOTO_URL = '/static/images/user.png'
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = "/static/"
@@ -116,6 +117,8 @@ MEDIA_URL = "/images/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+
 
 # Default primary key field type
 

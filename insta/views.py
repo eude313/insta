@@ -1,20 +1,25 @@
-from insta.models import User, Post, Profile, CarouselImage
+from requests import Response
+from insta.models import User, Post, Profile, CarouselImage, Like, Follow, Message
 from django.shortcuts import redirect, render
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required 
-from .forms import ProfileForm 
+from .forms import ProfileForm, MessageForm
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
-from django.http import JsonResponse
+from django.db.models import Prefetch, Q, Subquery, OuterRef, Count
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.http import require_POST
 from requests.exceptions import RequestException
+from django.conf import settings
+
 
 def signUp(request):
     try:
         if request.method == "POST":
             username = request.POST["username"]
             email = request.POST["email"]
+            first_name = request.POST['first_name']
             password = request.POST["password"]
             confirm_password = request.POST["confirm_password"]
             
@@ -23,7 +28,7 @@ def signUp(request):
                 return render(request, "auth/signin.html")
             if password == confirm_password:
                 user = User(
-                    username=username, email=email, password=make_password(password)
+                    username=username, email=email, first_name= first_name, password=make_password(password)
                 )
                 user.save()
                 messages.add_message(
@@ -65,56 +70,93 @@ def signOut(request):
     return redirect("signIn")
 
 
+@login_required(login_url='/')
 def upload(request):
     try:
-        if request.method == "POST":
-            images = request.FILES.getlist("images")
-            captions = request.POST["captions"]
-            location = request.POST["location"]
-            # Create one post for the carousel
-            post = Post(user=request.user, location=location, captions=captions)
-            post.save()
+        images = request.FILES.getlist("images")
+        captions = request.POST["captions"]
+        location = request.POST["location"]
+        # Create one post for the carousel
+        post = Post(user=request.user, location=location, captions=captions)
+        post.save()
 
-            # Link all images to the same post (carousel)
-            for image in images:
-                carousel_image = CarouselImage(post=post, image=image)
-                carousel_image.save()
-            return redirect("home")
-        else:
-            return render(request, "gram/upload.html")
-    except RequestException as e:
-        print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
+        # Link all images to the same post (carousel)
+        for image in images:
+            carousel_image = CarouselImage(post=post, image=image)
+            carousel_image.save()
+        
+        return JsonResponse({'message': 'Post created successfully.'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 @login_required(login_url='/')
 def home(request):
     try:
-        posts = Post.objects.all().order_by('-created_time') 
+        posts = Post.objects.all().order_by('-created_time').select_related('user__profile')
+        
+        likes_prefetch = Prefetch('like_set', queryset=Like.objects.filter(user=request.user), to_attr='user_likes')
+        posts = posts.prefetch_related(likes_prefetch)
+        
         profiles = Profile.objects.all() 
+        
         current_user_profile = Profile.objects.get(user=request.user)
         for post in posts:
             for carousel_image in post.carouselimage_set.all():
                 print(f"Carousel Image URL: {carousel_image.image.url}")
             print(f"Single Image URL: {post.image.url}")
+            
+        user_profile_photo_url = current_user_profile.photo.url
+        for post in posts:
+            post.liked = any(like.is_like for like in getattr(post, 'user_likes', []))
+
+        
+        other_profiles = Profile.objects.exclude(user=request.user)
         
         context = {
             "posts": posts,
             "profiles": profiles,
-            "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,    
+            'profiles': other_profiles,
+            "user_profile_photo": user_profile_photo_url, 
+            # "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,    
         }
         return render(request, "gram/index.html", context)
     except RequestException as e:
         print(f"An error occurred: {e}")
         return render(request, "connection_error.html")
 
+
+def like_toggle(request, post_id):
+    if request.method == 'POST' and request.user.is_authenticated:
+        post = get_object_or_404(Post, pk=post_id)
+        like, created = Like.objects.get_or_create(post=post, user=request.user)
+
+        context = {
+                "post": post,   
+        }
+    
+        if created:
+            like.is_like = True
+            like.save()
+            return JsonResponse({'liked': True})
+        else:
+            like.is_like = not like.is_like
+            like.save()
+            return JsonResponse({'liked': like.is_like}) 
+        
+    else:
+        return JsonResponse({}, status=400) 
+   
+
 @login_required(login_url='/')
 def viewImage(request, pk):
     try:
-        posts = Post.objects.get(id=pk)
-        if request.method == "POST":
-            posts.delete()
-            return redirect("home")
-        return render(request, "gram/viewImage.html", {"post": posts})
+        post = Post.objects.get(id=pk)
+        if request.method == "POST":            
+            if post.user == request.user:
+                post.delete()
+            return redirect('home')
+        
+        return render(request, "gram/viewImage.html", {"post": post})
     except RequestException as e:
         print(f"An error occurred: {e}")
         return render(request, "connection_error.html")
@@ -123,14 +165,14 @@ def viewImage(request, pk):
 def profile(request):
     try:
         profiles = Profile.objects.all()
-        posts = Post.objects.all()
+        posts = Post.objects.filter(user=request.user)
 
         if request.method == "POST":
             form = ProfileForm(request.POST, request.FILES)
             if form.is_valid():
                 current_user = request.user
-                new_photo = form.cleaned_data['photo']  # Adjust this based on your form field name
-                new_bio = form.cleaned_data['bio']  # Adjust this based on your form field name
+                new_photo = form.cleaned_data['photo'] 
+                new_bio = form.cleaned_data['bio']  
 
                 try:
                     # Update the existing profile
@@ -145,31 +187,44 @@ def profile(request):
                 return redirect("profile")
         else:
             form = ProfileForm()
-
         try:
-            # Try to get the current user's profile
-            current_user_profile = Profile.objects.get(user=request.user)
-            followers_count = current_user_profile.followers.count()
-            following_count = current_user_profile.following.count()
+            current_user_profile = Profile.objects.get(user=request.user) 
+
+            # Count the number of followers for the current user
+            followers_count = Follow.objects.filter(following=request.user).count()
+
+            # Count the number of users the current user is following
+            following_count = Follow.objects.filter(follower=request.user).count()
+
         except Profile.DoesNotExist:
-            # If the profile does not exist, handle this case (you might redirect to a profile creation page)
+            # Handle the case where the profile doesn't exist
             current_user_profile = None
             followers_count = 0
             following_count = 0
             
-        current_user_profile = Profile.objects.get(user=request.user)
-        followers_count = current_user_profile.followers.count()
-        following_count = current_user_profile.following.count()
         user_posts = Post.objects.filter(user=request.user)
+        
+        if current_user_profile and current_user_profile.photo:
+            user_profile_photo_url = current_user_profile.photo.url
+        else:
+            user_profile_photo_url = settings.DEFAULT_PROFILE_PHOTO_URL
+            
+
+        # profile_user = User.objects.get(username=username)
+        # is_following = False
+        # if request.user.is_authenticated:
+        #     is_following = request.user.profile.following.filter(id=profile_user.id).exists()
 
         context = {
             "profiles": profiles,
             "post": posts,
             "form": form,
+            # 'is_following': is_following,
             'user_posts': user_posts,
             "followers_count": followers_count,
             "following_count": following_count,
-            "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,    }
+            "user_profile_photo": user_profile_photo_url,    
+        }
 
         return render(request, "gram/profile.html", context)
     
@@ -181,36 +236,101 @@ def profile(request):
 def explore(request):
     try:
         posts = Post.objects.all().order_by('-created_time') 
+        profiles = Profile.objects.all() 
+        current_user_profile = Profile.objects.get(user=request.user)
         for post in posts:
             for carousel_image in post.carouselimage_set.all():
                 print(f"Carousel Image URL: {carousel_image.image.url}")
             print(f"Single Image URL: {post.image.url}")
-        context = {"posts": posts}
+
+        context = {"posts": posts ,"profiles": profiles, 
+             "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,}
         return render(request, 'gram/explore.html', context)
     except RequestException as e:
         print(f"An error occurred: {e}")
         return render(request, "connection_error.html")
 
-# @login_required
-# def user_posts(request):
-#     try:
-#         user_posts = Post.objects.filter(user=request.user)
-#         context = {'user_posts': user_posts}
-#         return render(request, 'user_posts.html', context)
-#     except RequestException as e:
-#         print(f"An error occurred: {e}")
-#         return render(request, "connection_error.html")
 
-# @login_required
-# def user_follow(request, username):
-#     user_to_follow = get_object_or_404(User, username=username)
-#     profile_to_follow = user_to_follow.profile
-#     request.user.profile.followers.add(profile_to_follow.user)
-#     return JsonResponse({'status': 'ok'})
+def follow_user(request, username):
+    if request.user.is_authenticated:
+        follower = request.user
+        following_user = User.objects.get(username=username)
 
-# @login_required
-# def user_unfollow(request, username):
-#     user_to_unfollow = get_object_or_404(User, username=username)
-#     profile_to_unfollow = user_to_unfollow.profile
-#     request.user.profile.followers.remove(profile_to_unfollow.user)
-#     return JsonResponse({'status': 'ok'})
+        if follower != following_user:  # Prevent self-following
+            follow_instance, created = Follow.objects.get_or_create(follower=follower, following=following_user)
+            if not created:
+                # User is already following, maybe show a message
+                pass
+    return redirect('user_profile', username=username)
+
+def unfollow_user(request, username):
+    if request.user.is_authenticated:
+        follower = request.user
+        following_user = User.objects.get(username=username)
+        Follow.objects.filter(follower=follower, following=following_user).delete()
+    return redirect('user_profile', username=username)
+
+
+def inbox(request):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.save()
+            return redirect('inbox')
+        else:
+            return HttpResponse("Form submission failed")
+    else:
+        form = MessageForm()
+        current_user_profile = Profile.objects.get(user=request.user)
+        received_messages = Message.objects.filter(receiver=request.user)
+        latest_messages = Message.objects.filter(sender=request.user, receiver=OuterRef('receiver')).order_by('-timestamp')
+        latest_message_ids = latest_messages.values('id')[:1]
+        sent_messages = Message.objects.filter(sender=request.user, id__in=Subquery(latest_message_ids)).select_related('receiver', 'receiver__profile')
+
+        # all_messages = sent_messages | received_messages
+        all_messages = Message.objects.filter(Q(sender=request.user) | Q(receiver=request.user))
+        
+        context = {
+            'form': form,
+            'received_messages': received_messages,
+            'sent_messages': sent_messages, 
+            'all_messages': all_messages,
+            "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,
+        }
+        return render(request, 'gram/inbox.html', context)
+
+
+
+def delete_message(request, message_id):
+    message = get_object_or_404(Message, id=message_id)
+    if message.sender == request.user or message.receiver == request.user:
+        message.delete()
+    return redirect('inbox')
+
+def clear_messages(request):
+    messages_to_delete = Message.objects.filter(sender=request.user)
+    messages_to_delete.delete()
+    return redirect('inbox')
+
+
+
+
+def search_profiles(request):
+    query = request.GET.get('q')
+    profiles = User.objects.filter(username__icontains=query).values('id', 'username')
+    return JsonResponse(list(profiles), safe=False)
+
+
+
+
+def search(request):
+    query = request.GET.get('q')
+
+    if query:
+        profiles = Profile.objects.filter(user__username__icontains=query)
+    else:
+        profiles = Profile.objects.none()
+
+    return render(request, 'search.html', {'profiles': profiles, 'query': query})

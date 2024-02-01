@@ -13,9 +13,9 @@
 </style>
 
 <div class="container text-center mt-3">
-  <div class="row">
+  <div class="row gap-0 row-gap-3 column-gap-3">
     {% for post in user_posts %}
-    <div class="col-md-4 mt-3">
+    <div class="col-md-4 p-1">
       {% if post.user == request.user %} {% if post.carouselimage_set.count == 1 %}
         <div class="image-container">
             <img
@@ -25,8 +25,7 @@
         </div>
         {% elif post.carouselimage_set.count > 1 %}
         <div
-            id="carouselExampleAutoplaying"
-            class="carousel slide"
+        id="carouselExampleFade" class="carousel slide carousel-fade"
             data-bs-ride="carousel">
             <div class="carousel-inner">
             {% for carousel_image in post.carouselimage_set.all %}

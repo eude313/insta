@@ -1,81 +1,24 @@
-<!-- Navbar-->
+<!-- Navbar -->
 {% load static %}
-<nav
-  class="border navbar navbar-expand-lg bg-body-tertiary sticky-top"
-  style=" padding: 0rem 7rem">
-  <div
-    class="container-md">
-    <div class="d-flex">
-      <!-- Brand -->
-      <a
-        class="navbar-brand me-2 mb-1 d-flex align-items-center"
-        href="{% url 'home' %}">
-        <p
-          class="m-1"
-          style="font-size: 1.8rem; font-family: 'Berkshire Swash', cursive">
-        
-            <i class="bi bi-award-fill"style="font-size: 1.5rem; color: gold"></i>
-          Bazenga Insta
-          <i
-            style="font-size: 1.5rem; color: gold"
-            class="fas fa-smile-wink"></i>
-        </p>
-      </a>
-    </div>
-    <!-- Left elements -->
-    <i class="bi bi-columns-gap"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#navbarScroll"
-    aria-controls="navbarScroll"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-    style="font-size: 24px; "
-    ></i>
-    <div
-      class="collapse navbar-collapse"
-      id="navbarScroll">
-      
-      <ul
-        class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
-        style="--bs-scroll-height: 100px">
-        <li class="nav-item me-3 me-lg-1 active">
-          <a
-            class="nav-link"
-            href="{% url 'home' %}">
-            <h3><i class="bi bi-house"></i></h3>
-          </a>
-        </li>
-        <li class="nav-item me-3 me-lg-1 active">
-          <a
-            class="nav-link"
-            href="#">
-            <h3><i class="bi bi-chat-left"></i></h3>
-          </a>
-        </li>
-
-        <li class="nav-item me-3 me-lg-1 active">
-          <a
-            class="nav-link"
-            href="{% url 'explore' %}">
-            <h3><i class="bi bi-compass"></i></h3>
-          </a>
-        </li>
-        <li class="nav-item me-3 me-lg-1 active">
-          <a
-            class="nav-link"
-            href="{% url 'upload' %}">
-            <h3><i class="bi bi-plus-lg"></i></h3>
-          </a>
-        </li>
-        <li class="nav-item me-3 me-lg-1 active">
-          <a
-            class="nav-link"
-            href="{% url 'profile' %}">
-            <h3><i class="bi bi-person"></i></h3>
-          </a>
-        </li>
-      </ul>
-    </div>
+<nav class="border navbar navbar-expand-lg bg-body-tertiary sticky-top d-flex justify-content-between" style="
+  cursor: pointer;">
+  <div>
+    {% if user_profile_photo %}
+      <img src="{{ user_profile_photo }}" alt="Pic" class="ms-3" style="
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;" />
+    {% else %}
+      <img src="{% static 'images/user.png' %}" class="ms-3" alt="pic" style="
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;" />
+    {% endif %}
+  </div>
+  <div>
+    <a href="{% url 'home' %}" class="text-decoration-none text-dark"><p class="fw-semibold fs-3 mt-2" style="font-family: 'Lobster', sans-serif;">Bazenga insta</p></a>
+  </div>
+  <div class="me-3">
+    <a href="{% url 'home' %}" class="text-decoration-none text-dark"><i class="bi bi-chat" style="font-size: 34px;"></i></a>
   </div>
 </nav>

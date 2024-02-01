@@ -1,21 +1,147 @@
 {% extends 'gram/base.html' %}
 {% load static %}
+{% comment %} {% load custom_filters %} {% endcomment %}
 {% block content %}
-{% load cloudinary %}
-<div class="nav-box">
-    {% include "gram/navbar.html" %}
-  </div> 
-<div class="container-main">
+  {% load cloudinary %}
+
+  <div class="nav-box">
+    {% include 'gram/navbar.html' %}
+  </div>
+  <div class="container-main">
     <div class="box-1">
-    </div> 
+      {% include 'gram/appbar.html' %}
+    </div>
     <div class="box-2">
-        <div class="card my-2 card-content">
-        </div>
+      <div>
+        {% for post in posts %}
+          <div class="card my-2 card-content border-bottom-0">
+            <div class="card-header d-flex justify-content-between">
+              <div class="d-flex">
+                <div class="parent">
+                  <div class="btn-gradient-2">
+                    {% if post.user.profile.photo %}
+                      <img src="{{ post.user.profile.photo.url }}" alt="" class="image-3 img-fluid border m-1" />
+                    {% else %}
+                      <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="mt-2">
+                  <p class="card-title ms-2 fw-semibold m-0">{{ post.user.username }}</p>
+                  <p class="card-title d-flex justify-content-md-center align-items-center ms-2 fw-light m-0">
+                    {{ post.location }} <small class="ms-2">{{ post.created_time|timesince }}</small>
+                  </p>
+                </div>
+              </div>
+
+              <!-- Button trigger modal -->
+              <div class="px-2 d-flex align-items-center" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal" style="width: auto;">
+                <i class="bi bi-three-dots fw-semibold" style="font-size: 24px"></i>
+              </div>
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="exampleModalLabel">About Post</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <ul class="list-group list-group-flush text-center">
+                        <li class="list-group-item">
+                          <a class="dropdown-item" href="{% url 'viewImage' post.id %}">view image</a>
+                        </li>
+                        <hr class="dropdown-divider" />
+                        <li class="list-group-item">
+                          <a class="dropdown-item" href="#">Unfollow</a>
+                        </li>
+                        <li class="list-group-item">A third item</li>
+                        <li class="list-group-item">A fourth item</li>
+                        <li class="list-group-item"></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% if post.carouselimage_set.count == 1 %}
+              <!-- Render single image -->
+              <img src="{{ post.carouselimage_set.first.image.url }}" class="d-block w-100" alt="..." />
+            {% elif post.carouselimage_set.count > 1 %}
+              <!-- Render carousel -->
+              <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+                <div class="carousel-inner">
+                  {% for carousel_image in post.carouselimage_set.all %}
+                    <div class="carousel-item {% if forloop.first %}{% endif %}">
+                      <img src="{{ carousel_image.image.url }}" class="d-block w-100" alt="..." />
+                    </div>
+                  {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            {% endif %}
+
+            <div class="card-body">
+              <h3 class="d-flex justify-content-between p-0 m-0">
+                <div class="d-flex">
+                  <div class="d-flex flex-column me-3" data-post-id="{{ post.id }}">
+                    {% if post.liked %}
+                        <i class="bi bi-heart-fill" type="button" style="color: red;"></i>
+                    {% else %}
+                        <i class="bi bi-heart"type="button" ></i>
+                    {% endif %}
+                  </div>
+
+                  <div class="d-flex flex-column me-3">
+                    <i class="bi bi-chat" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></i>
+                  </div>
+                  <div class="">
+                    <i class="bi bi-send"></i>
+                  </div>
+                </div>
+                <div>
+                  <i class="bi bi-bookmark me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Save"></i>
+                </div>
+              </h3>
+              <div class="d-flex my-2">
+                <p class="fs-6 m-0 fw-semibold">{{ post.likes.count }} likes</p>
+                <p class="fs-6 collapse ms-3 m-0 fw-semibold" id="collapseExample">{{ post.likes.count }} comments</p>
+              </div>
+              <p class="card-text f-3">{{ post.captions }}</p>
+            </div>
+            <div class="collapse" id="collapseExample">
+              <div class="card-footer text-body-secondary d-flex">
+                <div class="me-2 px-2">
+                  <h3 class="mt-2">
+                    <i class="bi bi-emoji-smile" id="emoji-picker-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                    <div class="btn-group dropup">
+                      <div class="dropdown-menu" id="emoji-picker-container"></div>
+                    </div>
+                  </h3>
+                </div>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Comment" aria-label="Comment" aria-describedby="button-addon2" style="margin: 0px"  id='input-field'/>
+                  <button class="btn btn-dark" type="button" id="button-addon2">Comment</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
     <div class="box-3">
+      {% include 'gram/sidebar.html' %}
     </div>
-    <div class="box-4">
-    </div>
-</div>
+    <div class="box-4"></div>
+  </div>
+{% include "gram/alert.html" %}
 
 {% endblock %}

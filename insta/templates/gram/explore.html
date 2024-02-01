@@ -1,45 +1,39 @@
-{% extends 'gram/base.html' %}
-{% load static %}
-{% block content %}
-{% load cloudinary %}
-<div class="nav-box">
-  {% include "gram/navbar.html" %}
-</div> 
-<div class="container-main">
-  <div class="box-1">
-    {% include "gram/appbar.html" %}
-  </div> 
-  <div class="box-5">
-    <div class="w-100  border border-success border-3 "> 
-      {% for post in posts %} 
-        {% if post.carouselimage_set.count == 1 %}
-          <!-- Render single image -->
-          <img src="{{ post.carouselimage_set.first.image.url }}" class="d-block w-100" alt="...">
-        {% elif post.carouselimage_set.count > 1 %}
-          <!-- Render carousel -->
-          <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
-              <div class="carousel-inner">
+{% extends 'gram/base.html' %} {% load static %} {% block content %}
+  {% load cloudinary %}
+  
+  <div class="nav-box">
+    {% include 'gram/navbar.html' %}
+  </div>
+  <div class="container-main">
+    <div class="box-1">
+      {% include 'gram/appbar.html' %}
+    </div>
+    <div class="box-5">
+      <div class="mt-2 row gap-0 row-gap-3 column-gap-3" data-masonry='{"percentPosition": true }'>
+        {% for post in posts %}
+          <div class="col-md-4 p-1">
+            {% if post.carouselimage_set.count == 1 %}
+              <!-- Render single image -->
+              <img src="{{ post.carouselimage_set.first.image.url }}" class="d-block w-100" alt="..." />
+            {% elif post.carouselimage_set.count > 1 %}
+              <!-- Render carousel -->
+              <div id="carouselExampleRide" class="carousel slide border" data-bs-ride="true">
+                <div class="carousel-inner">
                   {% for carousel_image in post.carouselimage_set.all %}
-                      <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                          <img src="{{ carousel_image.image.url }}" class="d-block w-100" alt="...">
-                      </div>
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                      <img src="{{ carousel_image.image.url }}" class="d-block w-10 lazyload0"  data-src="image.jpg" alt="Description"/>
+                    </div>
                   {% endfor %}
+                </div>
               </div>
-              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
-              </button>
-              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
-              </button>
+            {% endif %}
           </div>
-        {% endif %}
-      {% endfor %}
+        {% endfor %}
+      </div>
+
+      {% include 'gram/footer.html' %}
     </div>
   </div>
-  <div class="box-4">
-  </div>
-</div>
+
 
 {% endblock %}

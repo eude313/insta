@@ -1,0 +1,256 @@
+{% extends 'gram/base.html' %}
+{% load static %}
+{% block content %}
+  {% load cloudinary %}
+  <div class="container-main">
+    <div class="box-1">
+      {% include 'gram/appbar.html' %}
+    </div>
+    <div class="box-5 row" style="height:100vh; width: 80%;">
+      <div class="col-5 border-end">
+        <div class="d-flex justify-content-between p-3 mt-3">
+          <h3 class="fw-semibold">{{ request.user.username }}</h3>
+          <!-- Button trigger modal -->
+          <h3 data-bs-toggle="modal" type="button" data-bs-target="#exampleModal"><i class="bi bi-pencil-square"></i></h3>
+        </div>
+
+        <nav>
+          <div class="nav nav-underline p-3 nav-justified" id="nav-tab" role="tablist">
+            <h4 class="nav-link active fw-semibold" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="h4" role="tab" aria-controls="nav-home" aria-selected="true">Home</h4>
+            <h4 class="nav-link fw-semibold" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="h4" role="tab" aria-controls="nav-profile" aria-selected="false">Profile</h4>
+            <h4 class="nav-link fw-semibold" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="h4" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</h4>
+          </div>
+        </nav>
+
+        <div class="tab-content px-3" id="nav-tabContent">
+          <div class="tab-pane fade show active overflow-y-scroll" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+            <!-- Contacts -->
+            <div class="flex-column" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            
+              {% if received_messages %}
+              {% for message in received_messages %}
+                <a class="nav-link my-1" id="v-pills-{{ message.id }}-tab" data-bs-toggle="pill" href="#v-pills-{{ message.id }}" role="tab" aria-controls="v-pills-{{ message.id }}" aria-selected="true">
+                  <div class="d-flex cursor-pointer rounded border">
+                    <div class="bg-secondary rounded-circle d-inline-block me-3 mt-2 ms-2" style="width: 50px; height: 50px;">
+                      <img src="{{ message.sender.profile.photo.url }}" alt="User Avatar" class="w-100 h-100 rounded-circle" />
+                    </div>
+                    <div class="flex-fill my-2">
+                      <h5 class="text-lg font-semibold m-0">{{ message.sender.username }}</h5>
+                      <small class="text-secondary m-0">{{ message.message }}</small>
+                    </div>
+                    <span class="badge text-bg-dark m-4 fs-3"> {{ message.count.id }}</span>
+                  </div>
+                </a>
+              {% endfor %}
+            {% else %}
+            <!-- If there are no open messages -->
+            <div class="text-center">
+              <p>No chats. Start a new chat.</p>
+            </div>
+          {% endif %}
+
+
+
+            </div>
+          </div>
+          <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">comming soon stay tuned</div>
+          <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">comming soon stay tuned</div>
+        </div>
+      </div>
+
+      <div class="col-7 px-2">
+          <div class="tab-content" id="v-pills-tabContent">
+            {% if received_messages.exists or sent_messages.exists %}
+            {% for  message in all_messages %}
+                <div class="tab-pane fade" id="v-pills-{{ message.id }}" role="tabpanel" aria-labelledby="v-pills-{{ message.id }}-tab">
+                  <div class="d-flex justify-content-between border-bottom mt-3">
+                    <div class="d-flex m-2">
+                      <div class="parent">
+                        <div class="btn-gradient-2">
+                          <img src="{{ message.sender.profile.photo.url }}" alt="Receiver Photo" class="image-3 border m-1" />
+                        </div>
+                      </div>
+                      <div class="ms-2 pt-1">
+                        <p class="fw-semibold m-0">{{ message.receiver.username }}</p>
+                        <p class="fw-semibold m-0">Online</p>
+                      </div>
+                    </div>
+
+                    <div class="p-2 d-flex justify-content-around" style="width: auto;">
+                      <h3 class="p-2" type="button"><i class="bi bi-telephone"></i></h3>
+                      <h3 class="p-2 mx-1" type="button"><i class="bi bi-camera-video"></i></h3>
+                      <div class="dropdown">
+                        <h3 class="p-2" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-info-circle"></i></h3>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <a class="dropdown-item d-flex" href="{% url 'clear_messages' %}"><h4><i class="bi bi-trash me-2 text-danger"></i> clear chats</h4></a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Another action</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="border my-2 px-3 overflow-y-scroll bg-img flex-column" id="chatForm" style="height:74vh; width:100%; ">
+                   
+                     <div class="d-flex justify-content-{% if message.sender == request.user %}end{% else %}start{% endif %} my-4 cursor-pointer">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2 mt-2" style="width: 48px; height: 48px; background-color: #b7a8ff;">
+                            {% if message.sender.profile.photo %}
+                                <img src="{{ message.sender.profile.photo.url }}" alt="Sender Profile Photo" class="img-fluid w-100 h-100 rounded-circle" />
+                            {% else %}
+                                <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="img-fluid w-100 h-100 rounded-circle" />
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1 bg-dark text-white rounded p-3 d-flex align-items-center">
+                            <p>{{ message.message }}</p>
+                        </div>
+                    </div>
+
+              
+              
+            
+
+                  </div>
+
+                  <form method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-2 mt-1">
+                      <button class="btn rounded" type="button"><h3 class="m-0"><i class="bi bi-emoji-smile"></i></h3></button>
+                      <input type="text" name="message" class="form-control rounded-pill" id="messageInput" placeholder="Message...." aria-label="Message" />
+                      <button class="btn rounded" type="button"><h3 class="m-0"><i class="bi bi-mic"></i></h3></button>
+                      <button class="btn rounded" type="button" id="imageButton"><h3 class="m-0"><i class="bi bi-image"></i></h3></button>
+                      <button class="btn rounded" type="button" id="heartButton"><h3 class="m-0"><i class="bi bi-heart"></i></h3></button>
+                      <button type="submit" id="submitButton" class="btn btn-primary px-4 py-2 rounded-md ml-2 d-flex" style="display: none;"><h5 class="m-0 me-2"><i class="bi bi-send"></i></h5>Send</button>
+                    </div>
+                  </form>
+                </div>
+              {% endfor %}
+            {% else %}
+              <!-- If there are no open messages -->
+              <div class="text-center">
+                <p>No open messages. Start a new chat.</p>
+              </div>
+            {% endif %}
+          </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+  {% comment %}  <div class="modal fade" data-bs-backdrop="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="height: 200px;">
+          <div class="form-floating mb-3">
+            <input type="search" class="form-control" id="floatingInput" placeholder="search" />
+            <label for="floatingInput">Search</label>
+          </div>
+          <div id="searchResults">
+            <!-- Search results will be dynamically inserted here -->
+        </div>
+         <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Send</button>
+          </form> 
+          <p>No accounts found</p>
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary btn-block mt-3" id="submitBtn">Chat</button>
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
+  <!-- Modal -->
+ <div class="modal fade" data-bs-backdrop="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Search to Start a Chat</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div class="form-floating mb-3">
+                  <input type="search" class="form-control" id="searchInput" placeholder="Search">
+                  <label for="searchInput">Search</label>
+              </div>
+
+              <div id="searchResults"  class="overflow-y-scroll ">
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div> 
+
+
+  <script>
+
+// JavaScript to handle the search functionality and chat initiation
+
+document.addEventListener("DOMContentLoaded", function() {
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const chatForm = document.getElementById('chatForm');
+  const receiverIdInput = document.getElementById('receiverId');
+  
+
+  // Function to fetch search results asynchronously
+  async function fetchSearchResults(query) {
+      try {
+          const response = await fetch(`/search/profiles?q=${query}`);
+          const profiles = await response.json();
+          displaySearchResults(profiles);
+      } catch (error) {
+          console.error('Error fetching search results:', error);
+      }
+  }
+
+  // Function to display search results
+  function displaySearchResults(profiles) {
+      searchResults.innerHTML = '';
+      profiles.forEach(profile => {
+          const profileElement = document.createElement('div');
+          profileElement.innerHTML = `
+          <a class="nav-link my-1" id="v-pills-{{ message.id }}-tab" data-bs-toggle="pill" href="#v-pills-{{ message.id }}" role="tab" aria-controls="v-pills-{{ message.id }}" aria-selected="true">
+          <div class="d-flex cursor-pointer rounded border p-1 my-1">
+            <div class="bg-secondary rounded-circle d-inline-block me-3 ms-2" style="width: 50px; height: 50px;">
+              <img src="${profile.photo_url}" style=" background-color: #b7a8ff;width: 50px; height: 50px;" class="w-100 h-100 rounded-circle" />
+            </div> 
+            <div class="flex-fill my-2">
+              <h5 class="text-lg font-semibold m-0">${profile.username}</h5>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" data-user-id="${profile.id}"> chat</button>
+          </div>
+        </a>
+      `;
+          profileElement.querySelector('button').addEventListener('click', () => {
+              const userId = profile.id;
+              receiverIdInput.value = userId; // Set receiver ID in hidden input field
+              chatForm.submit(); // Submit the form to initiate chat
+          });
+          searchResults.appendChild(profileElement);
+      });
+  }
+
+  // Event listener for search input
+  searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      if (query.length > 0) {
+          fetchSearchResults(query);
+      } else {
+          searchResults.innerHTML = ''; // Clear search results if search input is empty
+      }
+  });
+});
+  </script>
+{% endblock %}

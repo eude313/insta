@@ -1,8 +1,162 @@
-<div>
-  <div class="col-4 list-group" id="list-tab" role="tablist">
-        <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">Home</a>
-        <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Profile</a>
-        <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">Messages</a>
-        <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Settings</a>
+{% load static %}
+<div class="d-flex flex-column box-1 " style="height: 100%; 
+position: fixed;">
+  <div class="mb-auto">
+    <div class="mt-3">
+      <a href="{% url 'home' %}" class="text-decoration-none text-dark" style="font-family: 'Lobster', sans-serif;">
+        <p class="fw-semibold fs-3 mt-1 ps-3 insta">
+          <span class="none">Bazenga</span><span class="ms-2 ms-sm-0 insta">insta</span>
+        </p>
+      </a>
+    </div>
+
+    <div class="w-100 px-3 px-md-2 px-sm-1">
+      <a href="{% url 'home' %}" class="text-decoration-none text-dark">
+        <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 mt-3 custom-container py-2">
+          <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-house-door"></i></h3>
+          <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">Home</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="w-100 px-3 px-md-2 px-sm-1">
+      <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2 container-canvas"  type="button" onclick="toggleNav()">
+        <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-search"></i></h3>
+        <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">Search</span>
+      </div>
+      <!-- offcanvas -->
+      <div class=" offcanvas-menu px-3 pt-4 scale-up-hor-left"  id="mySidepanel">
+        <div class="d-flex  justify-content-between mb-3">
+          <h3 class="fs-3 fw-semibold">Search</h3>
+          <i class="bi bi-x-lg" type="button" onclick="toggleNav()"></i>
+        </div>
+        <hr class="divider" />
+        <div >
+          <div class="form-floating mb-3">
+            <input type="search" class="form-control"  value="{{ query }}" id="searchInput,  floatingInput" placeholder="search">
+            <label for="floatingInput">search address</label>
+          </div>
+          <div class="overflow-y-scroll"style="height: 72vh;" >
+            {% for profile in profiles %}
+              <div class="d-flex cursor-pointer rounded p-1 m-1 ">
+                <div class="bg-secondary rounded-circle d-inline-block me-3 ms-2" style="width: 50px; height: 50px;">
+                  <img src="{{ profile.photo.url }}" style=" background-color: #b7a8ff;width: 50px; height: 50px;" class="w-100 h-100 rounded-circle" />
+                </div> 
+                <div class="flex-fill my-2">
+                  <h5 class="text-lg font-semibold m-0">{{ profile.user.username }}</h5>
+                </div>
+              </div>
+            {% empty %}
+                <p>No profiles found.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100 px-3 px-md-2 px-sm-1">
+      <a href="{% url 'explore' %}" class="text-decoration-none text-dark">
+        <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2">
+          <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-compass"></i></h3>
+          <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">Explore</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="w-100 px-3 px-md-2 px-sm-1">
+      <a href="{% url 'home' %}" class="text-decoration-none text-dark">
+        <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2">
+          <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-film"></i></h3>
+          <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">Reels</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="w-100 px-3 px-md-2 px-sm-1">
+      <a href="{% url 'inbox' %}" class="text-decoration-none text-dark">
+        <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2">
+          <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-send"></i></h3>
+          <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">Messages</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="w-100 px-3 px-md-2 px-sm-1">
+      <a href="{% url 'home' %}" class="text-decoration-none text-dark">
+        <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2">
+          <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-heart"></i></h3>
+          <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-3 ms-md-4 ms-sm-3 none">Notifications</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="px-3 px-md-2 px-sm-1">
+      <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2" type="button" id="myBtn">
+        <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-plus-lg"></i></h3>
+        <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">Create</span>
+      </div>
+      <!-- The Modal -->
+      <div id="myModal" class="modal" style="z-index: 1;">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5">Create Post</h1><i class="bi bi-x-lg close" type="button" ></i>
+          </div>
+          <div class="border" style="height: auto;">
+            <form class="px-4 py-2" method="POST" action="" enctype="multipart/form-data">
+              {% csrf_token %}
+              
+              <!-- file input -->
+              <div class="form-outline mb-3">
+                  <label class="form-label" for="customFile">Upload Image</label>
+                  <input type="file" id="imagesInput"   name="images" required multiple class="form-control" id="customFile" />
+              </div>
+              <!-- location input -->
+              <div class="form-outline mb-3">
+                  <label class="form-label" for="form2Example1">Location</label>
+                  <input name="location" id="form2Example1 locationInput"  class="form-control" required
+                  placeholder="Current location"/> 
+              </div>
+              <!-- message input -->
+              <div class="form-outline my-3">
+                  <label class="form-label" for="textAreaExample">Caption</label>
+                  <textarea name="captions" class="form-control" id="textAreaExample captionsInput" rows="3"  required placeholder="Add a caption..."></textarea>
+              </div>
+              <!-- Submit button -->
+
+              <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary btn-block mt-3" id="submitBtn">Create post</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100 px-3 px-md-2 px-sm-1">
+      <a href="{% url 'profile' %}" class="text-decoration-none text-dark">
+        <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2">
+          {% if user_profile_photo %}
+            <img src="{{ user_profile_photo }}" alt="Pic" class="ms-3 ms-sm-4" style="
+            width: 33px;
+            height: 33px;
+            border-radius: 50%;" />
+          {% else %}
+            <img src="{% static 'images/user.png' %}" class="ms-3 ms-sm-4" alt="pic" style="width: 30px;
+              height: 30px;
+              border-radius: 50%;" />
+          {% endif %}
+          <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">Profile</span>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="w-100 px-3 px-md-2 px-sm-1">
+    <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2">
+      <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-columns-gap"></i></h3>
+      <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-5 ms-md-4 ms-sm-3 none">More</span>
+    </div>
   </div>
 </div>
+
+

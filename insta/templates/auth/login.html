@@ -1,156 +1,61 @@
 {% extends 'gram/base.html' %} {% load static %} {% block content %}
-<div class="container">
-  <div
-    class="row my-5"
-    style="font-family: 'Courgette', cursive">
-    {% if messages %}
-      <div {%if message.tags%}
-      class="toast align-items-center text-bg-{{ message.tags }} border-0 show  position-fixed bottom-0 end-0 m-4" isShown='true' role="alert" aria-live="assertive" aria-atomic="true"{% endif  %}>
-        <div class="d-flex">
-        {% for message in messages %}
-            <div class="toast-body">
-                {{ message }}
-            </div>
-        {% endfor %}
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
+  <div class="container-fluid d-flex justify-content-center align-self-center">
+    <div class="row my-5">
+      <div class="col-md-6 blok">
+        <img alt="example" class="rounded" src="{% static '/images/phone.png' %}" />
       </div>
-    {% endif %}
-    <div class="col-md-3">
-      <div class="col-md">
-        <img
-          alt="example"
-          class="img-fluid rounded"
-          src="{% static '/images/phone.png'%}" />
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="">
-        <h4
-          class="text-center my-1"
-          style="width: 320px; font-family: 'Berkshire Swash', cursive">
-          Bazenga insta
-        </h4>
-        <div
-          class="border"
-          style="width: 320px">
-          <h4
-            class="text-center my-2 fw-bold"
-            style="width: 320px; font-family: 'Berkshire Swash', cursive">
-            Login
-          </h4>
-          <form
-            class="px-4 py-2"
-            method="POST"
-            action="">
-            {% csrf_token %}
-            <!-- Email input -->
-            <div class="form-outline mb-3">
-              <label
-                class="form-label"
-                for="form2Example1"
-                >Email
-              </label>
-              <input
-                type="email" required
-                name="email"
-                class="form-control"
-                placeholder="youremail@gmail.com" />
-            </div>
+      <div class="col-md-6">
+        <div class="m-3">
+          <div class="border" style="width: 320px">
+            <h4 class="text-center my-4 text-capitalize fs-1" style="font-family: 'Lobster', sans-serif; justify-content: center;">Bazenga insta</h4>
+            <form class="px-4 py-2" method="POST"validate>
+              {% csrf_token %}
+              <!-- Email input -->
+              <div class="form-outline mb-4">
+                <input name="email" type="email" class="form-control form-control-lg fs-6" placeholder="youremail@gmail.com" required />
+              </div>
 
-            <!-- Password input -->
-            <div class="form-outline">
-              <label
-                class="form-label"
-                for="form2Example1">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password" required
-                id="typePassword"
-                class="form-control"
-                placeholder="******" />
-            </div>
+              <!-- Password input -->
+              <div class="form-outline mb-3">
+                <input name="password" type="password" id="typePassword" class="form-control" required placeholder="*****" style="
+              height: 46px;" />
+              </div>
 
-            <!-- Submit button -->
-            <div class="d-grid gap-2">
-              <button
-                type="submit"
-                class="btn btn-primary btn-block my-3">
-                Log in
-              </button>
-            </div>
-            <!-- 2 column grid layout for inline styling -->
-            <div class="text-center">
-              <div class="d-flex">
-                <div
-                  class="d-flex align-items-center me-2"
-                  style="height: 27px; width: 100%">
-                  <div
-                    style="
-                      height: 1px;
-                      width: 100%;
-                      background-color: rgb(195, 195, 195);
-                    "></div>
+              <!-- Submit button -->
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-block my-3">Log in</button>
+              </div>
+              <!-- 2 column grid layout for inline styling -->
+              <div class="text-center">
+                <div class="d-flex mb-2">
+                  <div class="d-flex align-items-center me-2" style="height: 27px; width: 100%">
+                    <div style=" height: 1px; width: 100%; background-color: rgb(195, 195, 195);"></div>
+                  </div>
+
+                  <p style="font-size: 16px; height: 27px; margin-bottom: 0px">OR</p>
+                  <div class="d-flex align-items-center ms-2" style="height: 27px; width: 100%">
+                    <div style="height: 1px; width: 100%; background-color: rgb(195, 195, 195);"></div>
+                  </div>
                 </div>
-
-                <p style="font-size: 16px; height: 27px; margin-bottom: 0px">
-                  OR
-                </p>
-                <div
-                  class="d-flex align-items-center ms-2"
-                  style="height: 27px; width: 100%">
-                  <div
-                    style="
-                      height: 1px;
-                      width: 100%;
-                      background-color: rgb(195, 195, 195);
-                    "></div>
+                <div class="mb-3">
+                  <a href="#" class="link-offset-2 link-underline link-underline-opacity-0"><small>Forgot password?</small></a>
                 </div>
               </div>
-              <a href="#"><small> Forgot password?</small></a>
-            </div>
-          </form>
-        </div>
-        <div
-          class="border my-2 text-center pt-2"
-          style="width: 320px; height: 50px">
-          <small>
-            New around here?<a href="{% url 'signUp' %}"> Sign up</a></small
-          >
-        </div>
-        <div
-          class="text-center pb-1"
-          style="width: 320px">
-          <small>Get the app.</small>
-        </div>
-
-        <div
-          class="px-1"
-          style="width: 320px">
-          <a
-            href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb&utm_campaign=loginPage&ig_mid=E50E46DD-5BBA-48D4-8862-874BD4DFEA24&utm_content=lo&utm_medium=badge"
-            ><img
-              src="{% static './images/play.png' %}"
-              alt=""
-              class="img-fluid"
-          /></a>
+            </form>
+          </div>
+          <div class="border my-2 text-center pt-3" style="width: 320px; height: 60px">
+            <small>New around here?<a href="{% url 'signUp' %}" class="link-offset-2 link-underline link-underline-opacity-0 ms-2">Sign up</a></small>
+          </div>
+          <div class="text-center pb-1 mb-2" style="width: 320px">
+            <small class="fs-4">Get the app.</small>
+          </div>
+          <div class="px-1" style="width: 320px">
+            <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb&utm_campaign=loginPage&ig_mid=E50E46DD-5BBA-48D4-8862-874BD4DFEA24&utm_content=lo&utm_medium=badge"><img src="{% static './images/play.png' %}" alt="" class="img-fluid" /></a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<footer class="bg-light text-center text-lg-start">
-  <!-- Copyright -->
-  <div class="text-center p-3">
-    © 2020 Copyright:
-    <a
-      class="text-dark"
-      href="#"></a>
-  </div>
-  <!-- Copyright -->
-</footer>
-
+  {% include 'gram/footer.html' %}
+  {% include 'gram/alert.html' %}
 {% endblock %}

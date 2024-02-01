@@ -1,53 +1,68 @@
 {% load static %}
 
-<div
-  class="card mt-2">
+<div class="card mt-2 mx-2 border border-bottom-0">
   <div class="card-body">
-    <h5 class="card-title">
-      <ul class="nav nav-tabs card-header-tabs py-1 d-flex">
-        <li class="nav-item">
-          {% if user_profile_photo %}
-          <img src="{{ user_profile_photo }}" alt="User Profile Photo"  class=" image-3 img-fluid">
+    <div class="card-title">
+      <div class="d-flex justify-content-between my-2">
+        <div class="d-flex">
+          <div>
+            {% if user_profile_photo %}
+            <img src="{{ user_profile_photo }}" alt="User Profile Photo" class="image-3 img-fluid" />
           {% else %}
-          <img src="{% static 'images/user.png' %}" alt="Default User Photo" class='image-3'>
+            <img src="{% static 'images/user.png' %}" alt="Default User Photo" class='image-3' />
           {% endif %}
-        </li>
-        <li
-          class="caption d-none d-md-block ms-2"
-          style="font-family: 'Courgette', cursive">
-          <h6
-            class="mt-1"
-            style="font-size: 15px">
-            {{ request.user.email }}
-          </h6>
-          <h6
-            class="mt-1"
-            style="font-size: 15px">
-            {{ request.user.username }}
-          </h6>
-        </li>
-      </ul>
-    </h5>
-    <div
-      class="card-title mt-3 d-flex justify-content-between"
-      style="font-family: 'Berkshire Swash', cursive">
-      <h3
-        class="text-muted"
-        style="font-size: 17px">
-        Suggestions For You
-      </h3>
+          </div>
+
+          <div>
+            <p class="ms-2 fw-semibold m-0  fs-6">{{ request.user.username }}</p>
+            <p class="d-flex justify-content-md-center align-items-center ms-2 fw-light m-0 fs-6" style="font-size: 10px">{{ request.user.email }}</p>
+          </div>
+        </div>
+
+        <div class="px-2 d-flex align-items-center" type="button" style="width: auto;">
+          <a class="mb-2 fw-semibold m-0 text-dark  link-underline link-underline-opacity-0"  href="{% url 'signOut' %}">switch</a>
+        </div>
+      </div>
+    </div>
+    <div class="card-title mt-3 d-flex justify-content-between" style="font-family: 'Berkshire Swash', cursive">
+      <h3 class="text-muted fs-6 fw-semibold">Suggestions For You</h3>
       <h5 style="font-size: 15px">see all</h5>
     </div>
-    <div
-      class="card-text d-flex justify-content-between"
-      style="font-family: 'Courgette', cursive">
-      
-      <img
-        src="https://mdbootstrap.com/img/new/standard/city/047.jpg"
-        class="image-4 img-fluid"
-        alt="" />
-      <a href="#"> <small>Follow</small></a>
+    <div class="card-text justify-content-between">
+      <!-- user_profile.html -->
+      {% if request.user != user %}
+        {% if request.user not in user.followers.all %}
+          <form action="{% url 'follow_user' user.username %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Follow</button>
+          </form>
+        {% else %}
+          <form action="{% url 'unfollow_user' user.username %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Unfollow</button>
+          </form>
+        {% endif %}
+      {% endif %}
+      {% for profile in profiles %}
+      <div class="d-flex justify-content-between my-2">
+        <div class="d-flex">
+          <div>
+            <img src="{{ profile.photo.url }}" alt="follow" class="image-3 border" />
+          </div>
+
+          <div>
+            <p class="ms-2 fw-semibold m-0">{{ profile.user.username }}</p>
+            <p class="d-flex justify-content-md-center align-items-center ms-2 fw-light m-0">adipisic</p>
+          </div>
+        </div>
+
+        <div class="px-2 d-flex align-items-center" type="button" style="width: auto;">
+          <p class="mb-2 fw-semibold m-0">ipsum</p>
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
 
+  {% include 'gram/footer.html' %}
 </div>

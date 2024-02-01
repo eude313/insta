@@ -1,16 +1,12 @@
-/* font-family: 'Berkshire Swash', cursive;{heading}
-font-family: 'Courgette', cursive;{notes} */
-html {
-    overflow-y: scroll;
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+/* font-family: 'Roboto', sans-serif; */
 body {
-    margin: 0;
+    margin: 0px;
     padding: 0;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
 }
 
 .nav-box {
@@ -24,43 +20,68 @@ body {
     flex-direction: row;
 }
 
+.custom-container {
+    transition: background-color 0.3s ease;
+    border-radius: 26px;
+    height: auto;
+    transition-duration: 0.3s;
+    cursor: pointer;
+}
+
+.custom-container:hover {
+    transform: scale(0.95);
+    /* transition-duration: 0.3s;  */
+    background-color: #edececfd;
+}
+
 .box-1 {
     width: 20%;
     height: 100vh;
-    position: fixed;
-    left: 0;
-    background-color: red;
+    overflow: hidden;
+    border: 1px solid #edececfd;
+}
+@media screen and (max-height: 588px) {
+    .box-1 {
+        overflow-y: scroll;
+    }
 }
 
 .box-2 {
-    width: 60%;
-    height: auto;
+    width: 55%;
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .box-5 {
     width: 80%;
-    position: fixed;
-    right: 0;
     padding: 0 20px;
     justify-content: center;
+    overflow-y: scroll;
+    height: auto;
+}
+.inbox{
+    width: 80%;
 }
 
 .card-content {
     width: 630px;
-    height: 800px;
 }
 
 .box-3 {
-    width: 20%;
-    height: 100vh;
-    position: fixed;
-    right: 0;
-    background-color: green;
+    width: 25%;
 }
-
+.bg-img{
+    background: url('/static/images/2054934.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#submitButton{
+    display: none;
+}
 @media screen and (max-width: 1100px) {
     .container-main {
         width: 100%;
@@ -68,17 +89,26 @@ body {
 
     .box-1 {
         width: 25%;
-        background-color: black;
+    }
+    .inbox{
+        width: 75% !important;
+    }
+    .offcanvas-menu {
+        position: absolute;
+        top: 0;
+        left: 25% !important;
+        z-index: 1;
     }
 
     .box-2 {
         width: 75%;
-        position: fixed;
-        right: 0;
         padding: 10px 12px;
         display: flex;
         justify-content: center;
-        background-color: yellow;
+    }
+
+    .card-content {
+        width: 500px;
     }
 
     .box-5 {
@@ -88,29 +118,93 @@ body {
         justify-content: center;
     }
 
-    .card-content {
-        height: 700px;
-    }
-
     .box-3 {
         display: none;
     }
 }
 
-@media screen and (max-width: 500px) {
-    .nav-box {
-        display: block;
+
+@media screen and (max-width: 781px) {
+
+    .blok {
+        display: none;
+    }
+    .offcanvas-menu {
+        position: absolute;
+        top: 0;
+        left: 25.1% !important;
+        z-index: 1;
+    }
+}
+
+
+
+
+@media screen and (max-width: 700px) {
+    .box-1 {
+        width: 16%;
+        margin: 0px;
     }
 
+    .offcanvas-menu {
+        position: absolute;
+        top: 0;
+        left: 16% !important;
+        z-index: 1;
+    }
+
+    .box-2 {
+        width: 84%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .card-content {
+        width: 430px;
+    }
+
+    .box-5 {
+        width: 84% ;
+    }
+    .inbox{
+        width: 84% !important;
+    }
+
+    .box-3 {
+        display: none;
+    }
+
+    .none {
+        display: none;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .insta {
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+  
+}
+
+@media screen and (max-width: 521px) {
     .box-1 {
         display: none;
+    }
+
+    .nav-box {
+        display: block;
     }
 
     .box-2 {
         width: 100%;
         padding: 10px 12px;
-        display: flex;
-        justify-content: center;
+    }
+
+    .card-content {
+        width: 100%;
     }
 
     .box-5 {
@@ -119,20 +213,116 @@ body {
         display: flex;
         justify-content: center;
     }
-
-    .box-4 {
-        background-color: blueviolet;
-        width: 100%;
-        height: 80px;
-        position: fixed;
-        bottom: 0;
+    .inbox{
+        width: 100% !important;
     }
+    .bio {
+        text-align: center;
+    }
+
 }
 
 
 
 
 
+/* The Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+/* canvas */
+.offcanvas-menu {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 20%;
+    width: 400px;
+    height: 99vh;
+    margin: 4px 0px;
+    display: none;
+    background-color: white;
+    border-radius: 0px 20px 20px 0px;
+    border-right: 1px solid #aaaaaa;
+}
+
+.container-canvas:hover .offcanvas-menu {
+    left: 0;
+}
+
+
+.scale-up-hor-left {
+    -webkit-animation: scale-up-hor-left 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation: scale-up-hor-left 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+@-webkit-keyframes scale-up-hor-left {
+    0% {
+        -webkit-transform: scaleX(0.4);
+        transform: scaleX(0.4);
+        -webkit-transform-origin: 0% 0%;
+        transform-origin: 0% 0%;
+    }
+
+    100% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1);
+        -webkit-transform-origin: 0% 0%;
+        transform-origin: 0% 0%;
+    }
+}
+
+@keyframes scale-up-hor-left {
+    0% {
+        -webkit-transform: scaleX(0.4);
+        transform: scaleX(0.4);
+        -webkit-transform-origin: 0% 0%;
+        transform-origin: 0% 0%;
+    }
+
+    100% {
+        -webkit-transform: scaleX(1);
+        transform: scaleX(1);
+        -webkit-transform-origin: 0% 0%;
+        transform-origin: 0% 0%;
+    }
+}
 
 
 
@@ -160,8 +350,8 @@ body {
 }
 
 .image-2 {
-    width: 70px;
-    height: 70px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: inline-block;
 }
@@ -173,92 +363,41 @@ body {
     display: inline-block;
 }
 
-.image-4 {
-    width: 40px;
-    height: 40px;
+.btn-gradient-2 {
+    background: linear-gradient(white, white) padding-box,
+        linear-gradient(to right, red, purple) border-box;
     border-radius: 50%;
+    border: 4px solid transparent;
+    width: 64px;
+    height: 64px;
 }
+
+/* demo stuff */
+.parent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    /* padding: 3rem; */
+    justify-content: center;
+    align-items: center;
+    /* min-height: 100vh; */
+}
+
+.btn-gradient-2 {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    color: darkblue;
+    /* padding: 1rem 1rem; */
+    cursor: pointer;
+}
+
 
 /* Styles required only for the example above */
 .scrollspy-example-collapsible {
     position: relative;
     height: 200px;
     overflow: auto;
-}
-
-
-/* css/styles.css */
-
-/* Add general styles for form fields */
-.form-group {
-    margin-bottom: 20px;
-}
-
-/* Style the label */
-label {
-    display: block;
-    font-weight: bold;
-}
-
-/* Style the input fields */
-input[type="text"],
-input[type="file"],
-select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    margin-bottom: 12px;
-    box-sizing: border-box;
-}
-
-/* Style the submit button */
-button {
-    background-color: #4caf50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-
-/* explore */
-.container-explore {
-    position: relative;
-    width: 50%;
-}
-
-.image-x {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.overlay-y {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: .5s ease;
-    background-color: #008CBA;
-}
-
-.container-explore:hover .overlay-y {
-    opacity: 1;
-}
-
-.text-h {
-    color: white;
-    font-size: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    text-align: center;
 }

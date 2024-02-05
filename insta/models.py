@@ -79,7 +79,7 @@ class Post(models.Model):
     image = CloudinaryField("image")
     captions = models.TextField()
     created_time = models.DateTimeField(default=timezone.now)
-    likes = models.ManyToManyField(User, related_name='likes', blank=True)
+    likes = models.IntegerField(default=0)
     saved = models.BooleanField(default=False)
     location = models.CharField(max_length=60, blank=True)
 
@@ -87,7 +87,10 @@ class Post(models.Model):
     def __str__(self):
         return self.captions
     
-    
+    def toggle_like(self):
+        self.likes += 1 if not self.likes else -1
+        self.save()
+
     
 class CarouselImage(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -145,6 +148,14 @@ class Follow(models.Model):
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
+    
+    
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)

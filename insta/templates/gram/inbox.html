@@ -118,13 +118,14 @@
 
                   <form method="post">
                     {% csrf_token %}
+                    <input type="hidden" name="receiver_id" id="receiverId" value="">
                     <div class="input-group mb-2 mt-1">
                       <button class="btn rounded" type="button"><h3 class="m-0"><i class="bi bi-emoji-smile"></i></h3></button>
-                      <input type="text" name="message" class="form-control rounded-pill" id="messageInput" placeholder="Message...." aria-label="Message" />
+                      {{ form.message }}
                       <button class="btn rounded" type="button"><h3 class="m-0"><i class="bi bi-mic"></i></h3></button>
                       <button class="btn rounded" type="button" id="imageButton"><h3 class="m-0"><i class="bi bi-image"></i></h3></button>
                       <button class="btn rounded" type="button" id="heartButton"><h3 class="m-0"><i class="bi bi-heart"></i></h3></button>
-                      <button type="submit" id="submitButton" class="btn btn-primary px-4 py-2 rounded-md ml-2 d-flex" style="display: none;"><h5 class="m-0 me-2"><i class="bi bi-send"></i></h5>Send</button>
+                      <button class="btn btn-outline-primary rounded "style="display: none;" type="submit" id="button-addon2"> Send</button>
                     </div>
                   </form>
                 </div>
@@ -140,40 +141,11 @@
     </div>
   </div>
   <!-- Modal -->
-  {% comment %}  <div class="modal fade" data-bs-backdrop="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" style="height: 200px;">
-          <div class="form-floating mb-3">
-            <input type="search" class="form-control" id="floatingInput" placeholder="search" />
-            <label for="floatingInput">Search</label>
-          </div>
-          <div id="searchResults">
-            <!-- Search results will be dynamically inserted here -->
-        </div>
-         <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Send</button>
-          </form> 
-          <p>No accounts found</p>
-        </div>
-        <div class="d-grid gap-2">
-          <button type="submit" class="btn btn-primary btn-block mt-3" id="submitBtn">Chat</button>
-        </div>
-      </div>
-    </div>
-  </div> {% endcomment %}
-  <!-- Modal -->
  <div class="modal fade" data-bs-backdrop="false" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Search to Start a Chat</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Start a Chat</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -196,13 +168,15 @@
   <script>
 
 // JavaScript to handle the search functionality and chat initiation
-
 document.addEventListener("DOMContentLoaded", function() {
   const searchInput = document.getElementById('searchInput');
   const searchResults = document.getElementById('searchResults');
   const chatForm = document.getElementById('chatForm');
   const receiverIdInput = document.getElementById('receiverId');
-  
+  const messageInput = document.getElementById('messageInput');
+  const submitButton = document.getElementById('button-addon2');
+  const imageButton = document.getElementById('imageButton');
+  const heartButton = document.getElementById('heartButton');
 
   // Function to fetch search results asynchronously
   async function fetchSearchResults(query) {
@@ -221,18 +195,18 @@ document.addEventListener("DOMContentLoaded", function() {
       profiles.forEach(profile => {
           const profileElement = document.createElement('div');
           profileElement.innerHTML = `
-          <a class="nav-link my-1" id="v-pills-{{ message.id }}-tab" data-bs-toggle="pill" href="#v-pills-{{ message.id }}" role="tab" aria-controls="v-pills-{{ message.id }}" aria-selected="true">
-          <div class="d-flex cursor-pointer rounded border p-1 my-1">
-            <div class="bg-secondary rounded-circle d-inline-block me-3 ms-2" style="width: 50px; height: 50px;">
-              <img src="${profile.photo_url}" style=" background-color: #b7a8ff;width: 50px; height: 50px;" class="w-100 h-100 rounded-circle" />
-            </div> 
-            <div class="flex-fill my-2">
-              <h5 class="text-lg font-semibold m-0">${profile.username}</h5>
-            </div>
-            <button type="button" class="btn btn-primary btn-sm" data-user-id="${profile.id}"> chat</button>
-          </div>
-        </a>
-      `;
+              <a class="nav-link my-1" id="v-pills-{{ message.id }}-tab" data-bs-toggle="pill" href="#v-pills-{{ message.id }}" role="tab" aria-controls="v-pills-{{ message.id }}" aria-selected="true">
+                  <div class="d-flex cursor-pointer rounded border p-1 my-1">
+                      <div class="bg-secondary rounded-circle d-inline-block me-3 ms-2" style="width: 50px; height: 50px;">
+                          <img src="${profile.photo_url}" style=" background-color: #b7a8ff;width: 50px; height: 50px;" class="w-100 h-100 rounded-circle" />
+                      </div> 
+                      <div class="flex-fill my-2">
+                          <h5 class="text-lg font-semibold m-0">${profile.username}</h5>
+                      </div>
+                      <button type="button" class="btn btn-primary btn-sm" data-user-id="${profile.id}"> chat</button>
+                  </div>
+              </a>
+          `;
           profileElement.querySelector('button').addEventListener('click', () => {
               const userId = profile.id;
               receiverIdInput.value = userId; // Set receiver ID in hidden input field
@@ -251,6 +225,43 @@ document.addEventListener("DOMContentLoaded", function() {
           searchResults.innerHTML = ''; // Clear search results if search input is empty
       }
   });
+
+  // Event listener for input in the message input field
+  messageInput.addEventListener('input', function() {
+      const messageText = this.value.trim(); // Get the trimmed value of the input
+      // Check if the message text is not empty
+      if (messageText.length > 0) {
+          submitButton.style.display = 'block'; // Display the submit button
+          submitButton.disabled = false; // Enable the submit button
+          // Hide the heart and image buttons
+          imageButton.style.display = 'none';
+          heartButton.style.display = 'none';
+      } else {
+          submitButton.style.display = 'none'; // Hide the submit button
+          submitButton.disabled = true; // Disable the submit button
+          // Show the heart and image buttons
+          imageButton.style.display = 'block';
+          heartButton.style.display = 'block';
+      }
+  });
+
+
+
+  // Function to handle chat button clicks
+  function handleChatButtonClick(userId) {
+      receiverIdInput.value = userId; // Set receiver ID in hidden input field
+      chatForm.submit(); // Submit the form to initiate chat
+  }
+
+  // Event listener for chat button clicks
+  const chatButtons = document.querySelectorAll('.chat-button');
+  chatButtons.forEach(button => {
+      button.addEventListener('click', function() {
+          const userId = this.getAttribute('data-user-id');
+          handleChatButtonClick(userId);
+      });
+  });
 });
+
   </script>
 {% endblock %}

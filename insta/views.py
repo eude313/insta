@@ -1,5 +1,5 @@
 from requests import Response
-from insta.models import User, Post, Profile, CarouselImage, Like, Follow, Message
+from insta.models import User, Post, Profile, CarouselImage, Like, Follow, Message,Notification
 from django.shortcuts import redirect, render
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
@@ -76,7 +76,6 @@ def upload(request):
         images = request.FILES.getlist("images")
         captions = request.POST["captions"]
         location = request.POST["location"]
-        # Create one post for the carousel
         post = Post(user=request.user, location=location, captions=captions)
         post.save()
 
@@ -94,9 +93,6 @@ def home(request):
     try:
         posts = Post.objects.all().order_by('-created_time').select_related('user__profile')
         
-        likes_prefetch = Prefetch('like_set', queryset=Like.objects.filter(user=request.user), to_attr='user_likes')
-        posts = posts.prefetch_related(likes_prefetch)
-        
         profiles = Profile.objects.all() 
         
         current_user_profile = Profile.objects.get(user=request.user)
@@ -106,8 +102,6 @@ def home(request):
             print(f"Single Image URL: {post.image.url}")
             
         user_profile_photo_url = current_user_profile.photo.url
-        for post in posts:
-            post.liked = any(like.is_like for like in getattr(post, 'user_likes', []))
 
         
         other_profiles = Profile.objects.exclude(user=request.user)
@@ -125,41 +119,60 @@ def home(request):
         return render(request, "connection_error.html")
 
 
-def like_toggle(request, post_id):
-    if request.method == 'POST' and request.user.is_authenticated:
-        post = get_object_or_404(Post, pk=post_id)
-        like, created = Like.objects.get_or_create(post=post, user=request.user)
-
-        context = {
-                "post": post,   
-        }
-    
-        if created:
-            like.is_like = True
-            like.save()
-            return JsonResponse({'liked': True})
-        else:
-            like.is_like = not like.is_like
-            like.save()
-            return JsonResponse({'liked': like.is_like}) 
+def like_toggle(request):
+    if request.method == 'POST' and request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        post_id = request.POST.get('post_id')
+        post = Post.objects.get(pk=post_id)
+        post.toggle_like()
         
+        liked = True if post.likes > 0 else False
+        data = {
+            'liked': liked,
+            'likes_count': post.likes,
+        }
+        return JsonResponse(data)
     else:
-        return JsonResponse({}, status=400) 
-   
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+# @login_required(login_url='/')
+# def viewImage(request, pk):
+#     try:
+#         post = Post.objects.get(id=pk)
+#         if request.method == "POST":            
+#             if post.user == request.user:
+#                 post.delete()
+#             return redirect('home')
+        
+#         return render(request, "gram/viewImage.html", {"post": post})
+#     except RequestException as e:
+#         print(f"An error occurred: {e}")
+#         return render(request, "connection_error.html")
+
 
 @login_required(login_url='/')
-def viewImage(request, pk):
-    try:
-        post = Post.objects.get(id=pk)
-        if request.method == "POST":            
-            if post.user == request.user:
-                post.delete()
-            return redirect('home')
-        
-        return render(request, "gram/viewImage.html", {"post": post})
-    except RequestException as e:
-        print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
+def post_details(request):
+    if request.method == 'GET' and request.is_ajax():
+        post_id = request.GET.get('post_id')
+        try:
+            post = Post.objects.get(pk=post_id)
+            data = {
+                'image_url': post.image.url,
+                'captions': post.captions,
+            }
+            context = {
+            "post": post,
+            "profiles": profiles,
+            'profiles': other_profiles,
+            "user_profile_photo": user_profile_photo_url,    
+            }
+            return render(request, 'your_app/post_details.html', context)
+        except Post.DoesNotExist:
+            return JsonResponse({'error': 'Post not found'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
 
 @login_required(login_url='/')
 def profile(request):
@@ -334,3 +347,23 @@ def search(request):
         profiles = Profile.objects.none()
 
     return render(request, 'search.html', {'profiles': profiles, 'query': query})
+
+
+
+
+def notifications(request):
+    user = request.user
+    current_user_profile = Profile.objects.get(user=request.user)
+    notifications = Notification.objects.filter(recipient=user)
+    
+    context = {
+        'notifications': notifications,
+        "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,
+    }
+    return render(request, 'gram/notifications.html',context)
+
+def mark_as_read(request, notification_id):
+    notification = Notification.objects.get(id=notification_id)
+    notification.is_read = True
+    notification.save()
+    return redirect('notifications')

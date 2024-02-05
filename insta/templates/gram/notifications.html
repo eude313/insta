@@ -1,0 +1,26 @@
+
+
+{% extends 'gram/base.html' %}
+{% load static %}
+{% block content %}
+  {% load cloudinary %}
+  <div class="container-main">
+    <div class="box-1">
+      {% include 'gram/appbar.html' %}
+    </div>
+    <div class="box-5"> 
+        <h1>Notifications</h1>
+        <ul>
+            {% for notification in notifications %}
+                <li{% if notification.is_read %} style="font-weight: normal;"{% else %} style="font-weight: bold;"{% endif %}>
+                    {{ notification.message }}
+                    <a href="{% url 'mark_as_read' notification.id %}">Mark as read</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% include 'gram/footer.html' %}
+    </div>
+
+  </div>
+
+{% endblock %}

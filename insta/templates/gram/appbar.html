@@ -1,6 +1,6 @@
 {% load static %}
-<div class="d-flex flex-column box-1 " style="height: 100%; 
-position: fixed;">
+<div class="d-flex flex-column fixed-left" style="height: 100%;; 
+">
   <div class="mb-auto">
     <div class="mt-3">
       <a href="{% url 'home' %}" class="text-decoration-none text-dark" style="font-family: 'Lobster', sans-serif;">
@@ -82,7 +82,7 @@ position: fixed;">
     </div>
 
     <div class="w-100 px-3 px-md-2 px-sm-1">
-      <a href="{% url 'home' %}" class="text-decoration-none text-dark">
+      <a href="{% url 'notifications' %}" class="text-decoration-none text-dark">
         <div class="col-md-4 col-sm-12 d-flex align-items-center w-100 my-2 custom-container py-2">
           <h3 class="m-0 ms-3 ms-sm-4"><i class="bi bi-heart"></i></h3>
           <span class="fw-bolder fs-md-4 fs-lg-2 m-0 ms-3 ms-md-4 ms-sm-3 none">Notifications</span>
@@ -98,18 +98,18 @@ position: fixed;">
       <!-- The Modal -->
       <div id="myModal" class="modal" style="z-index: 1;">
         <!-- Modal content -->
-        <div class="modal-content">
+        <div class="modal-content" style="width: 40%;">
           <div class="modal-header">
             <h1 class="modal-title fs-5">Create Post</h1><i class="bi bi-x-lg close" type="button" ></i>
           </div>
-          <div class="border" style="height: auto;">
-            <form class="px-4 py-2" method="POST" action="" enctype="multipart/form-data">
+          <div style="height: auto;">
+            <form class="px-4 py-2" method="POST" action="{% url 'upload' %}" enctype="multipart/form-data">
               {% csrf_token %}
               
               <!-- file input -->
               <div class="form-outline mb-3">
                   <label class="form-label" for="customFile">Upload Image</label>
-                  <input type="file" id="imagesInput"   name="images" required multiple class="form-control" id="customFile" />
+                  <input type="file" required id="imagesInput"  accept="image/*"  name="images" multiple class="form-control" id="customFile" />
               </div>
               <!-- location input -->
               <div class="form-outline mb-3">

@@ -11,11 +11,11 @@
     <div class="box-1">
       {% include 'gram/appbar.html' %}
     </div>
-    <div class="box-2">
+    <div class="box-2 overflow-auto">
       <div>
         {% for post in posts %}
-          <div class="card my-2 card-content border-bottom-0">
-            <div class="card-header d-flex justify-content-between">
+          <div class="card my-3 card-content post border-0 border-bottom" data-post-id="{{ post.id }}">
+            <div class="card-header d-flex justify-content-between border-0 bg-white">
               <div class="d-flex">
                 <div class="parent">
                   <div class="btn-gradient-2">
@@ -49,8 +49,8 @@
                     </div>
                     <div class="modal-body">
                       <ul class="list-group list-group-flush text-center">
-                        <li class="list-group-item">
-                          <a class="dropdown-item" href="{% url 'viewImage' post.id %}">view image</a>
+                        <li class="list-group-item" data-bs-toggle="modal" data-bs-target="#exampleModal1" type="button">
+                          <p class="dropdown-item" >view details</p>
                         </li>
                         <hr class="dropdown-divider" />
                         <li class="list-group-item">
@@ -65,16 +65,17 @@
                 </div>
               </div>
             </div>
+         
             {% if post.carouselimage_set.count == 1 %}
               <!-- Render single image -->
-              <img src="{{ post.carouselimage_set.first.image.url }}" class="d-block w-100" alt="..." />
+              <img src="{{ post.carouselimage_set.first.image.url }}" class="d-block w-100  rounded border" data-bs-toggle="modal" data-bs-target="#exampleModal1" type="button" alt="..." />
             {% elif post.carouselimage_set.count > 1 %}
               <!-- Render carousel -->
-              <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+              <div id="carouselExampleRide" class="carousel slide rounded border" data-bs-ride="true" data-bs-toggle="modal" data-bs-target="#exampleModal1" type="button" >
                 <div class="carousel-inner">
                   {% for carousel_image in post.carouselimage_set.all %}
-                    <div class="carousel-item {% if forloop.first %}{% endif %}">
-                      <img src="{{ carousel_image.image.url }}" class="d-block w-100" alt="..." />
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}  rounded ">
+                      <img src="{{ carousel_image.image.url }}" class="d-block w-10 lazyload0" style="border-radius: 5px;"  data-src="image.jpg" alt="Description"/>
                     </div>
                   {% endfor %}
                 </div>
@@ -92,16 +93,16 @@
             <div class="card-body">
               <h3 class="d-flex justify-content-between p-0 m-0">
                 <div class="d-flex">
-                  <div class="d-flex flex-column me-3" data-post-id="{{ post.id }}">
-                    {% if post.liked %}
-                        <i class="bi bi-heart-fill" type="button" style="color: red;"></i>
+                  <div class="like-btn border" type='button' data-post-id="{{ post.id }}" data-liked="{{ post.user_has_liked }}" >
+                    {% if post.user_has_liked %}
+                        <i class="bi bi-heart-fill" style="color:red;"></i>
                     {% else %}
-                        <i class="bi bi-heart"type="button" ></i>
+                        <i class="bi bi-heart"></i>
                     {% endif %}
-                  </div>
-
-                  <div class="d-flex flex-column me-3">
-                    <i class="bi bi-chat" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"></i>
+                    <p class="fs-6 m-0 fw-semibold like-count" style="display: absolute;">{{ post.likes }}</p>
+                </div>
+                  <div class="d-flex flex-column me-3"data-bs-toggle="modal" type="button" data-bs-target="#exampleModal1">
+                    <i class="bi bi-chat"></i>
                   </div>
                   <div class="">
                     <i class="bi bi-send"></i>
@@ -111,31 +112,11 @@
                   <i class="bi bi-bookmark me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Save"></i>
                 </div>
               </h3>
-              <div class="d-flex my-2">
-                <p class="fs-6 m-0 fw-semibold">{{ post.likes.count }} likes</p>
-                <p class="fs-6 collapse ms-3 m-0 fw-semibold" id="collapseExample">{{ post.likes.count }} comments</p>
-              </div>
               <p class="card-text f-3">{{ post.captions }}</p>
             </div>
-            <div class="collapse" id="collapseExample">
-              <div class="card-footer text-body-secondary d-flex">
-                <div class="me-2 px-2">
-                  <h3 class="mt-2">
-                    <i class="bi bi-emoji-smile" id="emoji-picker-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                    <div class="btn-group dropup">
-                      <div class="dropdown-menu" id="emoji-picker-container"></div>
-                    </div>
-                  </h3>
-                </div>
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Comment" aria-label="Comment" aria-describedby="button-addon2" style="margin: 0px"  id='input-field'/>
-                  <button class="btn btn-dark" type="button" id="button-addon2">Comment</button>
-                </div>
-              </div>
-            </div>
+           
           </div>
-        {% endfor %}
-      </div>
+        {% endfor %}</div>
     </div>
     <div class="box-3">
       {% include 'gram/sidebar.html' %}
@@ -143,5 +124,156 @@
     <div class="box-4"></div>
   </div>
 {% include "gram/alert.html" %}
+<!-- Modal --> 
+<!-- -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="false" aria-hidden="true">
+  <h2 type="button" data-bs-dismiss="modal" aria-label="Close" class="p-2 position-absolute top-0 end-0" style="color: #edececfd;">
+    <i class="bi bi-x-lg"></i>
+  </h2>
+  <div class="modal-dialog modal-xl"  style="height: auto;">
+    <div class="modal-content p-0" id="postModalBody">
+      <div class="d-flex">
+        <div class="modal-body rounded-start col-6">
+        </div>
+        <div class="modal-body border  p-0 col-6 rounded-end"  style="height: auto;">
+          <div class="p-0 my-2 d-flex justify-content-between border-bottom">
+            <div class="d-flex ps-2">
+              <div >
+                {% if post.user.profile.photo %}
+                  <img src="{{ post.user.profile.photo.url }}" alt="" class="image-3 img-fluid border m-1" />
+                {% else %}
+                  <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+                {% endif %}
+              </div>
+
+              <div class="mt-2">
+                <p class="card-title ms-2 fw-semibold m-0">{{ post.user.username }}</p>
+                <p class="card-title d-flex justify-content-md-center align-items-center ms-2 fw-light m-0">
+                  {{ post.location }} <small class="ms-2">{{ post.created_time|timesince }}</small>
+                </p>
+              </div>
+            </div>
+            <div class="px-2 d-flex align-items-center" style="width: auto;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="delete this post">
+              <a class="d-flex" href="#"><h4><i class="bi bi-trash me-2 text-danger"></i></h4></a>
+            </div>
+          </div>
+          <div class="border mx-2" style="height: 300px;">
+            
+          </div>
+          <div class="border-top mt-1">
+            <div class="p-2">
+              <h4 class="d-flex justify-content-between p-0 m-0">
+                <div class="d-flex">
+                  <div class="like-btn  me-3" type='button' data-post-id="{{ post.id }}" data-liked="{{ post.user_has_liked }}" >
+                    {% if post.user_has_liked %}
+                        <i class="bi bi-heart-fill" style="color:red;"></i>
+                    {% else %}
+                        <i class="bi bi-heart"></i>
+                    {% endif %}
+                  </div>
+                  <div class="d-flex flex-column me-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >
+                    <i class="bi bi-chat"></i>
+                  </div>
+                  <a href="{% url 'inbox' %}" class="text-decoration-none text-dark">
+                    <div class="">
+                      <i class="bi bi-send"></i>
+                    </div>
+                  </a>
+                </div>
+                <div>
+                  <i class="bi bi-bookmark me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Save"></i>
+                </div>
+              </h4>
+              <p class="fs-6 m-0 mt-1 fw-semibold"> 100 likes</p>
+              <small class="m-0 fw-mediun text-muted" style="font-size: 14px;"> 1 month</small>
+            </div>
+            <div class="border-top collapse" id="collapseExample"> 
+              <div class="pt-2 input-group ">
+                <h4 class="px-2 mt-2">
+                  <i class="bi bi-emoji-smile"  id="button-addon2" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                  <div class="btn-group dropup">
+                    <div class="dropdown-menu" id="emoji-picker-container"></div>
+                  </div>
+                </h4>
+                <input type="text" class="form-control border-0" placeholder="Comment" aria-label="Comment" aria-describedby="button-addon2" style="margin: 0px height: 30px;"  id='input-field'/>
+                <h5 class="px-2 mt-2 fw-semibold" type="button" id="button-addon2">Post</h5>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+ $(document).ready(function() {
+    $(".like-btn").click(function(e) {
+        e.preventDefault();
+        var postId = $(this).data("post-id");
+        var $icon = $(this).find("i");
+        var $count = $(this).find(".like-count");
+        var liked = $(this).data("liked"); // Getting liked state from data attribute
+
+        if (liked) {
+            $icon.removeClass("bi-heart");
+            $icon.addClass("bi-heart-fill");
+            $icon.css("color", "red");
+        } else {
+            $icon.removeClass("bi-heart-fill");
+            $icon.addClass("bi-heart");
+            $icon.css("color", "");
+        }
+        
+        
+        $.ajax({
+            type: "POST",
+            url: "/like_toggle/", 
+            data: {
+                'post_id': postId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.liked) {
+                  $icon.removeClass("bi-heart");
+                  $icon.addClass("bi-heart-fill");
+                  $icon.css("color", "red");
+              } else {
+                  $icon.removeClass("bi-heart-fill");
+                  $icon.addClass("bi-heart");
+                  $icon.css("color", ""); // Reset color to default
+              }
+
+              if (response.likes === 0) {
+                  $count.text('0 likes');
+              } else if (response.likes === 1) {
+                  $count.text('1 like');
+              } else {
+                  $count.text(response.likes + ' likes');
+              }
+            }
+        }); 
+    });
+    $('.post').on('click', function() {
+      var postId = $(this).data('post-id');
+
+      // AJAX request to fetch post details
+      $.ajax({
+          url: '/get_post_details/', // URL to your Django view
+          type: 'GET',
+          data: { 'post_id': postId },
+          success: function(data) {
+              // Populate modal with post details
+              $('#postModalBody').html(data);
+
+              // Show the modal
+              $('#exampleModal1').modal('show');
+          }
+      });
+  });
+});
+
+</script>
 
 {% endblock %}

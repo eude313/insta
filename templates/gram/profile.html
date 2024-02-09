@@ -1,0 +1,128 @@
+{% extends 'gram/base.html' %} {% load static %} {% block content %}
+  {% load cloudinary %}
+  
+  <div class="container-main">
+    <div class="box-1">
+      {% include 'gram/appbar.html' %}
+    </div>
+    <div class="box-5">
+      <div class="container w-100">
+        <div class="row my-3">
+          <div class="col-md-5 col-sm-12 d-flex justify-content-center">
+            {% if user_profile_photo %}
+              <img src="{{ user_profile_photo }}" alt="User Profile Photo" class="image-1 img-fluid" />
+            {% else %}
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-1" />
+            {% endif %}
+          </div>
+          <div class="col-md-7 col-sm-12 p-0">
+            <div class="m-0 my-2 row align-items-center">
+              <div class="col-md-6 col-sm-12">
+                <h4 class="fs-3 fw-medium text-uppercase m-0">{{ request.user.username }}</h4>
+              </div>
+              <!-- Button trigger modal -->
+              <div class="col-md-5 col-sm-12" data-bs-toggle="modal" type="button" data-bs-target="#exampleModal">
+                <h5 class="fs-5 mt-1 w-100 ">Edit profile</h5>
+              </div>
+              <div class="dropdown col-md-1 col-sm-12">
+                <h4 class="m-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-three-dots"></i></h4>
+
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <i class="bi bi-person-dash" style="font-size: 24px"></i>
+                      <span class="ms-2">Unfollow</span>
+                    </a>
+                  </li>
+                  <li class="d-flex">
+                    <a class="dropdown-item" href="{% url 'signOut' %}"><i class="bi bi-box-arrow-in-right" style="font-size: 24px"></i><span class="ms-3">Logout</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="px-2 ">  
+              <div class="w-100 bio">
+              {% comment %} {% for profile in profiles %}
+                  <p>{{ profile.bio }}</p>
+                  <p>{{ profile.get_gender_display }}</p>
+              {% endfor %} {% endcomment %}  <p>{{ current_user_profile.bio  }}</p>
+                          <p>{{ current_user_profile.get_gender_display }}</p>
+                </div>
+            </div>
+
+            <div class="row m-0" style="font-family: 'Courgette', cursive">
+              <div class="col-md-4 col-sm-4 text-center">
+                <h5>{{ post.count }} Posts</h5>
+              </div>
+              <div class="col-md-4 col-sm-4 text-center">
+                <h5>{{ followers_count }} Followers</h5>
+              </div>
+              <div class="col-md-4 col-sm-4 text-center">
+                <h5>{{ following_count }} Following</h5>
+              </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+              <div class="modal-dialog modal-xl">
+                <form class="px-4 py-2" method="POST" action="{% url 'profile' %}" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="modal-content p-0 d-flex">
+                    <div class="modal-header">
+                 
+                        <div class="d-flex">
+                          <div>
+                            {% if user_profile_photo %}
+                              <img src="{{ user_profile_photo }}" alt="User Profile Photo" class="image-3 img-fluid" />
+                            {% else %}
+                              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class='image-3' />
+                            {% endif %}
+                          </div>
+                
+                          <div>
+                            <p class="ms-2 fw-semibold m-0  fs-6">{{ request.user.username }}</p>
+                            <p class="d-flex justify-content-md-center align-items-center ms-2 fw-light m-0 fs-6" style="font-size: 10px">{{ request.user.email }}</p>
+                          </div>
+                        </div>
+                        <div class="d-flex align-items-center"style="width: auto; font-family: 'Roboto', sans-serif;">
+                          <h4 class="fw-bold fs-4">Update Profile
+                          </h4>
+                        </div>
+                        <div class="px-2 d-flex align-items-center" type="button" style="width: auto;">
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    <div class="modal-body  d-flex">
+                      <div class="col-md-6 border">
+                        {% comment %} {% for profile in profiles %} {% endcomment %}
+                          <p>{{ current_user_profile.bio  }}</p>
+                          <p>{{ current_user_profile.get_gender_display }}</p>
+                        {% comment %} {% endfor %} {% endcomment %}
+                      </div>
+                      <div class="col-md-6 border">
+                        <div class="form-control">{{ form.photo.label_tag }} {{ form.photo }}</div>
+                        <div class="form-group">{{ form.gender.label_tag }} {{ form.gender }}</div>
+                        <div class="form-group">{{ form.bio.label_tag }} {{ form.bio }}</div>
+                        <div class="d-grid gap-2">
+                        <!-- Submit button -->
+                          <button type="submit" class="btn btn-primary btn-block mt-3">Edit profile</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div >
+          {% include 'gram/profileInfo.html' %}
+        </div>
+      </div>
+
+      {% include 'gram/footer.html' %}
+    </div>
+  </div>
+
+{% endblock %}

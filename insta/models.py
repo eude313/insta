@@ -6,8 +6,6 @@ from cloudinary.models import CloudinaryField
 from django.utils import timezone
 
 # Create your models here.
-
-
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
         if not email:
@@ -87,6 +85,7 @@ class Post(models.Model):
     def __str__(self):
         return self.captions
     
+
     def toggle_like(self):
         self.likes += 1 if not self.likes else -1
         self.save()
@@ -112,7 +111,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     first_name = models.CharField(max_length=100, null=True, default='')
     photo = CloudinaryField("photo")
-    bio = models.CharField(max_length=280)
+    bio = models.CharField(max_length=180)
     gender = models.CharField(
         max_length=1,
         choices=GENDER_CHOICES,

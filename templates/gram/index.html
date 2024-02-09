@@ -1,0 +1,489 @@
+{% extends 'gram/base.html' %}
+{% load static %}
+{% block content %}
+  {% load cloudinary %}
+  {% load custom_filters %}
+
+  <style>
+    /* Styles for modals */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    /* Close button style */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .slider-container{
+      display: flex;
+      overflow-x:hidden;
+      
+    }
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top:24%;
+      font-weight: bold;
+      transition: 0.6s ease;
+      user-select: none;
+      color: rgba(0,0,0,0.5);
+      margin-left: 20px;
+
+    }
+    
+    .next {
+      right: 0;
+      margin-right: 20px;
+    }
+    
+    .prev:hover, .next:hover {
+      color: black;
+    }
+    .gray-border {
+      background: linear-gradient(white, white) padding-box,
+        linear-gradient(to right, gray, gray) border-box;
+      border-radius: 50%;
+      border: 4px solid transparent;
+      padding: 0px;
+      position: relative;
+    animation: changeBorderColor 2s linear forwards;
+    }
+
+
+  </style>
+
+  <div class="nav-box">
+    {% include 'gram/navbar.html' %}
+  </div>
+  <div class="container-main">
+    <div class="box-1">
+      {% include 'gram/appbar.html' %}
+    </div>
+    <div class="box-2 overflow-auto">
+      <div class="m-2 py-2 position-relative d-flex">  
+        <a href="#">
+          <div class="position-relative z-2"style='left:64px; top:0px'>
+            {% if user_profile_photo %}
+              <img src="{{ user_profile_photo }}"  alt="User Photo" class="border d-block " style='height:78px; width:78px; border-radius: 50%; box-shadow: 3px 3px 10px purple;'  />
+            {% else %}
+              <img src="{% static 'images/user.png' %}" alt="User Photo" class="border" style='height:78px; width:78px; border-radius: 50%; box-shadow: 3px 3px 10px purple;' />
+            {% endif %}
+            <div class="position-absolute bottom-0 end-0">
+                <span class="badge rounded-circle"style=' border-radius: 50%; box-shadow: 3px 1px 10px  purple; background:linear-gradient(to right, red, purple) border-box;'>
+                  <h5 class="m-0 p-0"><i class="bi bi-plus-lg"></i></h5>
+                </span>
+            </div>
+            <small class="position-absolute text-muted fw-semibold"style='left:-1px; bottom:-28px; font-size:15px; width:85px'> New Status</small>
+          </div>
+        </a>
+        
+        <div class="py-2 px-2 slider-container" style="width: 600px; margin-left: 70px;">  
+          <div class="parent slide-item">
+            <div class="btn-gradient-2 gray-border"onclick="changeBorder(this)">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+            <small class="text-muted"> hsff</small>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+          <div class="parent slide-item">
+            <div class="btn-gradient-2">
+              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+            </div>
+          </div>
+
+        </div>
+        <h2 class="prev" type="button" onclick="plusSlides(-1)">
+          <i class="bi bi-arrow-left-circle-fill"></i>
+        </h2> 
+        <h2 class="next" type="button" onclick="plusSlides(1)">
+          <i class="bi bi-arrow-right-circle-fill" onclick="plusSlides(1)"></i>
+        </h2>
+        </div>
+      
+
+      
+      
+      <div style="display: flex; justify-content: center;">
+        <div >
+          {% for post in posts %}
+            <div class="card my-3 card-content border-0 border-bottom" id="post{{ post.id }}" data-liked="{{ post.user_has_liked }}" >
+              <div class="card-header d-flex justify-content-between border-0 px-0 bg-white">
+                <div class="d-flex">
+                  <div class="parent">
+                    <div class="btn-gradient-2">
+                      {% if post.user.profile.photo %}
+                        <img src="{{ post.user.profile.photo.url }}" alt="" class="image-3 img-fluid border m-1" />
+                      {% else %}
+                        <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="mt-2">
+                    <p class="card-title ms-2 fw-semibold m-0">{{ post.user.username }}</p>
+                    <p class="card-title d-flex justify-content-md-center align-items-center ms-2 fw-light m-0">
+                      {{ post.location }} <small class="ms-2">
+                        {{ my_datetime|time_filter }}
+                      </small>
+                    </p>
+                  </div>
+                </div>
+                <!-- Button trigger modal -->
+                <div class="d-flex align-items-center"  onclick="openModal('modal1')"type="button">
+                  <i class="bi bi-three-dots fw-semibold" style="font-size: 24px"></i>
+                </div>
+              
+              </div>
+          
+              {% if post.carouselimage_set.count == 1 %}
+                <!-- Render single image -->
+                <img src="{{ post.carouselimage_set.first.image.url }}" class="d-block w-100  rounded border" type="button" alt="..." />
+              {% elif post.carouselimage_set.count > 1 %}
+                <!-- Render carousel -->
+                <div id="carouselExampleRide" class="carousel slide rounded border" data-bs-ride="true" type="button" >
+                  <div class="carousel-indicators">
+                    {% for carousel_image in post.carouselimage_set.all %}
+                    <button type="button" data-bs-target="#carouselExampleRide" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %} class="active" {% endif %}style=" width:8px;     height:8px; border-radius: 50%;"> </button>
+                  {% endfor %}
+                  </div>
+                  <div class="carousel-inner"style="border-radius: 5px;"> 
+                    {% for carousel_image in post.carouselimage_set.all %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ carousel_image.image.url }}" class="d-block w-10 lazyload0 rounded"  data-src="image.jpg" alt="Description"/>
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+                  <h2>
+                    <i class="bi bi-arrow-left-circle-fill " aria-hidden="true"></i></h2> 
+                    <span class="visually-hidden">Previous</span>
+                  </button>
+                  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+                    <h2><i class="bi bi-arrow-right-circle-fill" aria-hidden="true"></i></h2>
+                    <span class="visually-hidden">Next</span>
+                  </button>
+                </div>
+              {% endif %}
+
+              <div class="card-body">
+                <h3 class="d-flex justify-content-between p-0 m-0">
+                  <div class="d-flex">
+                    <div class="like-btn" type='button' >
+                      {% if post.user_has_liked %}
+                          <i class="bi bi-heart-fill" style="color:red;
+                          transition: .5s ease;"></i>
+                      {% else %}
+                          <i class="bi bi-heart"></i>
+                      {% endif %}
+                  </div>
+                    <div class="d-flex flex-column mx-2"onclick="openModal('modal2')">
+                      <i class="bi bi-chat"></i>
+                    </div>
+                    <div class="">
+                      <i class="bi bi-send"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <i class="bi bi-bookmark me-2"></i>
+                  </div>
+                </h3>
+                <p class="fs-6 m-0 fw-semibold like-count">{{ post.likes }}</p>
+                <p class="card-text f-3">{{ post.captions }}</p>
+              </div>
+              
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="box-3">
+      {% include 'gram/sidebar.html' %}
+    </div>
+    <div class="box-4"></div>
+  </div>
+{% include "gram/alert.html" %}
+
+<!-- First Modal -->
+ <div  id="modal1" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="infoModalLabel{{ post.id }}">About Post</h1>
+        <button type="button" class="btn-close"onclick="closeModal('modal1')"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush text-center">
+          <hr class="dropdown-divider" />
+          <li class="list-group-item">
+            <a class="dropdown-item" href="#">Unfollow</a>
+          </li>
+          <li class="list-group-item">A third item</li>
+          <li class="list-group-item">A fourth item</li>
+          <li class="list-group-item"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Second Modal -->
+<div class="modal"  id="modal2" >
+  <h2 type="button" class="p-2 position-absolute top-0 end-0" style="color: #edececfd;" onclick="closeModal('modal2')">
+    <i class="bi bi-x-lg"></i>
+  </h2>
+  <div class="modal-dialog  modal-xl" id="cont">
+    <div class="modal-content p-0">
+      <div class="d-flex">
+        <div class="modal-body rounded-start col-6">
+
+        </div>
+        <div class="modal-body border p-0 col-6 rounded-end"  style="height: auto;">
+          <div class="p-0 my-2 d-flex justify-content-between border-bottom">
+            <div class="d-flex ps-2">
+              <div >
+                {% if post.user.profile.photo %}
+                  <img src="{{ post.user.profile.photo.url }}" alt="" class="image-3 img-fluid border m-1" />
+                {% else %}
+                  <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-3 border m-1" />
+                {% endif %}
+              </div>
+
+              <div class="mt-2">
+               <p class="card-title ms-2 fw-semibold m-0">{{ post.user.username }}</p>
+                <p class="card-title d-flex justify-content-md-center align-items-center ms-2 fw-light m-0">
+                  {{ post.location }} <small class="ms-2">{{ post.created_time|timesince }}</small>
+                </p> 
+              </div>
+            </div>
+            <div class="px-2 d-flex align-items-center" style="width: auto;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="delete this post">
+              <a class="d-flex" href="#"><h4><i class="bi bi-trash me-2 text-danger"></i></h4></a>
+            </div>
+          </div>
+          <div class="border mx-2" style="height: 300px;">
+            
+          </div>
+          <div class="border-top mt-1">
+            <div class="p-2">
+              <h4 class="d-flex justify-content-between p-0 m-0">
+                <div class="d-flex">
+                  <div class="like-btn  me-3" type='button'>
+                    {% if post.user_has_liked %}
+                        <i class="bi bi-heart-fill" style="color:red;"></i>
+                    {% else %}
+                        <i class="bi bi-heart"></i>
+                    {% endif %}
+                  </div>
+                  <div class="d-flex flex-column me-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >
+                    <i class="bi bi-chat"></i>
+                  </div>
+                  <a href="{% url 'inbox' %}" class="text-decoration-none text-dark">
+                    <div class="">
+                      <i class="bi bi-send"></i>
+                    </div>
+                  </a>
+                </div>
+                <div>
+                  <i class="bi bi-bookmark me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Save"></i>
+                </div>
+              </h4>
+              <p class="fs-6 m-0 mt-1 fw-semibold"> 100 likes</p>
+              <small class="m-0 fw-mediun text-muted" style="font-size: 14px;"> 1 month</small>
+            </div>
+            <div class="border-top collapse" id="collapseExample"> 
+              <div class="pt-2 input-group ">
+                <h4 class="px-2 mt-2">
+                  <i class="bi bi-emoji-smile"  id="button-addon2" type="button" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                  <div class="btn-group dropup">
+                    <div class="dropdown-menu" id="emoji-picker-container"></div>
+                  </div>
+                </h4>
+                <input type="text" class="form-control border-0" placeholder="Comment" aria-label="Comment" aria-describedby="button-addon2" style="margin: 0px height: 30px;"  id='input-field'/>
+                <h5 class="px-2 mt-2 fw-semibold" type="button" id="button-addon2">Post</h5>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $(".like-btn").click(function(e) {
+      e.preventDefault();
+  
+      const $cardContent = $(this).closest('.card-content');
+      const postId = $cardContent.attr('id').replace('post', ''); 
+      const $icon = $(this).find("i");
+      const $count = $cardContent.find(".like-count");
+      const liked = $cardContent.data("liked");
+  
+      // Send AJAX request to toggle like status
+      $.ajax({
+        type: "POST",
+        url: "/like_toggle/", 
+        data: {
+          'post_id': postId,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        dataType: 'json',
+        success: function(response) {
+          if (response.liked) {
+            $icon.removeClass("bi-heart");
+            $icon.addClass("bi-heart-fill");
+            $icon.css("color", "red");
+          } else {
+            $icon.removeClass("bi-heart-fill");
+            $icon.addClass("bi-heart");
+            $icon.css("color", "");
+          }
+          // Update like count of the specific post
+          updateLikeCount($count, response.likes);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      }); 
+    }); 
+  
+    function updateLikeCount($countElement, likes) {
+      const singularPlural = (likes === 1) ? ' like' : ' likes';
+      $countElement.text(likes + singularPlural);
+    }
+  
+    function initializeLikes() {
+      $(".card-content").each(function() {
+        const $cardContent = $(this);
+        const liked = $cardContent.data("liked");
+        const $icon = $cardContent.find(".like-btn i");
+        
+        if (liked) {
+          $icon.removeClass("bi-heart");
+          $icon.addClass("bi-heart-fill");
+          $icon.css("color", "red");
+        } else {
+          $icon.removeClass("bi-heart-fill");
+          $icon.addClass("bi-heart");
+          $icon.css("color", "");
+        }
+      });
+    }
+    initializeLikes();
+  });
+  
+  
+  // Function to open modal
+  function openModal(id) {
+    var modal = document.getElementById(id);
+    modal.style.display = "block";
+  }
+
+  // Function to close modal
+  function closeModal(id) {
+    var modal = document.getElementById(id);
+    modal.style.display = "none";
+  }
+
+  // Close the modal when clicking outside of it
+  document.addEventListener('click', function(event) {
+    var modals = document.getElementsByClassName('modal');
+    for (var i = 0; i < modals.length; i++) {
+      var modal = modals[i];
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  });
+
+  //slider
+  let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("slide-item");
+
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.transform = "translateX(" + ((i - slideIndex) * 10) + "px)";
+        }
+    }
+
+  
+</script>
+
+{% endblock %}

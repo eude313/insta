@@ -1,0 +1,47 @@
+
+
+{% extends 'gram/base.html' %}
+{% load static %}
+{% block content %}
+  {% load cloudinary %}
+  <div class="container-main">
+    <div class="box-1">
+      {% include 'gram/appbar.html' %}
+    </div>
+    <div class="box-5"> 
+        <h1>Notifications</h1>
+        <div class="Profile">
+          <div class="Profile-border">
+            <div class="Profile-border-segmentContainer">
+              <!-- Generating segments dynamically using JavaScript -->
+            </div>
+          </div>
+          <div class="Profile-borderMask">
+            <svg class="Profile-borderMask-gfx" width="500" height="500">
+              <circle cx="100" cy="100" r="89.6" fill="transparent" stroke="#fafafa" stroke-width="2"></circle>
+              <circle cx="100" cy="100" r="88.4" fill="transparent" stroke="#fafafa" stroke-width="2"></circle>
+              <circle cx="100" cy="100" r="89.6" fill="transparent" stroke="#fafafa" stroke-width="2"></circle>
+              <circle cx="100" cy="100" r="88.4" fill="transparent" stroke="#fafafa" stroke-width="2"></circle>
+            </svg>
+          </div>
+          <div class="Profile-imageMask">
+            <img src="http://placekitten.com/150/150" alt="Profile Picture">
+          </div>
+        </div>
+        <ul>
+            {% for notification in notifications %}
+                <li{% if notification.is_read %} style="font-weight: normal;"{% else %} style="font-weight: bold;"{% endif %}>
+                    {{ notification.message }}
+                    <a href="{% url 'mark_as_read' notification.id %}">Mark as read</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% include 'gram/footer.html' %}
+    </div>
+
+  </div>
+  <Script>
+  
+  </Script>
+
+{% endblock %}

@@ -20,7 +20,7 @@
         </div>
 
         <div class="px-2 d-flex align-items-center" type="button" style="width: auto;">
-          <a class="mb-2 fw-semibold m-0 text-dark  link-underline link-underline-opacity-0"  href="{% url 'signOut' %}">switch</a>
+          <a class="mb-2 fw-semibold m-0 text-primary  link-underline link-underline-opacity-0"  href="{% url 'signOut' %}">switch</a>
         </div>
       </div>
     </div>
@@ -56,13 +56,16 @@
           </div>
         </div>
 
-        <div class="px-2 d-flex align-items-center" type="button" style="width: auto;">
+        <div class="px-2 d-flex align-items-center text-primary" type="button" style="width: auto;">
           <p class="mb-2 fw-semibold m-0">ipsum</p>
         </div>
       </div>
       {% endfor %}
     </div>
   </div>
+  <div class="text-center">
+    <a class="link-dark link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover mx-2" href="https://github.com/eude313">© 2024 Instagram by Eudes</a>
+  </div>
 
-  {% include 'gram/footer.html' %}
+
 </div>

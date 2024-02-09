@@ -13,8 +13,12 @@ urlpatterns = [
     path('explore/', views.explore, name='explore'),
     path('inbox/', views.inbox, name='inbox'),
     path('search/', views.search, name='search'),
+    
+    path('post_details/', views.post_details, name='post_details'),
  
     path('like_toggle/', views.like_toggle, name='like_toggle'),
+
+    path('other_profiles/', views.other_profiles, name='other_profiles'),    
 
     path('follow/<str:username>/', views.follow_user, name='follow_user'),
     path('unfollow/<str:username>/', views.unfollow_user, name='unfollow_user'),

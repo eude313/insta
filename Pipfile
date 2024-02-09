@@ -13,6 +13,7 @@ python-decouple = "*"
 cloudinary = "*"
 python-dotenv = "*"
 requests = "*"
+python-dateutil = "*"
 
 [dev-packages]
 

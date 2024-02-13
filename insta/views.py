@@ -88,6 +88,13 @@ def upload(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 
+
+def status(request):
+    # user = request.user
+    context = {
+    }
+    return render(request, 'gram/status.html',context)
+
 @login_required(login_url='/')
 def home(request):
     try:
@@ -126,125 +133,54 @@ def like_toggle(request):
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-def post_details(request):
-    if request.method == 'GET' and request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest': 
-        post_id = request.GET.get('post_id')
-        try:
-            post = Post.objects.get(pk=post_id)
-            context = {
-                "post": post 
-            }
-            return render(request, 'post_details.html', context)
-        except:
-            return JsonResponse({'error': 'Post not found'})
-    else:
-        return JsonResponse({'error': 'Invalid request'})
-
-# @login_required(login_url='/')
 # def post_details(request):
-#     if request.method == 'GET' and request.is_ajax():
+#     if request.method == 'GET' and request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest': 
 #         post_id = request.GET.get('post_id')
 #         try:
 #             post = Post.objects.get(pk=post_id)
-#             print(f"Single Image URL: {post.image.url}")
-
-#             # Assuming you have a OneToOneField or ForeignKey relation from Post to Profile
-#             # You need to adjust the following lines based on your actual model structure
-#             # Fetching other_profiles assuming it's a related model to the post's user
-#             other_profiles = Profile.objects.exclude(user=post.user)
-
 #             context = {
-#                 "post": post,
-#                 'profiles': other_profiles,
+#                 "post": post 
 #             }
-#             return render(request, 'your_app/post_details.html', context)
-#         except Post.DoesNotExist:
-#             return JsonResponse({'error': 'Post not found'}, status=404)
-#         except Exception as e:
-#             # Handle any other exceptions gracefully
-#             return JsonResponse({'error': str(e)}, status=500)
+#             return render(request, 'post_details.html', context)
+#         except:
+#             return JsonResponse({'error': 'Post not found'})
 #     else:
-#         return JsonResponse({'error': 'Invalid request'}, status=400)
+#         return JsonResponse({'error': 'Invalid request'})
+
+@login_required(login_url='/')
+def post_details(request):
+    if request.method == 'GET' and request.is_ajax():
+        post_id = request.GET.get('post_id')
+        try:
+            post = Post.objects.get(pk=post_id)
+            print(f"Single Image URL: {post.image.url}")
+            other_profiles = Profile.objects.exclude(user=post.user)
+
+            context = {
+                "post": post,
+                'profiles': other_profiles,
+            }
+            return render(request, 'your_app/post_details.html', context)
+        except Post.DoesNotExist:
+            return JsonResponse({'error': 'Post not found'}, status=404)
+        except Exception as e:
+            # Handle any other exceptions gracefully
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-# @login_required(login_url='/')
-# def profile(request):
-#     try:
-#         profiles = Profile.objects.all()
-#         posts = Post.objects.filter(user=request.user)
-#         if request.method == "POST":
-#             form = ProfileForm(request.POST, request.FILES)
-#             if form.is_valid():
-#                 current_user = request.user
-#                 new_photo = form.cleaned_data['photo'] 
-#                 new_bio = form.cleaned_data['bio']  
-
-#                 try:
-#                     # Update the existing profile
-#                     current_user_profile = Profile.objects.get(user=current_user)
-#                     current_user_profile.photo = new_photo
-#                     current_user_profile.bio = new_bio
-#                     current_user_profile.save()
-#                 except Profile.DoesNotExist:
-#                     # Create a new profile
-#                     Profile.objects.create(user=current_user, photo=new_photo, bio=new_bio)
-
-#                 return redirect("profile")
-#         else:
-#             form = ProfileForm()
-#         try:
-#             current_user_profile = Profile.objects.get(user=request.user) 
-
-#             # Count the number of followers for the current user
-#             followers_count = Follow.objects.filter(following=request.user).count()
-
-#             # Count the number of users the current user is following
-#             following_count = Follow.objects.filter(follower=request.user).count()
-
-#         except Profile.DoesNotExist:
-#             # Handle the case where the profile doesn't exist
-#             current_user_profile = None
-#             followers_count = 0
-#             following_count = 0
-            
-#         user_posts = Post.objects.filter(user=request.user)
-        
-#         if current_user_profile and current_user_profile.photo:
-#             user_profile_photo_url = current_user_profile.photo.url
-#         else:
-#             user_profile_photo_url = settings.DEFAULT_PROFILE_PHOTO_URL
-            
-
-#         # profile_user = User.objects.get(username=username)
-#         # is_following = False
-#         # if request.user.is_authenticated:
-#         #     is_following = request.user.profile.following.filter(id=profile_user.id).exists()
-
-#         context = {
-#             "profiles": profiles,
-#             "post": posts,
-#             "form": form,
-#             # 'is_following': is_following,
-#             'user_posts': user_posts,
-#             "followers_count": followers_count,
-#             "following_count": following_count,
-#             "user_profile_photo": user_profile_photo_url,    
-#         }
-
-#         return render(request, "gram/profile.html", context)
-    
-#     except RequestException as e:
-#         print(f"An error occurred: {e}")
-#         return render(request, "connection_error.html")
 @login_required(login_url='/')
 def profile(request):
     try:
+        profiles = Profile.objects.all()
+        posts = Post.objects.filter(user=request.user)
         if request.method == "POST":
             form = ProfileForm(request.POST, request.FILES)
             if form.is_valid():
                 current_user = request.user
-                new_photo = form.cleaned_data['photo']
-                new_bio = form.cleaned_data['bio']
+                new_photo = form.cleaned_data['photo'] 
+                new_bio = form.cleaned_data['bio']  
 
                 try:
                     # Update the existing profile
@@ -259,20 +195,43 @@ def profile(request):
                 return redirect("profile")
         else:
             form = ProfileForm()
+        try:
+            current_user_profile = Profile.objects.get(user=request.user) 
 
-        # Retrieve the user's profile and related information
-        current_user_profile = Profile.objects.filter(user=request.user).first()
-        followers_count = Follow.objects.filter(following=request.user).count()
-        following_count = Follow.objects.filter(follower=request.user).count()
+            # Count the number of followers for the current user
+            followers_count = Follow.objects.filter(following=request.user).count()
+
+            # Count the number of users the current user is following
+            following_count = Follow.objects.filter(follower=request.user).count()
+
+        except Profile.DoesNotExist:
+            # Handle the case where the profile doesn't exist
+            current_user_profile = None
+            followers_count = 0
+            following_count = 0
+            
         user_posts = Post.objects.filter(user=request.user)
-        user_profile_photo_url = current_user_profile.photo.url if current_user_profile and current_user_profile.photo else settings.DEFAULT_PROFILE_PHOTO_URL
+        
+        if current_user_profile and current_user_profile.photo:
+            user_profile_photo_url = current_user_profile.photo.url
+        else:
+            user_profile_photo_url = settings.DEFAULT_PROFILE_PHOTO_URL
+            
+
+        # profile_user = User.objects.get(username=username)
+        # is_following = False
+        # if request.user.is_authenticated:
+        #     is_following = request.user.profile.following.filter(id=profile_user.id).exists()
 
         context = {
+            "profiles": profiles,
+            "post": posts,
             "form": form,
-            "user_posts": user_posts,
+            # 'is_following': is_following,
+            'user_posts': user_posts,
             "followers_count": followers_count,
             "following_count": following_count,
-            "user_profile_photo": user_profile_photo_url,
+            "user_profile_photo": user_profile_photo_url,    
         }
 
         return render(request, "gram/profile.html", context)
@@ -280,7 +239,6 @@ def profile(request):
     except RequestException as e:
         print(f"An error occurred: {e}")
         return render(request, "connection_error.html")
-
 
 
 @login_required(login_url='/')

@@ -24,18 +24,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
     <link
       rel="stylesheet"
       rel="preload"
       type="text/css"
       href="{% static '/css/base.css' %}" />
     <title>insta</title>
+    <style>
+      .back{
+        background-image: linear-gradient(to right top, #ffc600 20%, #ff0040, #e600cc 80%);
+      }
+    </style>
   </head>
   <body>
+
     {% block content %}{% endblock %}
 
     <!-- MDB -->
     <script src=" https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script
       type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
@@ -51,6 +60,43 @@
         // Add the 'show' class if messages exist
         if (messagesExist) {
           offcanvasBottom.classList.add('show');
+        }
+      });
+      const swiper = new Swiper(".swiper", {
+        direction: "horizontal",
+        loop: false,
+       // effect: 'coverflow',
+        crossFade:true,
+        grabCursor: true,
+        centeredSlides: true,
+        slidesPerView: 3,
+        spaceBetween: 38, 
+        coverflowEffect: {
+          rotate: 0,
+          stretch: 0,
+          depth: 100,
+          modifier: 2.5,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        on: {
+          slideChangeTransitionEnd: function () {
+            const slides = document.querySelectorAll('.swiper-slide');
+            slides.forEach(slide => {
+              const overlay = slide.querySelector('.overlay-stories');
+              if (overlay) {
+                if (slide.classList.contains('swiper-slide-active')) {
+                  overlay.classList.add('active');
+                  slide.classList.remove('active-slide');
+                } else {
+                  overlay.classList.remove('active');
+                  slide.classList.add('active-slide');
+                }
+              }
+            });
+          }
         }
       });
       </script>

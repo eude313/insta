@@ -9,11 +9,16 @@
       <div class="container w-100">
         <div class="row my-3">
           <div class="col-md-5 col-sm-12 d-flex justify-content-center">
-            {% if user_profile_photo %}
-              <img src="{{ user_profile_photo }}" alt="User Profile Photo" class="image-1 img-fluid" />
-            {% else %}
-              <img src="{% static 'images/user.png' %}" alt="Default User Photo" class="image-1" />
-            {% endif %}
+            <div class="parent">
+              <a href="#" data-user-index="0" class="btn-gradient-2 image-1 back">
+                {% if user_profile_photo %}
+                  <img src="{{ user_profile_photo }}" alt="User Profile Photo"/>
+                {% else %}
+                  <img src="{% static 'images/user.png' %}" alt="Default User Photo"/>
+                {% endif %}
+              </a>
+            </div> 
+
           </div>
           <div class="col-md-7 col-sm-12 p-0">
             <div class="m-0 my-2 row align-items-center">
@@ -64,7 +69,7 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+            <div class="modal z-3" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
               <div class="modal-dialog modal-xl">
                 <form class="px-4 py-2" method="POST" action="{% url 'profile' %}" enctype="multipart/form-data">
                   {% csrf_token %}

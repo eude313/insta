@@ -1,0 +1,90 @@
+{% extends 'gram/base.html' %}
+{% load static %}
+{% block content %}
+  {% load cloudinary %}
+  <style></style>
+  <div class="container-fluid p-0" style=" overflow: hidden; height: 100vh; border: 2px solid red;">
+    <div class="d-flex justify-content-between"  >
+      <a href="{% url 'home' %}" class="text-decoration-none text-dark z-2" style="font-family: 'Lobster', sans-serif;">
+        <p class="fw-semibold fs-3 mt-1 ps-3 insta">
+          <span class="none me-2">Bazenga</span><span class="ms-2 ms-sm-0 insta">insta</span>
+        </p>
+      </a>
+      <a href="{% url 'home' %}" class="text-decoration-none text-dark z-2" style="font-family: 'Lobster', sans-serif;"><h2 type="button" class="p-2" style="color: #edececfd;"><i class="bi bi-x-lg"></i></h2></a>
+    </div>
+    <div class="swiper mx-2" style="width: 98.5%; height: 100vh; position: absolute; top: 0; left:2px; overflow: hidden;  border: 1px solid yellowgreen;">
+      <div class="swiper-wrapper position-relative d-flex align-items-center">
+        <div class="swiper-slide">
+           <div class="overlay-stories">
+            <div class="parent slide-item d-flex" style="flex-direction: column;">
+              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
+                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
+              </a>
+              <span class="fs-6">mark_johnson</span>
+            </div> 
+          </div>
+        </div>
+        <div class="swiper-slide">
+           <div class="overlay-stories">
+            <div class="parent slide-item d-flex" style="flex-direction: column;">
+              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
+                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
+              </a>
+              <span class="fs-6">mark_johnson</span>
+            </div> 
+          </div>
+        </div>
+        <div class="swiper-slide">
+           <div class="overlay-stories">
+            <div class="parent slide-item d-flex" style="flex-direction: column;">
+              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
+                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
+              </a>
+              <span class="fs-6">mark_johnson</span>
+            </div> 
+          </div>
+        </div>
+        <div class="swiper-slide">
+           <div class="overlay-stories">
+            <div class="parent slide-item d-flex" style="flex-direction: column;">
+              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
+                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
+              </a>
+              <span class="fs-6">mark_johnson</span>
+            </div> 
+          </div>
+        </div>
+        <div class="swiper-slide">
+           <div class="overlay-stories">
+            <div class="parent slide-item d-flex" style="flex-direction: column;">
+              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
+                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
+              </a>
+              <span class="fs-6">mark_johnson</span>
+            </div> 
+          </div>
+        </div>
+        <div class="swiper-slide">
+           <div class="overlay-stories">
+            <div class="parent slide-item d-flex" style="flex-direction: column;">
+              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
+                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
+              </a>
+              <span class="fs-6">mark_johnson</span>
+            </div> 
+          </div>
+        </div>
+      </div>
+     
+      <div class="p-2 swiper-button-prev" type="button" style="position: absolute; left:32%; top:45%">
+      </div>
+      <div class="swiper-button-next"  style="position: absolute; right:32%; top:45%">
+      </div>
+    </div>
+  </div>
+
+  <script>
+  
+
+  </script>
+{% endblock %}

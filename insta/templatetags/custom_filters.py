@@ -3,6 +3,7 @@ from django import template
 from django.utils.timesince import timesince
 from datetime import datetime
 from dateutil import parser
+from django.utils import timezone
 
 register = template.Library()
 
@@ -15,13 +16,16 @@ def shorten_time_since(value):
         return ''
 
     try:
+        # Parse the value if it's a string
         if isinstance(value, str):
             value = parser.parse(value)
 
+        # Check if value is a datetime object
         if not isinstance(value, datetime):
             return ''
 
-        delta = datetime.now() - value
+        # Calculate the time difference
+        delta = timezone.now() - value
 
         # Years
         if delta.days >= 365:
@@ -51,10 +55,10 @@ def shorten_time_since(value):
             return f'{delta.seconds}s'
         
     except Exception as e:
-        # Handle any exceptions that occur during parsing
+        # Log the exception for debugging
         print(f"Error parsing datetime: {e}")
         return ''
-
+    
 @register.filter(name='like_filter')
 def liked_icon(post, user):
     try:

@@ -2,9 +2,13 @@ from django.urls import path
 from . import views
 
 
+
 urlpatterns = [
-    path("", views.signIn, name="signIn"),
-    path("signUp", views.signUp, name="signUp"),
+    path('', views.loading_page, name='loading_page'),
+    path("signIn", views.signIn, name="signIn"),
+    path('error/', views.error, name='error'),
+    path('signUp/', views.signUp, name='signUp'),
+    
     path("logOut", views.signOut, name="signOut"),
     path("home", views.home, name="home"),
     # path("viewImage/<str:pk>/", views.viewImage, name="viewImage"),
@@ -13,6 +17,7 @@ urlpatterns = [
     path('explore/', views.explore, name='explore'),
     path('inbox/', views.inbox, name='inbox'),
     path('search/', views.search, name='search'),
+    path('create_story/', views.create_story, name='create_story'),
     path('status/', views.status, name='status'),
     
     path('post_details/', views.post_details, name='post_details'),

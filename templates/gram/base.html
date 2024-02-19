@@ -50,56 +50,32 @@
       <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emoji-mart@5.5.2/dist/browser.min.js"></script>
     <script>
+      function delayRedirect(url) {
+        var delayTime = 1000; 
+        setTimeout(function() {
+            window.location.href = url;
+        }, delayTime);
+      }
       document.addEventListener('DOMContentLoaded', function() {
-        // Check if messages exist
+          var links = document.querySelectorAll('.delayed-redirect');
+          links.forEach(function(link) {
+              link.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  var targetUrl = link.getAttribute('href');
+                  delayRedirect(targetUrl);
+              });
+          });
+      });
+      document.addEventListener('DOMContentLoaded', function() {
         var messagesExist = {% if messages %} true; {% else %} false; {% endif %};
+        var toastAlert = document.getElementById('toastAlert');
       
-        // Get the offcanvas element
-        var offcanvasBottom = document.getElementById('offcanvasBottom');
-      
-        // Add the 'show' class if messages exist
         if (messagesExist) {
-          offcanvasBottom.classList.add('show');
+          toastAlert.classList.add('show');
         }
       });
-      const swiper = new Swiper(".swiper", {
-        direction: "horizontal",
-        loop: false,
-       // effect: 'coverflow',
-        crossFade:true,
-        grabCursor: true,
-        centeredSlides: true,
-        slidesPerView: 3,
-        spaceBetween: 38, 
-        coverflowEffect: {
-          rotate: 0,
-          stretch: 0,
-          depth: 100,
-          modifier: 2.5,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-        on: {
-          slideChangeTransitionEnd: function () {
-            const slides = document.querySelectorAll('.swiper-slide');
-            slides.forEach(slide => {
-              const overlay = slide.querySelector('.overlay-stories');
-              if (overlay) {
-                if (slide.classList.contains('swiper-slide-active')) {
-                  overlay.classList.add('active');
-                  slide.classList.remove('active-slide');
-                } else {
-                  overlay.classList.remove('active');
-                  slide.classList.add('active-slide');
-                }
-              }
-            });
-          }
-        }
-      });
-      </script>
+    </script>
+    <script src="{% static '/js/loading.js' %}"rel="preload"></script>
     <script src="{% static '/js/index.js' %}"rel="preload"></script>
   </body>
 </html>

@@ -1,21 +1,25 @@
-
-
 {% extends 'gram/base.html' %}
 {% load static %}
 {% block content %}
+
+{% include 'gram/progress.html' %}
   {% load cloudinary %}
-  <div class="container-main">
+  <style>
+  </style>
+    <div class="container-main">
     <div class="box-1">
       {% include 'gram/appbar.html' %}
     </div>
     <div class="box-5"> 
         <h1>Notifications</h1>
         
-        <div class="parent">
+        {% comment %} <div class="parent">
           <a href="#" data-user-index="0" class="btn-gradient-2 image-1">
             <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
           </a>
-        </div> 
+        </div>  {% endcomment %}
+      
+
 
         <ul>
             {% for notification in notifications %}
@@ -29,5 +33,7 @@
     </div>
 
   </div>
+<script>
+</script>
 
 {% endblock %}

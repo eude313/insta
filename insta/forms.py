@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Message
+from .models import Profile, Message, Story
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -28,3 +28,10 @@ class MessageForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['message'].widget.attrs.update({'class': 'form-control  rounded-pill','aria-label':'Message','id':"messageInput",'style':"height:45px;" ,'placeholder':"Message......"})
+
+
+
+# class StoryForm(forms.ModelForm):
+#     class Meta:
+#         model = Story
+#         fields = ['content', 'caption', 'tagged_users', 'link']

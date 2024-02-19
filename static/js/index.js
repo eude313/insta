@@ -58,13 +58,13 @@ $(document).ready(function() {
           },
           error: function(xhr, status, error) {
               var errorMessage = xhr.responseJSON ? xhr.responseJSON.error : 'An error occurred.';
-              alert(errorMessage); // Show error message
-              // Enable the submit button
+              alert(errorMessage); 
               $('#submitBtn').prop('disabled', true);
           }
       });
   });
 });
+
 
 // Function to get CSRF cookie value
 function getCookie(name) {
@@ -73,7 +73,6 @@ function getCookie(name) {
       var cookies = document.cookie.split(';');
       for (var i = 0; i < cookies.length; i++) {
           var cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
           if (cookie.substring(0, name.length + 1) === (name + '=')) {
               cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
               break;
@@ -85,33 +84,34 @@ function getCookie(name) {
 
 
 
-// JavaScript code to handle the search functionality
+// handle the search functionality
 document.addEventListener("DOMContentLoaded", function() {
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
   const searchResults = document.getElementById('searchResults');
 
-  searchForm.addEventListener('submit', async function(event) {
+  if (searchForm) {
+    searchForm.addEventListener('submit', async function(event) {
       event.preventDefault();
       const query = searchInput.value.trim();
       if (query.length > 0) {
-          try {
-              const response = await fetch(`/search/profiles?q=${query}`);
-              const profiles = await response.json();
-              displaySearchResults(profiles);
-          } catch (error) {
-              console.error('Error fetching search results:', error);
-          }
+        try {
+          const response = await fetch(`/search/profiles?q=${query}`);
+          const profiles = await response.json();
+          displaySearchResults(profiles);
+        } catch (error) {
+          console.error('Error fetching search results:', error);
+        }
       } else {
-          searchResults.innerHTML = ''; // Clear search results if search input is empty
+          searchResults.innerHTML = ''; 
       }
-  });
-
+    });
+  }
   function displaySearchResults(profiles) {
       searchResults.innerHTML = '';
       profiles.forEach(profile => {
           const profileElement = document.createElement('div');
-          profileElement.textContent = profile.user.username;
+          profileElement.textContent = profile.username;
           searchResults.appendChild(profileElement);
       });
   }

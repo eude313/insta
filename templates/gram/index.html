@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
   {% load cloudinary %}
+  {% include 'gram/progress.html' %}
   {% load custom_filters %}
 
   <style>
@@ -42,17 +43,44 @@
       text-decoration: none;
       cursor: pointer;
     }
-    .back{
-      background-image: linear-gradient(to right top, #ffc600 20%, #ff0040, #e600cc 80%);
+
+    .marquee-container {
+      overflow: hidden;
+      position: relative;
+      width: 88%;
+      height: 100%; 
+
+    }
+
+    .marquee-content {
+      position: absolute;
+      white-space: nowrap;
+      left: 0;
+    }
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      border: 1px solid rebeccapurple;
+    }
+
+    .slide-story {
+      margin:0px 2px;
+      flex: 0 0 auto;
     }
     .status{
-      width: 70px;
-      height: 70px;
+      width: 65px;
+      height: 65px;
     }
     .slider-container{
       display: flex;
       overflow-x:hidden;
       
+    }
+    .slide-btn{
+      cursor: pointer;
+      position: absolute;
+      top:24%;
+      color: rgba(0,0,0,0.5)
     }
     .prev, .next {
       cursor: pointer;
@@ -63,7 +91,6 @@
       user-select: none;
       color: rgba(0,0,0,0.5);
       margin-left: 20px;
-
     }
     
     .next {
@@ -81,13 +108,12 @@
       border: 4px solid transparent;
       padding: 0px;
       position: relative;
-    animation: changeBorderColor 2s linear forwards;
+      animation: changeBorderColor 2s linear forwards;
     }
     .demo-stories-name {
       font-size:13px;
       font-weight:500;
-      line-height:1;
-      margin-top:10px
+      margin-top:5px;
     }
   </style>
 
@@ -99,52 +125,62 @@
       {% include 'gram/appbar.html' %}
     </div>
     <div class="box-2 overflow-auto">
-      <div class="m-2 py-2 position-relative d-flex">
-       
-        <a href="#">
-          <div class="position-relative z-2"style='left:64px; top:0px'>
-            {% if user_profile_photo %}
-              <img src="{{ user_profile_photo }}"  alt="User Photo" class="border d-block " style='height:78px; width:78px; border-radius: 50%; box-shadow: 3px 3px 10px purple;'  />
-            {% else %}
-              <img src="{% static 'images/user.png' %}" alt="User Photo" class="border" style='height:78px; width:78px; border-radius: 50%; box-shadow: 3px 3px 10px purple;' />
-            {% endif %}
-            <div class="position-absolute bottom-0 end-0">
-                <span class="badge rounded-circle"style=' border-radius: 50%; box-shadow: 3px 1px 10px  purple; background:linear-gradient(to right, red, purple) border-box;'>
-                  <h5 class="m-0 p-0"><i class="bi bi-plus-lg"></i></h5>
-                </span>
+    
+      <div class="d-flex mx-3 mt-2">
+        <div>
+            <div class="position-relative" onclick="openModal('modal3')" type='button'>
+              <div class="btn-gradient-2 ms-2" style="width: 70px; height: 70px; {% if current_user_profile.story_set.all %}
+              background-image: linear-gradient(to right top, blue 20%, green 80%);
+              {% else %}background-image: none;{% endif %}">
+                {% if user_profile_photo %}
+                  <img src="{{ user_profile_photo }}" alt="" />
+                {% else %}
+                  <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
+                {% endif %}
+              </div>
+              <div class="position-absolute m-0 z-2 d-flex align-items-center pt-2 border" style="left: 50px; top: 40px; color: gray; background-color: whitesmoke; border-radius: 50%; height: 22px; width: 22px;">
+                <h5 class="text-center"><i class="bi bi-plus-lg"></i></h5>
+              </div>
+              <small class="text-muted fw-semibold mx-2 ps-1"style='font-size:13px; width:80px; margin-top:5px;'> New Story</small>
             </div>
-            <small class="position-absolute text-muted fw-semibold"style='left:-1px; bottom:-28px; font-size:15px; width:85px'> New Status</small>
-          </div>
-        </a>
-        <div class="py-2 px-2 slider-container" style="width: 600px; margin-left: 70px;">
-         
-          <div class="parent slide-item">
-            <a href="{% url 'status' %}" data-user-index="0" class="btn-gradient-2 status back">
-              <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
-            </a>
-            <span class="demo-stories-name">mark_johnson</span>
+        </div> 
+        <div class="d-flex justify-content-center position-relative" style="width: 100%;">
+          <div class="marquee-container">
+            <div class="marquee-content d-flex" id="marqueeContent">
+              {% if stories %}
+                {% regroup stories by user as user_stories %}
+                {% for user_story in user_stories %}
+                  <div class="slide-story">
+                    <div class="parent slide-item d-flex" style="flex-direction: column;">
+                      <a href="{% url 'status' %}" class="btn-gradient-2 status back ms-2">                    
+                        <img src="{{ user_story.grouper.profile.photo.url }}" alt="Default User Photo" />
+                      </a>
+                      <span class="demo-stories-name">{{ user_story.grouper.username }}</span>
+                    </div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p class="slide-story">Post a new story</p>
+              {% endif %}
+            </div>
           </div> 
-
-        </div>
-        <h2 class="prev" type="button" onclick="plusSlides(-1)">
-          <i class="bi bi-arrow-left-circle-fill"></i>
-        </h2> 
-        <h2 class="next" type="button" onclick="plusSlides(1)">
-          <i class="bi bi-arrow-right-circle-fill" onclick="plusSlides(1)"></i>
-        </h2>
-      </div>
-      
-
-      
-      
+          <h2 onclick="moveLeft()" style="
+          right:0px;"class="slide-btn" ><i class="bi bi-arrow-right-circle-fill"></i></h2>
+          <h2 onclick="moveRight()"class="slide-btn" style="
+          left:0px;"><i class="bi bi-arrow-left-circle-fill"></i></h2>
+        </div> 
+      </div> 
       <div style="display: flex; justify-content: center;">
         <div >
           {% for post in posts %}
             <div class="card my-3 card-content border-0 border-bottom" id="post{{ post.id }}" data-liked="{{ post.user_has_liked }}" >
               <div class="card-header d-flex justify-content-between border-0 px-0 bg-white">
                 <div class="d-flex">
-                  <div class="parent">
-                    <a href="#" data-user-index="0" class="btn-gradient-2 back" style="width: 58px;height: 58px;">
+                 <div class="parent">
+                    <a href="#" data-user-index="0" class="btn-gradient-2" style="width: 58px;height: 58px;  {% if story in stories_with_users %}
+                        background-image: linear-gradient(to right top, #ffc600 20%, #ff0040, #e600cc 80%);
+                        {% else %}background-image: none;
+                        {% endif %}">
                       {% if post.user.profile.photo %}
                         <img src="{{ post.user.profile.photo.url }}" alt="" />
                       {% else %}
@@ -152,6 +188,7 @@
                       {% endif %}
                     </a>
                   </div> 
+
                   <div class="mt-2">
                     <p class="card-title ms-2 fw-semibold m-0">{{ post.user.username }}</p>
                     <p class="card-title d-flex justify-content-md-center align-items-center ms-2 fw-light m-0">
@@ -181,8 +218,8 @@
                   </div>
                   <div class="carousel-inner"style="border-radius: 5px;"> 
                     {% for carousel_image in post.carouselimage_set.all %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <img src="{{ carousel_image.image.url }}" class="d-block w-10 lazyload0 rounded"  data-src="image.jpg" alt="Description"/>
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}" style="max-height: 800px;min-height: 100%; min-width: auto; position:relative; height: 800px;">
+                        <img src="{{ carousel_image.image.url }}" class="d-block w-100 lazyload0 rounded"  data-src="image.jpg" alt="Description"style="max-height: 800px; position:absolute; object-fit:cover; width:100;height: 100%;"/>
                       </div>
                     {% endfor %}
                   </div>
@@ -226,6 +263,16 @@
               
             </div>
           {% endfor %}
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5636868111921507" crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-5636868111921507"
+                data-ad-slot="4678502601"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
       </div>
     </div>
@@ -341,6 +388,48 @@
   </div>
 </div>
 
+<!-- Story Modal -->
+<div  id="modal3" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content p-0 py-2">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 fw-semibold" id="infoModalLabel{{ post.id }}">Create story</h1>
+        <button type="button" class="btn-close"onclick="closeModal('modal3')"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-flush text-center">
+          <li class="list-group-item">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+                <input class="form-control" type="file" id="formFile" type="file" name="content" accept="image/*,video/*">
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="caption"  placeholder="Caption:">
+                <label for="caption">Caption:</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input  type="text" id="tagged_users" name="tagged_users" class="form-control"  placeholder="Tagged Users:">
+                <label for="tagged_users">Tag Someone</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input type="url" id="link" name="link" class="form-control" placeholder="Link">
+                <label for="link">Link:</label>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Share Story</button>
+              </div>
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   $(document).ready(function() {
     $(".like-btn").click(function(e) {
@@ -405,51 +494,19 @@
     initializeLikes();
   });
   
+  var carousel = document.getElementById('carouselExampleRide');
+  var prevButton = carousel.querySelector('.carousel-control-prev');
+ 
+  prevButton.style.display = 'none';
+
+  carousel.addEventListener('slid.bs.carousel', function (event) {
+    if (event.to === 0) {
+      prevButton.style.display = 'none';
+    } else {
+      prevButton.style.display = 'block';
+    }
   
-  // Function to open modal
-  function openModal(id) {
-    var modal = document.getElementById(id);
-    modal.style.display = "block";
-  }
-
-  // Function to close modal
-  function closeModal(id) {
-    var modal = document.getElementById(id);
-    modal.style.display = "none";
-  }
-
-  // Close the modal when clicking outside of it
-  document.addEventListener('click', function(event) {
-    var modals = document.getElementsByClassName('modal');
-    for (var i = 0; i < modals.length; i++) {
-      var modal = modals[i];
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-  });
-
-  //slider
-  let slideIndex = 1;
-    showSlides(slideIndex);
-
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
-    }
-
-    function showSlides(n) {
-        let i;
-        let slides = document.getElementsByClassName("slide-item");
-
-        if (n > slides.length) { slideIndex = 1 }
-        if (n < 1) { slideIndex = slides.length }
-
-        for (i = 0; i < slides.length; i++) {
-            slides[i].style.transform = "translateX(" + ((i - slideIndex) * 10) + "px)";
-        }
-    }
-
-  
+});
 </script>
 
 {% endblock %}

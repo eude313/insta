@@ -4,6 +4,8 @@ import datetime as dt
 from django.db.models.signals import post_save, post_delete
 from cloudinary.models import CloudinaryField
 from django.utils import timezone
+from django.conf import settings
+import os
 
 # Create your models here.
 class MyAccountManager(BaseUserManager):
@@ -158,3 +160,39 @@ class Notification(models.Model):
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
+    
+    
+
+
+
+class Story(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = CloudinaryField('stories', null=True, blank=True)
+    caption = models.CharField(max_length=255, blank=True)
+    tagged_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='tagged_in_stories', blank=True)
+    link = models.URLField(blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    expires_at = models.DateTimeField(null=True, blank=True)
+    is_highlight = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if not self.expires_at and not self.is_highlight:
+            self.expires_at = self.created_at + timezone.timedelta(hours=24)
+        super().save(*args, **kwargs)
+
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+
+    def delete(self, *args, **kwargs):
+        if self.content:
+            if os.path.isfile(self.content.path):
+                os.remove(self.content.path)
+        super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return f'Story by {self.user.username}'
+
+    class Meta:
+        ordering = ['-created_at']
+
+    

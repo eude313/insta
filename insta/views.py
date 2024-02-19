@@ -1,5 +1,5 @@
 from requests import Response
-from insta.models import User, Post, Profile, CarouselImage, Like, Follow, Message,Notification
+from insta.models import User, Post, Profile, CarouselImage, Like, Follow, Message,Notification,Story
 from django.shortcuts import redirect, render
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
@@ -12,38 +12,36 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from requests.exceptions import RequestException
 from django.conf import settings
+from django.utils import timezone
 
+
+def loading_page(request):
+    return render(request, 'loading.html')
+
+def error(request):
+    return render(request, '404.html')
 
 def signUp(request):
-    try:
-        if request.method == "POST":
-            username = request.POST["username"]
-            email = request.POST["email"]
-            first_name = request.POST['first_name']
-            password = request.POST["password"]
-            confirm_password = request.POST["confirm_password"]
-            
-            if User.objects.filter(Q(email=email) | Q(username=username)).exists():
-                messages.add_message(request, messages.ERROR, "This email or username is already in use.")
-                return render(request, "auth/signin.html")
-            if password == confirm_password:
-                user = User(
-                    username=username, email=email, first_name= first_name, password=make_password(password)
-                )
-                user.save()
-                messages.add_message(
-                    request, messages.SUCCESS, "Account created successfully!"
-                )
-                return redirect("signIn")
-            else:
-                print("wrong password")
-        return render(request, "auth/signin.html")
-    except RequestException as e:
-        print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
-
-
-
+    if request.method == "POST":
+        username = request.POST["username"]
+        email = request.POST["email"]
+        first_name = request.POST['first_name']
+        password = request.POST["password"]
+        confirm_password = request.POST["confirm_password"]
+        
+        if User.objects.filter(Q(email=email) | Q(username=username)).exists():
+            messages.add_message(request, messages.ERROR, "😓 This email or username is already in use. 😓")
+            return render(request, "auth/signin.html")
+        if password == confirm_password:
+            user = User.objects.create_user(username=username, email=email, first_name=first_name, password=password)
+            messages.add_message(request, messages.SUCCESS, "🎉 Account created successfully! 🎉")
+            return redirect("signIn")
+        else:
+            return render(request, "auth/signin.html")
+        
+    else:
+        return HttpResponse("Method Not Allowed", status=405)
+    
 
 def signIn(request):
     try:
@@ -53,20 +51,21 @@ def signIn(request):
             user = authenticate(email=email, password=password)
             if user is not None:
                 login(request, user)
-                messages.add_message(request, messages.SUCCESS, "log in successfull!")
+                messages.add_message(request, messages.SUCCESS, "🎉 log in successfull! 🎉")
                 return redirect("home")
             else:
-                messages.add_message(request, messages.ERROR, "invalid infomation!")
+                messages.add_message(request, messages.ERROR, "🚧 invalid infomation! 🚧", extra_tags='safe')
                 return redirect("signIn")
         else:
             return render(request, "auth/login.html")
     except RequestException as e:
         print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
+        return redirect("error")
 
+@login_required(login_url='/')
 def signOut(request):
     logout(request)
-    messages.add_message(request, messages.SUCCESS, "you have been logged Out!")
+    messages.add_message(request, messages.SUCCESS, "🎉 you have been logged out! 🎉")
     return redirect("signIn")
 
 
@@ -84,16 +83,57 @@ def upload(request):
             carousel_image = CarouselImage(post=post, image=image)
             carousel_image.save()
         
-        return JsonResponse({'message': 'Post created successfully.'})
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+        messages.success(request, "🎉 Post created successfully. 🎉")
+        return redirect('home') 
 
+       
+    except Exception as e:
+        messages.error(request, f"Upload failed : {e}")
+        return redirect('home') 
+
+
+def create_story(request):
+    if request.method == 'POST':
+        # Process the form data and save the story
+        content = request.POST.get('content')
+        caption = request.POST.get('caption')
+        tagged_users = request.POST.get('tagged_users')
+        link = request.POST.get('link')
+
+        if content:
+            story = Story.objects.create(
+                user=request.user,
+                content=content,
+                caption=caption,
+                tagged_users=tagged_users,
+                link=link,
+                created_at=timezone.now()
+            )
+            story.save()
+            return redirect('status')
+    return render(request, 'gram/index.html')
 
 def status(request):
-    # user = request.user
-    context = {
-    }
-    return render(request, 'gram/status.html',context)
+    # stories = Story.objects.filter(expires_at__gte=timezone.now())
+    user_stories = Story.objects.filter(user=request.user, expires_at__gt=timezone.now()).order_by('-created_at')
+    
+    if user_stories.count() > 0:
+        stories = user_stories.values('content', 'caption')[:user_stories.count()]  
+
+        context = {
+            'user_stories': stories
+        }
+        return render(request, 'gram/status.html',context)
+    else:
+        messages.add_message(request, messages.ERROR, "🚧 There are no available stories! 🚧")
+        return redirect("home")
+
+def delete_story(request, story_id):
+    story = get_object_or_404(Story, pk=story_id)
+    if request.user == story.user:
+        story.delete()
+    return redirect('status')
+
 
 @login_required(login_url='/')
 def home(request):
@@ -103,18 +143,22 @@ def home(request):
         current_user_profile = Profile.objects.get(user=request.user)            
         user_profile_photo_url = current_user_profile.photo.url
         other_profiles = Profile.objects.exclude(user=request.user)
+        stories = Story.objects.filter(expires_at__gte=timezone.now())
+        stories_with_users = Story.objects.select_related('user')
+        
         
         context = {
             "posts": posts,
             "profiles": profiles,
             'profiles': other_profiles,
-            "user_profile_photo": user_profile_photo_url, 
-            # "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,    
+            'stories': stories,
+            "user_profile_photo": user_profile_photo_url,
+            'stories_with_users': stories_with_users  
         }
         return render(request, "gram/index.html", context)
     except RequestException as e:
         print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
+        return redirect("error")
 
 
 def like_toggle(request):
@@ -130,7 +174,8 @@ def like_toggle(request):
         }
         return JsonResponse(data)
     else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+        messages.add_message(request, messages.ERROR, "🚧 Invalid request status=400 🚧")
+    # JsonResponse({'error': 'Invalid request'}, )
 
 
 # def post_details(request):
@@ -162,12 +207,14 @@ def post_details(request):
             }
             return render(request, 'your_app/post_details.html', context)
         except Post.DoesNotExist:
-            return JsonResponse({'error': 'Post not found'}, status=404)
+            messages.add_message(request, messages.ERROR, "🚧 Post not found status=404 🚧")
+            # return JsonResponse({'error': 'Post not found'}, status=404)
         except Exception as e:
-            # Handle any other exceptions gracefully
-            return JsonResponse({'error': str(e)}, status=500)
+            messages.add_message(request, messages.ERROR, "🚧 internal server error status=500 🚧")
+            # return JsonResponse({'error': str(e)}, status=500)
     else:
-        return JsonResponse({'error': 'Invalid request'}, status=400)
+        messages.add_message(request, messages.ERROR, "🚧 Invalid request status=400 🚧")
+        # return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 @login_required(login_url='/')
@@ -238,7 +285,7 @@ def profile(request):
     
     except RequestException as e:
         print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
+        return redirect("error")
 
 
 @login_required(login_url='/')
@@ -257,7 +304,7 @@ def other_profiles(request, username):
         return render(request, "gram/other_profile.html", context)
     except RequestException as e:
         print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
+        return redirect("error")
 
 
 
@@ -267,17 +314,16 @@ def explore(request):
         posts = Post.objects.all().order_by('-created_time') 
         profiles = Profile.objects.all() 
         current_user_profile = Profile.objects.get(user=request.user)
-        # for post in posts:
-        #     for carousel_image in post.carouselimage_set.all():
-        #         print(f"Carousel Image URL: {carousel_image.image.url}")
-        #     print(f"Single Image URL: {post.image.url}")
-
-        context = {"posts": posts ,"profiles": profiles, 
-             "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,}
+       
+        context = {
+            "posts": posts ,
+            "profiles": profiles, 
+            "user_profile_photo": current_user_profile.photo.url if current_user_profile else None,
+        }
         return render(request, 'gram/explore.html', context)
     except RequestException as e:
         print(f"An error occurred: {e}")
-        return render(request, "connection_error.html")
+        return redirect("error")
 
 
 def follow_user(request, username):
@@ -309,7 +355,8 @@ def inbox(request):
             message.save()
             return redirect('inbox')
         else:
-            return HttpResponse("Form submission failed")
+            messages.add_message(request, messages.ERROR, "Form submission failed")
+            # return HttpResponse("Form submission failed")
     else:
         form = MessageForm()
         current_user_profile = Profile.objects.get(user=request.user)
@@ -344,19 +391,26 @@ def clear_messages(request):
     return redirect('inbox')
 
 
-
-
 def search_profiles(request):
     query = request.GET.get('q')
-    profiles = User.objects.filter(username__icontains=query).values('id', 'username')
-    return JsonResponse(list(profiles), safe=False)
-
+    profiles = Profile.objects.filter(user__username__icontains=query).values('id', 'user__username', 'photo')
+    
+    profiles_with_photo_urls = []
+    for profile in profiles:
+        photo_url = profile['photo'].url if profile['photo'] else None
+        profile_data = {
+            'id': profile['id'],
+            'username': profile['user__username'],
+            'photo_url': photo_url
+        }
+        profiles_with_photo_urls.append(profile_data)
+    
+    return JsonResponse(profiles_with_photo_urls, safe=False)
 
 
 
 def search(request):
     query = request.GET.get('q')
-
     if query:
         profiles = Profile.objects.filter(user__username__icontains=query)
     else:

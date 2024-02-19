@@ -1,13 +1,14 @@
 {% extends 'gram/base.html' %}
 {% load static %}
 {% block content %}
+{% include 'gram/progress.html' %}
   {% load cloudinary %}
   <div class="container-main">
     <div class="box-1">
-      {% include 'gram/appbar.html' %}
+      {% include 'gram/appbar.html' %}]
     </div>
     <div class="box-5 row" style="height:100vh; width: 80%;">
-      <div class="col-5 border-end">
+      <div class="col-md-5 col-sm-4  border-end">
         <div class="d-flex justify-content-between p-3 mt-3">
           <h3 class="fw-semibold">{{ request.user.username }}</h3>
           <!-- Button trigger modal -->
@@ -58,7 +59,7 @@
         </div>
       </div>
 
-      <div class="col-7 px-2">
+      <div class="col-md-7 col-sm-8 px-2">
           <div class="tab-content" id="v-pills-tabContent">
             {% if received_messages.exists or sent_messages.exists %}
             {% for  message in all_messages %}
@@ -66,8 +67,8 @@
                   <div class="d-flex justify-content-between border-bottom mt-3">
                     <div class="d-flex m-2">
                       <div class="parent">
-                        <div class="btn-gradient-2">
-                          <img src="{{ message.sender.profile.photo.url }}" alt="Receiver Photo" class="image-3 border m-1" />
+                        <div class="btn-gradient-2" style="width: 60px; height: 60px;">
+                          <img src="{{ message.sender.profile.photo.url }}" alt="Receiver Photo"/>
                         </div>
                       </div>
                       <div class="ms-2 pt-1">
@@ -109,11 +110,6 @@
                             <p>{{ message.message }}</p>
                         </div>
                     </div>
-
-              
-              
-            
-
                   </div>
 
                   <form method="post">
@@ -137,6 +133,11 @@
               </div>
             {% endif %}
           </div>
+
+          <div class="container" id="profileContainer">
+            <!-- Profile details will be dynamically generated here -->
+        </div>
+        
       </div>
     </div>
   </div>
@@ -155,6 +156,7 @@
               </div>
 
               <div id="searchResults"  class="overflow-y-scroll ">
+                
               </div>
           </div>
           <div class="modal-footer">
@@ -189,33 +191,35 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   }
 
-  // Function to display search results
-  function displaySearchResults(profiles) {
-      searchResults.innerHTML = '';
-      profiles.forEach(profile => {
-          const profileElement = document.createElement('div');
-          profileElement.innerHTML = `
-              <a class="nav-link my-1" id="v-pills-{{ message.id }}-tab" data-bs-toggle="pill" href="#v-pills-{{ message.id }}" role="tab" aria-controls="v-pills-{{ message.id }}" aria-selected="true">
-                  <div class="d-flex cursor-pointer rounded border p-1 my-1">
-                      <div class="bg-secondary rounded-circle d-inline-block me-3 ms-2" style="width: 50px; height: 50px;">
-                          <img src="${profile.photo_url}" style=" background-color: #b7a8ff;width: 50px; height: 50px;" class="w-100 h-100 rounded-circle" />
-                      </div> 
-                      <div class="flex-fill my-2">
-                          <h5 class="text-lg font-semibold m-0">${profile.username}</h5>
-                      </div>
-                      <button type="button" class="btn btn-primary btn-sm" data-user-id="${profile.id}"> chat</button>
+ // Function to display search results
+function displaySearchResults(profiles) {
+  searchResults.innerHTML = '';
+  profiles.forEach(profile => {
+      const profileElement = document.createElement('div');
+      profileElement.innerHTML = `
+          <a class="nav-link my-1"  target="_blank">
+              <div class="d-flex cursor-pointer rounded border p-1 my-1">
+                  <div class="bg-secondary rounded-circle d-inline-block me-3 ms-2" style="width: 50px; height: 50px;">
+                      <img src="${profile.photo_url}" style=" background-color: #b7a8ff;width: 50px; height: 50px;" class="w-100 h-100 rounded-circle" />
+                  </div> 
+                  <div class="flex-fill my-2">
+                      <h5 class="text-lg font-semibold m-0">${profile.username}</h5>
                   </div>
-              </a>
-          `;
-          profileElement.querySelector('button').addEventListener('click', () => {
-              const userId = profile.id;
-              receiverIdInput.value = userId; // Set receiver ID in hidden input field
-              chatForm.submit(); // Submit the form to initiate chat
-          });
-          searchResults.appendChild(profileElement);
+                  <button type="button" class="btn btn-primary btn-sm" data-user-id="${profile.id}" data-bs-dismiss="modal"> chat</button>
+              </div>
+          </a>
+      `;
+      searchResults.appendChild(profileElement);
+      profileElement.addEventListener('click', (event) => {
+          event.preventDefault(); // Prevent the default behavior of the link
+          const userId = profile.id;
+          receiverIdInput.value = userId; 
+          createProfileDiv(profile);
       });
-  }
+  });
+}
 
+   
   // Event listener for search input
   searchInput.addEventListener('input', function() {
       const query = this.value.trim();
@@ -246,7 +250,6 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
 
-
   // Function to handle chat button clicks
   function handleChatButtonClick(userId) {
       receiverIdInput.value = userId; // Set receiver ID in hidden input field
@@ -261,7 +264,25 @@ document.addEventListener("DOMContentLoaded", function() {
           handleChatButtonClick(userId);
       });
   });
+
+// Function to create a new div for the profile
+function createProfileDiv(profile) {
+  // Create profile div
+  const profileDiv = document.createElement('div');
+  profileDiv.classList.add('profile-details');
+  profileDiv.innerHTML = `
+      <h3>${profile.username}</h3>
+      <p>Profile ID: ${profile.id}</p>
+      <!-- Add other profile details here -->
+  `;
+
+  // Append the profile div to the container
+  const profileContainer = document.getElementById('profileContainer');
+  profileContainer.appendChild(profileDiv);
+}
+
 });
+
 
   </script>
 {% endblock %}

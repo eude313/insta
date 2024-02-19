@@ -1,4 +1,5 @@
 {% extends 'gram/base.html' %} {% load static %} {% block content %}
+{% include 'gram/progress.html' %}
   {% load cloudinary %}
   
   <div class="container-main">
@@ -10,7 +11,7 @@
         <div class="row my-3">
           <div class="col-md-5 col-sm-12 d-flex justify-content-center">
             <div class="parent">
-              <a href="#" data-user-index="0" class="btn-gradient-2 image-1 back">
+              <a href="#" data-user-index="0" class="btn-gradient-2 image-1 z-1">
                 {% if user_profile_photo %}
                   <img src="{{ user_profile_photo }}" alt="User Profile Photo"/>
                 {% else %}

@@ -1,9 +1,28 @@
 {% extends 'gram/base.html' %}
 {% load static %}
 {% block content %}
+
+  {% include 'gram/progress.html' %}
   {% load cloudinary %}
-  <style></style>
-  <div class="container-fluid p-0" style=" overflow: hidden; height: 100vh; border: 2px solid red;">
+  <style>
+    .story-slider {
+      height: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .carosel__slider{
+      position: relative; 
+    }
+    .carosel__slider img,
+    .carosel__slider video{
+      height: 100%; 
+      width: 100%;  
+      object-fit: fill; 
+      object-position: center; 
+      border-radius: 20px;
+    }
+    </style>
+ <div class="container-fluid p-0" style=" overflow: hidden; height: 100%;">
     <div class="d-flex justify-content-between"  >
       <a href="{% url 'home' %}" class="text-decoration-none text-dark z-2" style="font-family: 'Lobster', sans-serif;">
         <p class="fw-semibold fs-3 mt-1 ps-3 insta">
@@ -12,79 +31,117 @@
       </a>
       <a href="{% url 'home' %}" class="text-decoration-none text-dark z-2" style="font-family: 'Lobster', sans-serif;"><h2 type="button" class="p-2" style="color: #edececfd;"><i class="bi bi-x-lg"></i></h2></a>
     </div>
-    <div class="swiper mx-2" style="width: 98.5%; height: 100vh; position: absolute; top: 0; left:2px; overflow: hidden;  border: 1px solid yellowgreen;">
+    <div class="swiper mx-2" style="width: 98.5%; height: 100vh; position: absolute; top: 0; left:2px; overflow: hidden;">
       <div class="swiper-wrapper position-relative d-flex align-items-center">
-        <div class="swiper-slide">
-           <div class="overlay-stories">
-            <div class="parent slide-item d-flex" style="flex-direction: column;">
-              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
-                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
-              </a>
-              <span class="fs-6">mark_johnson</span>
+      {% for story in user_stories %}
+        <div class="swiper-slide border story-slide">
+          <div class="overlay-stories">
+            <div class="parent  d-flex" style="flex-direction: column;">
+              <div class="btn-gradient-2 status back image-5">
+                <img src="{{ story.user.profile.photo.url}}" alt="Default User Photo" />
+              </div>
+              <span class="fs-6">{{ story.user.username  }}</span>
             </div> 
           </div>
-        </div>
-        <div class="swiper-slide">
-           <div class="overlay-stories">
-            <div class="parent slide-item d-flex" style="flex-direction: column;">
-              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
-                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
-              </a>
-              <span class="fs-6">mark_johnson</span>
-            </div> 
+          
+          {% if story.content %}
+          <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              {% for story in user_stories %}
+              <button  data-bs-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></button>
+              {% endfor %}
+            </div>
+          
+            <div class="carousel-inner">
+              {% if ".mp4" in story.content.url|lower %}
+             <div class="carousel-item carosel__slider">
+                <video autoplay muted class="d-block w-100" style="height: 400px;">
+                  <source src="{{ story.content.url }}" type="video/mp4">
+                </video>
+              </div> 
+              {% else %}
+              <div class="carousel-item active carosel__slider" style="height: 400px;">
+                <img src="{{ story.content.url }}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                  <p>{{ story.caption }}</p>
+                </div>
+              </div>
+               {% endif %} 
+            </div>
+          
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon  visually-hidden" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon  visually-hidden" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
           </div>
+          {% endif %}
+          
         </div>
-        <div class="swiper-slide">
-           <div class="overlay-stories">
-            <div class="parent slide-item d-flex" style="flex-direction: column;">
-              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
-                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
-              </a>
-              <span class="fs-6">mark_johnson</span>
-            </div> 
-          </div>
-        </div>
-        <div class="swiper-slide">
-           <div class="overlay-stories">
-            <div class="parent slide-item d-flex" style="flex-direction: column;">
-              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
-                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
-              </a>
-              <span class="fs-6">mark_johnson</span>
-            </div> 
-          </div>
-        </div>
-        <div class="swiper-slide">
-           <div class="overlay-stories">
-            <div class="parent slide-item d-flex" style="flex-direction: column;">
-              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
-                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
-              </a>
-              <span class="fs-6">mark_johnson</span>
-            </div> 
-          </div>
-        </div>
-        <div class="swiper-slide">
-           <div class="overlay-stories">
-            <div class="parent slide-item d-flex" style="flex-direction: column;">
-              <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
-                <img src="{% static 'images/user.png' %}" alt="Default User Photo" />
-              </a>
-              <span class="fs-6">mark_johnson</span>
-            </div> 
-          </div>
-        </div>
+      {% endfor %}
       </div>
-     
-      <div class="p-2 swiper-button-prev" type="button" style="position: absolute; left:32%; top:45%">
+      <div class="swiper-button-prev" type="button" style="position: absolute; left:36.3%; top:45%">
       </div>
-      <div class="swiper-button-next"  style="position: absolute; right:32%; top:45%">
+      <div class="swiper-button-next"  style="position: absolute; right:36.3%; top:45%">
       </div>
     </div>
-  </div>
+  </div> 
+ 
+ 
+   
 
-  <script>
-  
 
-  </script>
 {% endblock %}
+
+
+{% comment %} 
+      <div class="story__slide story-slider swiper-slide bg-danger">
+        <video autoplay>
+          <source src="https://exit109.com/~dnn/clips/RW20seconds_1.mp4#t=.1" type="video/mp4">
+        </video> 
+      </div> {% endcomment %}
+      {% comment %} <div class="story__slide swiper-slide bg-danger">
+        <img src="https://picsum.photos/450/810" />
+      </div> 
+{% endcomment %}
+
+{% comment %} 
+ 
+
+<div class="d-flex w-100">
+{% for story in stories %}
+  <div >
+      <h2>{{ story.caption }}</h2>
+      {% if story.content %}
+          {% if ".mp4" in story.content.url|lower %}
+              <video width="320" height="240" controls>
+                  <source src="{{ story.content.url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+              </video>
+          {% else %}
+              <img src="{{ story.content.url }}"width="320" height="240"  alt="{{ story.caption }}">
+          {% endif %}
+      {% endif %}
+      <p>{{ story.created_at }}</p>
+      <p>{{ story.username }}</p>
+      <a href="{% url 'status' %}" class="btn-gradient-2 status back image-5">
+        <img src="{{ story.user.profile.photo.url  }}" alt="Default User Photo" />
+      </a>
+      <span class="fs-6">{{ story.user.username  }}</span>
+  </div>
+{% endfor %} 
+</div> {% endcomment %}
+
+ {% comment %} <!-- Second Swiper Instance (Cube Effect) -->
+          <div class="swiper-container cube-swiper" style="width: 100%; height: 100%;">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide bg-danger  radius">Slide 1</div>
+              <div class="swiper-slide bg-warning  radius">Slide 2</div>
+              <div class="swiper-slide bg-primary  radius">Slide 3</div>
+              <!-- Add more slides as needed -->
+            </div>
+              <div class="swiper-progress-bar z-2"></div>
+          </div> {% endcomment %}

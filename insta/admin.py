@@ -5,7 +5,8 @@ models = [
     User,
     Post,
     Profile,
-    Follow 
+    Follow ,
+    Story
 ]
 
 for model in models:
